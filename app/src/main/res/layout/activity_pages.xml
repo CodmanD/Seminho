@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context="kodman.seminho.EventsActivity"
+    android:orientation="vertical"
+    android:background="?attr/colorPrimary"
+    >
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbarEvent"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+
+        android:background="?attr/colorPrimaryDark"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/AppTheme"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:subtitleTextColor="?attr/colorButtonNormal"
+        app:titleTextColor="?attr/colorButtonNormal" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="?attr/colorPrimary"
+
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="&#8722;"
+            android:layout_weight="1"
+            android:textSize="20sp"
+            android:background="?attr/colorPrimary"
+            android:gravity="center"
+            android:onClick="onClick"
+            android:id="@+id/tvDel"
+            android:textColor="?attr/colorButtonNormal"
+            />
+        <TextView
+            android:id="@+id/tvPrev"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="&#60;"
+            android:textSize="20sp"
+            android:layout_weight="1"
+            android:background="?attr/colorPrimary"
+            android:gravity="center"
+            android:onClick="onClick"
+            android:textColor="?attr/colorButtonNormal"
+            />
+        <EditText
+            android:text=""
+            android:id="@+id/etTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Event Title"
+            android:textSize="18sp"
+            android:background="?attr/colorPrimary"
+            android:textColor="?attr/colorButtonNormal"
+            android:gravity="center"
+            android:layout_weight="2"
+            android:onClick="onClick"
+            android:maxLines="2"
+            android:maxWidth="300dp"
+            android:maxLength="50"
+            />
+        <TextView
+            android:id="@+id/tvNext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="&#62;"
+            android:layout_weight="1"
+            android:textSize="20sp"
+            android:background="?attr/colorPrimary"
+            android:textColor="?attr/colorButtonNormal"
+            android:gravity="center"
+            android:onClick="onClick"
+            />
+        <TextView
+            android:id="@+id/tvAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="&#43;"
+            android:layout_weight="1"
+            android:textSize="20sp"
+            android:background="?attr/colorPrimary"
+            android:textColor="?attr/colorButtonNormal"
+            android:gravity="center"
+            android:onClick="onClick"
+            />
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/tvEventProperties"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+
+        android:layout_marginTop="8dp"
+
+        android:background="?attr/colorControlActivated"
+        android:gravity="center"
+        android:text="@string/event_properties"
+        android:textColor="?attr/colorPrimary"
+        android:textSize="26sp"
+        />
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:layout_gravity="center"
+        android:background="@color/colorPrimary"
+
+        />
+
+
+</LinearLayout>

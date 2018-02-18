@@ -1,0 +1,11 @@
+OK.
+
+1) this app function in the background all the time,
+   and notifies you at certain times?
+
+
+2)The interface sent must be exactly the same,
+  or minor changes are possible?
+
+3)plus in the picture appUI1 adds an event to the server.
+ Does the minus delete it?

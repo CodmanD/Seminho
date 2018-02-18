@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    >
+    <item
+        android:id="@+id/actionNewEvent"
+        android:orderInCategory="100"
+        android:title="@string/actionNewEvent"
+        android:icon="@drawable/ic_add_white_24dp"
+        app:showAsAction="ifRoom" />
+
+
+    <item
+        android:id="@+id/actionImport"
+        android:orderInCategory="100"
+        android:title="@string/actionImport"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/actionImportURL"
+        android:orderInCategory="100"
+        android:title="@string/actionImportFromUrl"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/actionExport"
+        android:orderInCategory="100"
+        android:title="@string/actionExport"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/actionSettings"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_build_white_24dp"
+        android:title="@string/actionSettings"
+        app:showAsAction="ifRoom"
+
+        >
+        <menu
+
+            >
+            <item
+                android:id="@+id/actionAdvance"
+                android:orderInCategory="100"
+                android:title="@string/actionAdvance"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/actionSelectSound"
+                android:orderInCategory="100"
+                android:title="@string/actionSelectSound"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/actionChangeTheme"
+                android:orderInCategory="100"
+                android:title="@string/actionChangeTheme"
+                app:showAsAction="never" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/actionAbout"
+        android:orderInCategory="100"
+        android:title="@string/actionAbout"
+        app:showAsAction="never" />
+</menu>

@@ -1,0 +1,234 @@
+package kodman.seminho;
+
+
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.preference.PreferenceManager;
+
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+
+import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.util.Log;
+import android.view.LayoutInflater;
+
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import kodman.seminho.Model.AlarmEvent;
+import kodman.seminho.DataBase.DatabaseHelper;
+
+
+public class EventsActivity extends AppCompatActivity {
+
+    final String TAG = "Seminho";
+    @BindView(R.id.toolbarAE)
+    Toolbar toolbar;
+    Calendar calendar;
+    RecyclerView rv;
+    int themeNumber = 0;
+    ArrayList<AlarmEvent> events;
+    String head;
+    int year,month,day;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+
+        try {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+            themeNumber = preferences.getInt(TAG + "theme", 0);
+            //   Log.d(TAG, "ChangeTheme =" + themeNumber);
+
+            if (themeNumber == 1) {
+                setTheme(R.style.AppThemeBlue);
+            }
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_events);
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            ButterKnife.bind(this);
+            setSupportActionBar(toolbar);
+
+
+
+            LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
+            rv = (RecyclerView) findViewById(R.id.rv);
+            rv.setLayoutManager(mLayoutManager);
+
+            Intent intent = getIntent();
+            Bundle data = intent.getExtras();
+             day = data.getInt("day");
+             month = data.getInt("month");
+             year = data.getInt("year");
+
+            head=day + "." + month + "." + year;
+           // toolbar.setTitle("" + day + "." + month + "." + year);
+            toolbar.setNavigationIcon(R.drawable.ic_keyboard_arrow_left_white_24dp);
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(EventsActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
+            });
+           // getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.RED));
+           // toolbar.setSubtitle((Html.fromHtml("<font color=\"#999999\">" + getString(R.string.app_subname) + "</font>")))
+            calendar = Calendar.getInstance();
+            calendar.set(year, month, day);
+        } catch (Exception e) {
+          Log.d(TAG,"Exception "+e.getMessage());
+        }
+
+        // TextView tv=this.findViewById(R.id.tvDate);
+       // tv.setText(day+"."+(month+1)+"."+year);
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_activity_events, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        Intent intent = new Intent(EventsActivity.this, PagesActivity.class);
+
+        CalendarDay date=new CalendarDay(year,month,day);
+
+            Log.d(TAG, "SEND SelectDate" +new CalendarDay());
+            intent.putExtra("selectedDate", date);
+
+
+        startActivity(intent);
+       // return true;
+
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        events =  DatabaseHelper.getInstance(this).getEvents(calendar);
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(events);
+        rv.setAdapter(adapter);
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+       // toolbar.setTitle((Html.fromHtml("<font color=\"#999999\">" + "text" + "</font>")));
+        toolbar.setTitle(head);
+        if (events.size() <= 0) {
+            Intent intent = new Intent(EventsActivity.this, MainActivity.class);
+
+            startActivity(intent);
+        }
+    }
+
+    private class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+
+        private List<AlarmEvent> events;
+
+        public RecyclerViewAdapter(List<AlarmEvent> events) {
+            this.events = events;
+        }
+
+
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            //Log.d(TAG,"onCreateViewHolder");
+            // View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.event_item, viewGroup, false);
+            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_event, viewGroup, false);
+
+            return new ViewHolder(v);
+        }
+
+
+        @Override
+        public void onBindViewHolder(ViewHolder viewHolder, int i) {
+
+            AlarmEvent event = events.get(i);
+            //  Log.d(TAG,"onBindViewHolder event = "+event.getTitle());
+            viewHolder.title.setText(event.getTitle());
+            //viewHolder.alarmName.setText(event.getAlarmName());
+            viewHolder.category.setText(event.getCategory());
+
+
+            SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+            String date = format.format(new Date(event.getTimeAlarm()));
+            viewHolder.date.setText(date);
+            viewHolder.id=(int)event.getId();
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return events.size();
+        }
+
+        @Override
+        public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+            super.onAttachedToRecyclerView(recyclerView);
+        }
+
+
+        class ViewHolder extends RecyclerView.ViewHolder {
+            private TextView title;
+            //private TextView alarmName;
+            private TextView category;
+            private TextView date;
+            //private TextView id;
+            private int id;
+
+            public ViewHolder(View itemView) {
+                super(itemView);
+                //this.id = (TextView) itemView.findViewById(R.id.tvItemID);
+                this.title = (TextView) itemView.findViewById(R.id.tvItemTitle);
+               // this.alarmName = (TextView) itemView.findViewById(R.id.tvItemAlarmName);
+                this.category = (TextView) itemView.findViewById(R.id.tvItemCategory);
+                this.date = (TextView) itemView.findViewById(R.id.tvItemDate);
+
+
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    //    Toast.makeText(EventsActivity.this, "CLICK id = " + id.getText(), Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(EventsActivity.this, PagesActivity.class);
+                        //intent.putExtra("ID", Integer.parseInt(id.getText().toString()));
+                        intent.putExtra("ID", id);
+                        intent.putExtra("MS", calendar.getTimeInMillis());
+                        startActivity(intent);
+                    }
+                });
+            }
+        }
+    }
+
+}

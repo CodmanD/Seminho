@@ -1,0 +1,47 @@
+<resources>
+    <string name="app_name">Seminho</string>
+    <string name="actionNewEvent">New Event</string>
+    <string name="actionChangeTheme">Change theme</string>
+    <string name="actionImport">Import file</string>
+    <string name="actionImportFromUrl">Import file from URL</string>
+    <string name="actionExport">Export file</string>
+    <string name="actionSettings">Settings</string>
+    <string name="actionSelectSound">Select sound</string>
+    <string name="actionAdvance">Time advance</string>
+    <string name="actionAbout">About</string>
+    <string name="aboutCompany">International Network Support &#38; Service - Glas</string>
+    <string name="aboutVersion">1.0</string>
+    <string name="event_properties">Event Properties</string>
+    <string name="category">Category</string>
+    <string name="dateTime">Date</string>
+    <string name="alarmName">Alarm Name</string>
+    <string name="alarmTime">Alarm Time</string>
+    <string name="titleMain">Date</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="Time">Time</string>
+    <string name="ErrorAdding">ERROR ADDING</string>
+    <string name="add">Add event</string>
+    <string name="update">Update event</string>
+    <string name="notEvents">Not events</string>
+    <string name="day"> day </string>
+    <string name="days"> days </string>
+    <string name="hour"> hour </string>
+    <string name="hours"> hours </string>
+    <string name="minute"> minute </string>
+    <string name="minutes"> minutes </string>
+    <string name="advanceResult">Advance is set</string>
+    <string name="exportCompleted">Calendar saved</string>
+    <string name="importCompleted">Calendar imported</string>
+    <string name="zeroMinutes">0 minutes</string>
+    <string name="buttonOk">Ok</string>
+    <string name="buttonCancel">Cancel</string>
+    <string name="buttonDownload">Download</string>
+    <string name="pathURL">https://inss.ch/downloads/Test.ics</string>
+    <string-array name="categories">
+        <item>Event</item>
+        <item>Date</item>
+        <item>Business</item>
+        <item>Private</item>
+    </string-array>
+</resources>

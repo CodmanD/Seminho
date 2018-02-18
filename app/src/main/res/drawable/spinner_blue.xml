@@ -1,0 +1,21 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+        <layer-list>
+            <item>
+                <!--color android:color="?attr/colorControlActivated"/-->
+                <color android:color="#e4f2fd"/>
+            </item>
+
+            <item>
+                <bitmap
+                    android:color="#0e47a1"
+                    android:gravity="center_vertical|right"
+                    android:src="@drawable/ic_arrow_drop_down_black_24dp"/>
+            </item>
+
+        </layer-list>
+
+    </item>
+
+</selector>

@@ -1,0 +1,72 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar" >
+    <!-- Customize your theme here. -->
+    <item name="colorPrimary">@color/colorPrimary</item>
+    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <item name="colorAccent">@color/colorAccent</item>
+    <item name="colorControlNormal">#FFFFFF</item>
+        <item name="background">@drawable/seminho_image</item>
+        <!--item name="colorBackground">#FFF8E1</item-->
+        <item name="colorButtonNormal">#FFF8E1</item>
+        <item name="colorControlActivated">#ffcc80</item>
+        <item name="android:actionMenuTextColor">@color/colorAccent</item>
+        <!--item name="android:popupMenuStyle">@style/PopupMenu</item-->
+        <!--item name="android:actionMenuTextColor">@color/colorContent_blue</item-->
+        <!--item name="searchViewStyle">@style/AppSearchViewStyle</item-->
+</style>
+    <style name="AppThemeBlue" parent="Theme.AppCompat.Light.NoActionBar" >
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary_blue</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark_blue</item>
+        <item name="colorAccent">@color/colorAccent_blue</item>
+        <item name="colorControlNormal">#FFFFFF</item>
+        <!--item name="colorControlNormal">#000000</item-->
+        <item name="background">@drawable/seminho_image_blue</item>
+        <item name="colorButtonNormal">#f0f5fb</item>
+        <item name="colorControlActivated">#e4f2fd</item>
+
+        <!--item name="colorBackground">#FFF8E1</item-->
+        <!--item name="android:popupMenuStyle">@style/PopupMenuBlue</item-->
+        <!--item name="android:actionMenuTextColor">@color/colorContent_blue</item-->
+        <!--item name="searchViewStyle">@style/AppSearchViewStyle</item-->
+    </style>
+
+
+
+    <style name="MenuTheme" parent="AppThemeBlue">
+        <item name="colorButtonNormal">#FF0000</item>
+        <item name="background">@drawable/seminho_image_blue</item>
+    </style>
+
+    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/colorPrimary</item>
+    </style>
+
+    <style name="PopupMenu" parent="AppTheme">
+        <item name="android:actionMenuTextColor">@color/colorContent_blue</item>
+    </style>
+    <style name="PopupMenuBlue" parent="@android:style/Widget.Holo.ListPopupWindow">
+        <item name="android:popupBackground">@color/colorContent_blue</item>
+    </style>
+
+    <style name="Theme.stylingactionbar.widget" parent="@android:style/Theme.Holo">
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
+    </style>
+
+    <!--style name="AppSearchViewStyle" parent="Widget.AppCompat.SearchView">
+        <item name="android:textCursorDrawable">@drawable/white_cursor</item>
+        <item name="queryBackground">@android:color/transparent</item>
+        <item name="searchIcon">@drawable/icon_toolbar_search</item>
+        <item name="closeIcon">@drawable/icon_toolbar_clear</item>
+        <item name="queryHint">@string/search_hint</item>
+        <item name="android:imeActionId">6</item>
+    </style-->
+
+
+    <style name="Widget.App.Spinner" parent="@style/Widget.AppCompat.Spinner">
+        <item name="overlapAnchor">true</item>
+        <item name="android:background">@drawable/spinner</item>
+    </style>
+</resources>

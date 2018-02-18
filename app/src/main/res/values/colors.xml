@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#FF6F00</color>
+    <color name="colorPrimaryDark">#8c4400</color>
+    <color name="colorAccent">#399cff</color>
+    <color name="textColorPrimary">#fff9e1</color>
+    <color name="colorContent">#FFF8E1</color>
+
+    <color name="colorTitleEvent">#fff1be</color>
+
+
+    <color name="colorPrimary_blue">#0e47a1</color>
+    <color name="colorPrimaryDark_blue">#0b3a80</color>
+    <color name="colorAccent_blue">#FF6F00</color>
+    <color name="textColorPrimary_blue">#c7e8fd</color>
+    <color name="colorContent_blue">#f0f5fb</color>
+
+    <color name="colorCard_blue">#e4f2fd</color>
+    <color name="colorCard">#ffcc80</color>
+    <color name="colorLastDate">#ffbcc0</color>
+    <color name="colorNextDate">#b7ff7f</color>
+</resources>
