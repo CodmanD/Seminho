@@ -101,7 +101,7 @@ public class NotificationUtil extends ContextWrapper {
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(ae.getContent()))
                 .setChannelId(ANDROID_CHANNEL_ID)
                 .setContentTitle(ae.getTitle())
-                .setContentText(ae.getAlarmName())
+                .setContentText(ae.getContent())
                 .setTicker(ae.getTitle())
                 .setContentIntent(pending);
         //PendingIntent pendingDismiss = PendingIntent.getBroadcast(context, reminder.getId(), swipeIntent, PendingIntent.FLAG_UPDATE_CURRENT);

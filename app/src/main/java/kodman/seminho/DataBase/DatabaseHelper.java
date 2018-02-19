@@ -355,10 +355,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
-    public AlarmEvent getFirstEvent() {
+    public AlarmEvent getFirstEvent(long time) {
 
         SQLiteDatabase database = this.getReadableDatabase();
-        String query = "SELECT * FROM " + ALARMEVENT_TABLE + " WHERE " + COL_DATE_AND_TIME + " >= " + System.currentTimeMillis() +
+        String query = "SELECT * FROM " + ALARMEVENT_TABLE + " WHERE " + COL_DATE_AND_TIME + " >= " + time +
                 " ORDER BY " + COL_DATE_AND_TIME + " LIMIT 1";
 
         // Log.d(TAG, query);

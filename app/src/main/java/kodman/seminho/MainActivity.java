@@ -96,6 +96,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimerTask;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import kodman.seminho.Calendar.OneDayDecorator;
@@ -103,7 +104,6 @@ import kodman.seminho.Remind.AlarmReceiver;
 import kodman.seminho.Remind.AlarmUtil;
 import kodman.seminho.DataBase.DatabaseHelper;
 import kodman.seminho.Model.AlarmEvent;
-
 
 
 public class MainActivity extends AppCompatActivity implements OnDateSelectedListener, OnMonthChangedListener {
@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
     Uri ringtone;
     long advance;
     String pathURL;
-    boolean start=true;
+    boolean start = true;
 
     int themeNumber = 0;
     DatabaseHelper dbHelper;
@@ -141,10 +141,10 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         themeNumber = preferences.getInt(TAG + "theme", 0);
-        ringtone=Uri.parse(preferences.getString(TAG + "ringtone", "content://settings/system/notification_sound"));
-        advance=preferences.getLong(TAG + "advance",0);
-        pathURL=preferences.getString(TAG + "pathURL",getResources().getString(R.string.pathURL));
-       // Log.d(TAG,"Theme = "+themeNumber+" ringtone"+ringtone+" Advance = "+advance);
+        ringtone = Uri.parse(preferences.getString(TAG + "ringtone", "content://settings/system/notification_sound"));
+        advance = preferences.getLong(TAG + "advance", 0);
+        pathURL = preferences.getString(TAG + "pathURL", getResources().getString(R.string.pathURL));
+        // Log.d(TAG,"Theme = "+themeNumber+" ringtone"+ringtone+" Advance = "+advance);
         if (themeNumber == 1) {
             setTheme(R.style.AppThemeBlue);
         }
@@ -165,17 +165,17 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         getSupportActionBar().setTitle(title);
 
 
-     lv.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+        lv.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(View view, int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
-            Log.d(TAG,"LayoutChangeLisyener");
+                Log.d(TAG, "LayoutChangeLisyener");
 
-               // if(start)
+                // if(start)
                 {
-                                            Log.d(TAG,"ScrollTo");
-                                            sv.scrollTo(0,0);
-                                            start=false;
-                                        }
+                    Log.d(TAG, "ScrollTo");
+                    sv.scrollTo(0, 0);
+                    start = false;
+                }
             }
         });
 
@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                                 tv1.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                      //  Log.d(TAG,"Timer Tick");
+                                        //  Log.d(TAG,"Timer Tick");
                                         showCurrentEvent();
 //                                        if(start)
 //                                        {
@@ -212,19 +212,19 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
     private void restartNotify() {
 
-         AlarmEvent ae = dbHelper.getNextEvent(advance);
+        AlarmEvent ae = dbHelper.getNextEvent(advance);
         if (ae != null) {
             Intent alarmIntent = new Intent(this, AlarmReceiver.class);
-            AlarmUtil.setAlarm(this, alarmIntent, (int) ae.getId(),ringtone, ae.getTimeAlarm(),advance);
+            AlarmUtil.setAlarm(this, alarmIntent, (int) ae.getId(), ringtone, ae.getTimeAlarm(), advance);
         }
 
     }
 
 
     private void createList() {
-       final ArrayList<AlarmEvent> events = dbHelper.getEventForMain();
+        final ArrayList<AlarmEvent> events = dbHelper.getEventForMain();
         String[] arr = new String[events.size()];
-        Calendar cal = Calendar.getInstance();
+       final Calendar cal = Calendar.getInstance();
         for (int i = 0; i < events.size(); i++) {
             AlarmEvent ae = events.get(i);
             cal.setTimeInMillis(ae.getTimeAlarm());
@@ -232,6 +232,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                     " | " + ae.getTitle() + " | " + cal.get(Calendar.HOUR) + " : " + cal.get(Calendar.MINUTE) +
                     " " + (cal.get(Calendar.AM_PM) == 0 ? "AM" : "PM");
         }
+       /*
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, arr) {
 
@@ -245,29 +246,50 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                 return view;
             }
         };
+*/
+        ArrayAdapter<AlarmEvent> adapter = new ArrayAdapter<AlarmEvent>(this,
+                R.layout.item_list,R.id.tvTitleLV, events) {
+
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+
+                TextView tvData = (TextView) view.findViewById(R.id.tvDataLV);
+                TextView tvTitle = (TextView) view.findViewById(R.id.tvTitleLV);
+                TextView tvTime = (TextView) view.findViewById(R.id.tvTimeLV);
+                cal.setTimeInMillis(events.get(position).getTimeAlarm());
+                tvData.setText( cal.get(Calendar.DAY_OF_MONTH) + "/" + (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.YEAR));
+                tvTitle.setText( events.get(position).getTitle());
+                tvTime.setText( cal.get(Calendar.HOUR) + " : " + cal.get(Calendar.MINUTE) +
+                        " " + (cal.get(Calendar.AM_PM) == 0 ? "AM" : "PM"));
+              //  textView.setTextColor(Color.WHITE);
+
+                return view;
+            }
+        };
+
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                              @Override
-                              public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                  Intent intent = new Intent(MainActivity.this, PagesActivity.class);
-                                  //intent.putExtra("ID", Integer.parseInt(id.getText().toString()));
-                                  Log.d(TAG,"===============AE = "+events.get(position).getId()+" | "+events.get(position).getTitle());
-                                  intent.putExtra("ID", (int)events.get(position).getId());
-                                  Log.d(TAG,"GET ID="+intent.getIntExtra("ID",-1));
-                                  intent.putExtra("MS", events.get(position).getTimeAlarm());
-                                  startActivity(intent);
-                              }
-                          });
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(MainActivity.this, PagesActivity.class);
+                //intent.putExtra("ID", Integer.parseInt(id.getText().toString()));
+                Log.d(TAG, "===============AE = " + events.get(position).getId() + " | " + events.get(position).getTitle());
+                intent.putExtra("ID", (int) events.get(position).getId());
+                Log.d(TAG, "GET ID=" + intent.getIntExtra("ID", -1));
+                intent.putExtra("MS", events.get(position).getTimeAlarm());
+                startActivity(intent);
+            }
+        });
         lv.setAdapter(adapter);
-        getListViewSize(lv,adapter);
-        if(start)
-        {
-            Log.d(TAG,"ScrollTo");
-            sv.scrollTo(0,0);
-            start=false;
+        getListViewSize(lv, adapter);
+        if (start) {
+            Log.d(TAG, "ScrollTo");
+            sv.scrollTo(0, 0);
+            start = false;
         }
     }
 
-    public static void getListViewSize(ListView myListView,ListAdapter adapter) {
+    public static void getListViewSize(ListView myListView, ListAdapter adapter) {
         //ListAdapter myListAdapter = myListView.getAdapter();
         if (adapter == null) {
             //do nothing return null
@@ -348,9 +370,9 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
         Calendar cal = Calendar.getInstance();
 
-        AlarmEvent ae = dbHelper.getFirstEvent();
+        AlarmEvent ae = dbHelper.getFirstEvent(System.currentTimeMillis());
 
-       // Log.d(TAG,"showCurrentEvents = "+ae);
+        // Log.d(TAG,"showCurrentEvents = "+ae);
         if (ae != null) {
             long t = ae.getTimeAlarm();
             long res = t - System.currentTimeMillis();
@@ -360,7 +382,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
             int hours = (int) ((res % 86400000) / 3600000);
             int minutes = (int) ((res % 3600000) / 60000);
 
-          //  Log.d(TAG, "TTIME :" + days + "/" + hours + "/" + minutes);
+            //  Log.d(TAG, "TTIME :" + days + "/" + hours + "/" + minutes);
 
             Resources r = getResources();
             String d = "";
@@ -384,8 +406,13 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                     (minutes > 0 ? minutes + " " + m + " " : m);
 
             tv1.setText(time + "  till " + ae.getTitle());
-        } else
-            tv1.setText("no next event");
+        } else {
+            ae = dbHelper.getFirstEvent(System.currentTimeMillis() - 900000);
+            if (ae != null) {
+                tv1.setText(" now " + ae.getTitle());
+            } else
+                tv1.setText("no next event");
+        }
     }
 
     @Override
@@ -420,14 +447,12 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         }
         calendarView.addDecorators(decors);
         Calendar curDay = Calendar.getInstance();
-       for (int i = 0, count = 0; i < 31; i++) {
+        for (int i = 0, count = 0; i < 31; i++) {
 
             CalendarDay day = new CalendarDay(2018, calendarView.getCurrentDate().getMonth(), i + 1);
             count = dbHelper.getItemsEvents(day.getCalendar());
 
             int color = 1;
-
-
 
 
             curDay.set(curDay.get(Calendar.YEAR), curDay.get(Calendar.MONTH), curDay.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
@@ -436,7 +461,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
             long curEventTime = day.getCalendar().getTimeInMillis();
 
             if (curEventTime < curTime)
-                    color = getResources().getColor(R.color.colorLastDate);
+                color = getResources().getColor(R.color.colorLastDate);
             else
                 color = getResources().getColor(R.color.colorNextDate);
             decors.add(new OneDayDecorator(day, count, color));
@@ -444,8 +469,6 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         calendarView.addDecorators(decors);
 
     }
-
-
 
 
     @Override
@@ -462,16 +485,17 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
-        MenuItem item =menu.getItem(4).getSubMenu().getItem(0);
-        item.setTitle(getResources().getString(R.string.actionAdvance) +" : "+(advance/60000)+" min");
+        MenuItem item = menu.getItem(4).getSubMenu().getItem(0);
+        item.setTitle(getResources().getString(R.string.actionAdvance) + " : " + (advance / 60000) + " min");
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.actionNewEvent: {
 
-               //Toast.makeText(this, "NEW EVENT", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "NEW EVENT", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MainActivity.this, PagesActivity.class);
                 if (calendarView.getSelectedDate() != null) {
                     Log.d(TAG, "SEND SelectDate" + calendarView.getSelectedDate());
@@ -493,31 +517,29 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                 return true;
             }
             case R.id.actionImport:
-                if (hasPermissions()){
+                if (hasPermissions()) {
                     pickFile();
                     //Toast.makeText(this,"Input URL",Toast.LENGTH_SHORT).show();
-                }
-                else {
+                } else {
 
                     requestPermissionWithRationale();
                 }
 
                 return true;
             case R.id.actionImportURL:
-                if (hasPermissions()){
-                     //getFileFromUrl();
+                if (hasPermissions()) {
+                    //getFileFromUrl();
 
-                        actionImportURL();
-                    Toast.makeText(this,"Input URL :"+this.getApplicationInfo().dataDir,Toast.LENGTH_SHORT).show();
-                }
-                else {
+                    actionImportURL();
+                    Toast.makeText(this, "Input URL :" + this.getApplicationInfo().dataDir, Toast.LENGTH_SHORT).show();
+                } else {
 
                     requestPermissionWithRationale();
                 }
 
                 return true;
             case R.id.actionExport:
-               if (hasPermissions()) {
+                if (hasPermissions()) {
 
                     pickFolder();
 
@@ -529,48 +551,47 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
                 return true;
             case R.id.actionSettings:
-               // Toast.makeText(this,"Settings",Toast.LENGTH_SHORT).show();
+                // Toast.makeText(this,"Settings",Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.actionSelectSound:
-               selectSound();
+                selectSound();
                 // Toast.makeText(this,"Settings",Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.actionAdvance:
                 setAdvance();
-                 Toast.makeText(this,"Advanced",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Advanced", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.actionAbout:
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("Seminho "+getResources().getString(R.string.aboutVersion))
+                builder.setTitle("Seminho " + getResources().getString(R.string.aboutVersion))
                         .setMessage(R.string.aboutCompany)
                         .setIcon(R.mipmap.ic_launcher)
                         .setCancelable(true);
 
-                AlertDialog dialog=builder.create();
+                AlertDialog dialog = builder.create();
                 dialog.show();
                 return true;
-         }
+        }
         return super.onOptionsItemSelected(item);
     }
 
-    private void actionImportURL()
-    {
-        final View viewDialog= getLayoutInflater().inflate(R.layout.dialog_download,null);
-        final EditText et =viewDialog.findViewById(R.id.etPathURL);
+    private void actionImportURL() {
+        final View viewDialog = getLayoutInflater().inflate(R.layout.dialog_download, null);
+        final EditText et = viewDialog.findViewById(R.id.etPathURL);
         et.setText(pathURL);
-        AlertDialog.Builder builder= new AlertDialog.Builder(this, android.R.style.Theme_Holo_Light_Dialog);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Holo_Light_Dialog);
         builder.setTitle(R.string.actionImportFromUrl)
                 .setCancelable(true)
                 .setView(viewDialog)
                 .setPositiveButton(R.string.buttonDownload, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                    Toast.makeText(MainActivity.this,getResources().getString(R.string.buttonDownload)
-                +":"+et.getText(),Toast.LENGTH_SHORT).show();
-                   // getFileFromUrl(et.getText().toString());
+                        Toast.makeText(MainActivity.this, getResources().getString(R.string.buttonDownload)
+                                + ":" + et.getText(), Toast.LENGTH_SHORT).show();
+                        // getFileFromUrl(et.getText().toString());
                         downloadFile(et.getText().toString());
-                    dialog.dismiss();
+                        dialog.dismiss();
                     }
                 })
                 .setNegativeButton(R.string.buttonCancel, new DialogInterface.OnClickListener() {
@@ -584,16 +605,15 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
     }
 
-    private void setAdvance()
-    {
+    private void setAdvance() {
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View view = (LinearLayout) getLayoutInflater()
                 .inflate(R.layout.dialog_advance, null);
         final SeekBar seekBar = view.findViewById(R.id.seekBar);
-        final TextView tvAdvance=view.findViewById(R.id.tvAdvance);
-        final Button btnOk=view.findViewById(R.id.btnOk);
-        final Button btnCancel=view.findViewById(R.id.btnCancel);
+        final TextView tvAdvance = view.findViewById(R.id.tvAdvance);
+        final Button btnOk = view.findViewById(R.id.btnOk);
+        final Button btnCancel = view.findViewById(R.id.btnCancel);
 
         builder.setTitle("Please Select Advance ");
         builder.setView(view);
@@ -603,7 +623,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
-                tvAdvance.setText(String.valueOf(progress)+" min");
+                tvAdvance.setText(String.valueOf(progress) + " min");
             }
 
             @Override
@@ -618,7 +638,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         });
 
 //            }
-        final AlertDialog popDialog=builder.create();
+        final AlertDialog popDialog = builder.create();
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -628,9 +648,9 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this,getResources().getString(R.string.advanceResult)
-                        +" "+tvAdvance.getText(),Toast.LENGTH_SHORT).show();
-                MainActivity.this.advance=Long.parseLong(tvAdvance.getText().toString().substring(0,1))*60000;
+                Toast.makeText(MainActivity.this, getResources().getString(R.string.advanceResult)
+                        + " " + tvAdvance.getText(), Toast.LENGTH_SHORT).show();
+                MainActivity.this.advance = Long.parseLong(tvAdvance.getText().toString().substring(0, 1)) * 60000;
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putLong(TAG + "advance", MainActivity.this.advance);
@@ -641,7 +661,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                         getItem(4).
                         getSubMenu().
                         getItem(0).
-                        setTitle(getResources().getString(R.string.actionAdvance) +" : "+(MainActivity.this.advance/60000)+" min");
+                        setTitle(getResources().getString(R.string.actionAdvance) + " : " + (MainActivity.this.advance / 60000) + " min");
 
                 popDialog.dismiss();
                 restartNotify();
@@ -650,17 +670,16 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         popDialog.show();
     }
 
-    private void selectSound()
-    {
-        Intent intent= new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
-        Uri rington =     RingtoneManager.getActualDefaultRingtoneUri(
+    private void selectSound() {
+        Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+        Uri rington = RingtoneManager.getActualDefaultRingtoneUri(
                 getApplicationContext(), RingtoneManager.TYPE_RINGTONE);
         intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, rington);
-        startActivityForResult(intent,RINGTONES_REQUEST_CODE);
+        startActivityForResult(intent, RINGTONES_REQUEST_CODE);
     }
 
 
-//
+    //
     private void pickFile() {
         DialogProperties properties = new DialogProperties();
         properties.selection_mode = DialogConfigs.SINGLE_MODE;
@@ -699,7 +718,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         dialog.setDialogSelectionListener(new DialogSelectionListener() {
             @Override
             public void onSelectedFilePaths(String[] files) {
-                 try {
+                try {
                     File file = new File(files[0] + "/seminho.ics");
                     Log.d(TAG, "GET PATH ===" + file.getAbsolutePath());
                     if (!file.exists()) {
@@ -713,11 +732,11 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                     CalendarOutputter out = new CalendarOutputter();
                     net.fortuna.ical4j.model.Calendar iCal = createICal();
                     out.output(iCal, fout);
-                    Toast.makeText(MainActivity.this, R.string.exportCompleted+" /Seminho.ics", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, R.string.exportCompleted + " /Seminho.ics", Toast.LENGTH_SHORT).show();
 
                 } catch (Exception ex) {
                     Log.d(TAG, "EXCEPTION EXPORT :" + ex.getMessage() + "||||||" + ex.getLocalizedMessage());
-                     Toast.makeText(MainActivity.this, "Export Error", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Export Error", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -726,13 +745,12 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
     }
 
 
-
     ////////////////Permissions
     @SuppressLint("WrongConstant")
     private boolean hasPermissions() {
         int res = 0;
         //string array of permissions,
-        String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.INTERNET,};
+        String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.INTERNET,};
 
         for (String perms : permissions) {
             res = checkCallingOrSelfPermission(perms);
@@ -789,7 +807,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
     public void showNoStoragePermissionSnackbar() {
 
-        Snackbar.make(MainActivity.this.findViewById(R.id.root), "Storage permission isn't granted" , Snackbar.LENGTH_LONG)
+        Snackbar.make(MainActivity.this.findViewById(R.id.root), "Storage permission isn't granted", Snackbar.LENGTH_LONG)
                 .setAction("SETTINGS", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -827,8 +845,8 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
             editor.commit();
 
 
-            Toast.makeText(this,ringtone.toString(),Toast.LENGTH_SHORT).show();
-            Log.d(TAG,"--------------------RINGTONES :"+ringtone.getAuthority());
+            Toast.makeText(this, ringtone.toString(), Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "--------------------RINGTONES :" + ringtone.getAuthority());
 
             return;
         }
@@ -869,7 +887,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         icsCalendar.getProperties().add(new ProdId("-//Seminho"));
         icsCalendar.getProperties().add(CalScale.GREGORIAN);
         icsCalendar.getProperties().add(Version.VERSION_2_0);
-       // Log.d(TAG, "Create Empty ICaL ============" + tzDefault.getID());
+        // Log.d(TAG, "Create Empty ICaL ============" + tzDefault.getID());
         ArrayList<AlarmEvent> events = dbHelper.getEvents();
 
         //  Log.d(TAG, "Create  ICaL  GET EVENTS============" + events.size());
@@ -916,7 +934,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
                 icsCalendar.getComponents().add(vEvent);
             } catch (Exception e) {
-               // Log.d(TAG, "Exception CREATE VEVENT  i=" + i + " Message = " + e.getMessage() + " Excep = " + e.getClass());
+                // Log.d(TAG, "Exception CREATE VEVENT  i=" + i + " Message = " + e.getMessage() + " Excep = " + e.getClass());
             }
         }
 
@@ -939,67 +957,68 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         CalendarBuilder builder = new CalendarBuilder();
         try {
             java.util.TimeZone tzDefault = java.util.TimeZone.getDefault();
-            long deltaTZ=0;
+            long deltaTZ = 0;
             net.fortuna.ical4j.model.Calendar calendar = builder.build(fin);
 
             try {
-                Component c=calendar.getComponent(Component.VTIMEZONE);
+                Component c = calendar.getComponent(Component.VTIMEZONE);
 
-                PropertyList pList= c.getProperties();
+                PropertyList pList = c.getProperties();
                 // ComponentList cList.getComponents();
                 TimeZoneRegistry registry = builder.getRegistry();
-                TimeZone tZvEvent= registry.getTimeZone(((Property)pList.get(0)).getValue());
+                TimeZone tZvEvent = registry.getTimeZone(((Property) pList.get(0)).getValue());
                 //TimeZone tZone= registry.getTimeZone();
-                deltaTZ=tzDefault.getRawOffset()-tZvEvent.getRawOffset();
+                deltaTZ = tzDefault.getRawOffset() - tZvEvent.getRawOffset();
                 // Log.d(TAG,"----------------TZDefaault :"+tzDefault.getRawOffset());//.getProperty(Property.TZOFFSETFROM).getValue());
             } catch (Exception e) {
-              //  e.printStackTrace();
+                //  e.printStackTrace();
             }
 
 
             ComponentList listEvent = calendar.getComponents(Component.VEVENT);
-          for (Object elem : listEvent) {
+            for (Object elem : listEvent) {
                 AlarmEvent ae = new AlarmEvent();
 
                 VEvent vEvent = (VEvent) elem;
-              try {
-                  ae.setTitle(vEvent.getSummary().getValue());
-              } catch (Exception e) {
-                  e.printStackTrace();
-              }
+                try {
+                    ae.setTitle(vEvent.getSummary().getValue());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
-              try {
-                  ae.setContent(vEvent.getDescription().getValue());
-              } catch (Exception e) {
-                  e.printStackTrace();
-              }
-              try {
-                 // Log.d(TAG,"Tinezone = "+vEvent.getStartDate().getTimeZone().);
-                  ae.setTimeAlarm(vEvent.getStartDate().getDate().getTime()-deltaTZ);
-              } catch (Exception e) {
-                  e.printStackTrace();
-              }
-              try {
-                  ae.setUID(vEvent.getUid().getValue());
-              }catch (Exception e) {
-                      e.printStackTrace();
-                      continue;
-                  }
-            int res = dbHelper.replaceAlarmEvent(ae);
-                 Log.d(TAG,"Import:   "+vEvent+"\n\nRES="+res);
+                try {
+                    ae.setContent(vEvent.getDescription().getValue());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                try {
+                    // Log.d(TAG,"Tinezone = "+vEvent.getStartDate().getTimeZone().);
+                    ae.setTimeAlarm(vEvent.getStartDate().getDate().getTime() - deltaTZ);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                try {
+                    ae.setUID(vEvent.getUid().getValue());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    continue;
+                }
+                int res = dbHelper.replaceAlarmEvent(ae);
+                Log.d(TAG, "Import:   " + vEvent + "\n\nRES=" + res);
                 if (res > 0) {
                     //Log.d(TAG,"parse OK");
                 }
-              runOnUiThread(new Runnable() {
-                  @Override
-                  public void run() {
-                      //Toast.makeText(MainActivity.this, R.string.importCompleted, Toast.LENGTH_SHORT).show();
-                      //showEvent(new CalendarDay(calendarView.getCurrentDate().getCalendar()));
-                      decorateCalendar();
-                  }
-              });
-}
-           // decorateCalendar();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //Toast.makeText(MainActivity.this, R.string.importCompleted, Toast.LENGTH_SHORT).show();
+                        //showEvent(new CalendarDay(calendarView.getCurrentDate().getCalendar()));
+                        decorateCalendar();
+                        createList();
+                    }
+                });
+            }
+            // decorateCalendar();
         } catch (IOException e) {
             Log.d(TAG, "IOEXception " + e.getMessage());
             // e.printStackTrace();
@@ -1007,7 +1026,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
             Log.d(TAG, "ParseEXception " + e.getMessage());
             // e.printStackTrace();
         } catch (Exception e) {
-            Log.d(TAG, "AllCreateCalendarEXception " + e.getMessage()+" |"+e.getLocalizedMessage());
+            Log.d(TAG, "AllCreateCalendarEXception " + e.getMessage() + " |" + e.getLocalizedMessage());
             // e.printStackTrace();
         }
 
@@ -1054,14 +1073,13 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                     urlConnection.connect();
                     //Log.d(TAG,"Download connect");
                     //file = File.createTempFile("Mustachify", "download");
-                    file =new File(MainActivity.this.getApplicationInfo().dataDir+"/test.ics");
+                    file = new File(MainActivity.this.getApplicationInfo().dataDir + "/test.ics");
                     //Log.d(TAG,"---------------Download New FILE");
                     // File.createTempFile("Mustachify", "download");
-                    if(!file.createNewFile())
-                    {
-                       //Toast.makeText(this,"Error Create file",Toast.LENGTH_SHORT).show();
+                    if (!file.createNewFile()) {
+                        //Toast.makeText(this,"Error Create file",Toast.LENGTH_SHORT).show();
                         progressDialog.hide();
-                       Log.d(TAG,"ERRRRRRRRRRRRRRRor");
+                        Log.d(TAG, "ERRRRRRRRRRRRRRRor");
                         return null;
                     }
                     //Log.d(TAG,"Download FILE create OK");
@@ -1080,7 +1098,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                         fos.write(buffer, 0, bufferLength);
                         downloadedSize += bufferLength;
                         publishProgress(downloadedSize, totalSize);
-                        Log.d(TAG,"Download READ :"+downloadedSize);
+                        Log.d(TAG, "Download READ :" + downloadedSize);
                     }
 
                     fos.close();
@@ -1104,7 +1122,9 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
             protected void onProgressUpdate(Integer... values) {
                 progressDialog
                         .setProgress((int) ((values[0] / (float) values[1]) * 100));
-            };
+            }
+
+            ;
 
             @Override
             protected void onPostExecute(File file) {
