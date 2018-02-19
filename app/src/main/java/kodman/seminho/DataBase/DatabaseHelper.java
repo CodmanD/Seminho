@@ -420,6 +420,70 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return null;
     }
 
+    public AlarmEvent getNext(long time) {
+
+        SQLiteDatabase database = this.getReadableDatabase();
+        String query = "SELECT * FROM " + ALARMEVENT_TABLE + " WHERE " + COL_DATE_AND_TIME + " >= "
+                + time +
+                " ORDER BY " + COL_DATE_AND_TIME + " LIMIT 1";
+
+         Cursor cursor = database.rawQuery(query, null);
+
+
+        if (cursor.moveToFirst()) {
+            AlarmEvent ae = new AlarmEvent();
+            ae.setId(cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID)));
+            ae.setUID(cursor.getString(cursor.getColumnIndexOrThrow(COL_UID)));
+            ae.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(COL_TITLE)));
+            ae.setContent(cursor.getString(cursor.getColumnIndexOrThrow(COL_CONTENT)));
+            ae.setCategory(cursor.getString(cursor.getColumnIndexOrThrow(COL_CATEGORY)));
+            ae.setAlarmName(cursor.getString(cursor.getColumnIndexOrThrow(COL_ALARMNAME)));
+
+            ae.setTimeAlarm(cursor.getLong(cursor.getColumnIndexOrThrow(COL_DATE_AND_TIME)));
+            cursor.close();
+            database.close();
+            Log.d(TAG, "GET EVENTS AE: " + ae.toString());
+            return ae;
+
+        }
+        cursor.close();
+        database.close();
+        return null;
+    }
+
+    public AlarmEvent getPrev(long time) {
+
+        SQLiteDatabase database = this.getReadableDatabase();
+        String query = "SELECT * FROM " + ALARMEVENT_TABLE + " WHERE " + COL_DATE_AND_TIME + " <= "
+                + time +
+                " ORDER BY " + COL_DATE_AND_TIME + " DESC LIMIT 1";
+
+        // Log.d(TAG, query);
+
+        Cursor cursor = database.rawQuery(query, null);
+        //Log.d(TAG,"GET FROM DB Cursor ="+cursor.getCount());
+
+        if (cursor.moveToFirst()) {
+            AlarmEvent ae = new AlarmEvent();
+            ae.setId(cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID)));
+            ae.setUID(cursor.getString(cursor.getColumnIndexOrThrow(COL_UID)));
+            ae.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(COL_TITLE)));
+            ae.setContent(cursor.getString(cursor.getColumnIndexOrThrow(COL_CONTENT)));
+            ae.setCategory(cursor.getString(cursor.getColumnIndexOrThrow(COL_CATEGORY)));
+            ae.setAlarmName(cursor.getString(cursor.getColumnIndexOrThrow(COL_ALARMNAME)));
+
+            ae.setTimeAlarm(cursor.getLong(cursor.getColumnIndexOrThrow(COL_DATE_AND_TIME)));
+            cursor.close();
+            database.close();
+            Log.d(TAG, "GET EVENTS AE: " + ae.toString());
+            return ae;
+
+        }
+        cursor.close();
+        database.close();
+        return null;
+    }
+
 
 
     public ArrayList<AlarmEvent> getEventForMain() {

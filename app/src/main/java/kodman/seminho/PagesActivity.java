@@ -130,9 +130,6 @@ public class PagesActivity extends AppCompatActivity {
                 if (currentAE != null && events.size() - 1 >= position) {
                     currentAE=events.get(position);
                     etTitle.setText(currentAE.getTitle());
-
-                   // Log.d(TAG, "onPageSelected  Position =" + position);
-
                 }
 
             }

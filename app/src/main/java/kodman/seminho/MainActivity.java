@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         ringtone=Uri.parse(preferences.getString(TAG + "ringtone", "content://settings/system/notification_sound"));
         advance=preferences.getLong(TAG + "advance",0);
         pathURL=preferences.getString(TAG + "pathURL",getResources().getString(R.string.pathURL));
-        Log.d(TAG,"Theme = "+themeNumber+" ringtone"+ringtone+" Advance = "+advance);
+       // Log.d(TAG,"Theme = "+themeNumber+" ringtone"+ringtone+" Advance = "+advance);
         if (themeNumber == 1) {
             setTheme(R.style.AppThemeBlue);
         }
@@ -157,17 +157,27 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        //ScrollView sv=this.findViewById(R.id.sV);
-        //sv.scrollTo(0, sv.getScrollY());
-        //sv.fullScroll(ScrollView.FOCUS_UP);
-
         dbHelper = DatabaseHelper.getInstance(this);
-       // toolbar.setNavigationIcon(R.mipmap.ic_dehaze_white_24dp);
 
         calendarView.setOnDateChangedListener(this);
         calendarView.setOnMonthChangedListener(this);
         String title = FORMATTER.format(new Date(System.currentTimeMillis()));
         getSupportActionBar().setTitle(title);
+
+
+     lv.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View view, int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
+            Log.d(TAG,"LayoutChangeLisyener");
+
+               // if(start)
+                {
+                                            Log.d(TAG,"ScrollTo");
+                                            sv.scrollTo(0,0);
+                                            start=false;
+                                        }
+            }
+        });
 
         new java.util.Timer().schedule
                 (
@@ -177,15 +187,20 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                                 tv1.post(new Runnable() {
                                     @Override
                                     public void run() {
+                                      //  Log.d(TAG,"Timer Tick");
                                         showCurrentEvent();
-                                        if(start)
-                                        {
-                                            sv.scrollTo(0,0);
-                                            start=false;
-                                        }
+//                                        if(start)
+//                                        {
+//                                            Log.d(TAG,"ScrollTo");
+//                                            sv.scrollTo(0,0);
+//                                            start=false;
+//                                        }
+
                                     }
+
+
                                 });
-                                // Log.d(TAG,"Timer Tick");
+
                             }
                         },
                         0, 60000);
@@ -197,8 +212,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
     private void restartNotify() {
 
-        //AlarmEvent ae = dbHelper.getFirstEvent();
-        AlarmEvent ae = dbHelper.getNextEvent(advance);
+         AlarmEvent ae = dbHelper.getNextEvent(advance);
         if (ae != null) {
             Intent alarmIntent = new Intent(this, AlarmReceiver.class);
             AlarmUtil.setAlarm(this, alarmIntent, (int) ae.getId(),ringtone, ae.getTimeAlarm(),advance);
@@ -245,7 +259,12 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                           });
         lv.setAdapter(adapter);
         getListViewSize(lv,adapter);
-        //sv.fullScroll(ScrollView.FOCUS_UP);adap
+        if(start)
+        {
+            Log.d(TAG,"ScrollTo");
+            sv.scrollTo(0,0);
+            start=false;
+        }
     }
 
     public static void getListViewSize(ListView myListView,ListAdapter adapter) {
@@ -273,7 +292,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
 
 
-
+/*
     private void showCurrentEvent() {
 
         Calendar cal = Calendar.getInstance();
@@ -323,22 +342,25 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         }else
             tv1.setText("no next event");
     }
-/*
+    */
+
     private void showCurrentEvent() {
 
         Calendar cal = Calendar.getInstance();
 
         AlarmEvent ae = dbHelper.getFirstEvent();
 
+       // Log.d(TAG,"showCurrentEvents = "+ae);
         if (ae != null) {
             long t = ae.getTimeAlarm();
             long res = t - System.currentTimeMillis();
+            //Log.d(TAG, "Res :" + res);
 
-            int days = (int) res / 86400000;
+            int days = (int) (res / 86400000);
             int hours = (int) ((res % 86400000) / 3600000);
             int minutes = (int) ((res % 3600000) / 60000);
 
-            // Log.d(TAG, "TTIME :" + days + "/" + hours + "/" + minutes);
+          //  Log.d(TAG, "TTIME :" + days + "/" + hours + "/" + minutes);
 
             Resources r = getResources();
             String d = "";
@@ -365,7 +387,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         } else
             tv1.setText("no next event");
     }
-*/
+
     @Override
     public void onDateSelected(@NonNull MaterialCalendarView widget, @Nullable CalendarDay date, boolean selected) {
         //tvDate.setText(getSelectedDatesString());
@@ -434,19 +456,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         createList();
         showCurrentEvent();
         calendarView.clearSelection();
-      // final ScrollView sv=this.findViewById(R.id.sV);
-       // Point size = new Point();
-       //getWindowManager().getDefaultDisplay().getSize(size);
-        sv.scrollTo(0, 0);
 
-
-//        sv.post(new Runnable() {
-//            public void run() {
-//                sv.scrollTo(0, sv.getBottom());
-//            }
-//        });
-        //sv.fullScroll(R.id.textView1);
-      //Log.d(TAG,"Scroll"+sv+" pos = "+size.y);
     }
 
     @Override
@@ -649,68 +659,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         startActivityForResult(intent,RINGTONES_REQUEST_CODE);
     }
 
-//URL
-    private  void getFileFromUrl(String path)
-    {
 
-        try {
-          URL  url = new URL(path);
-           HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-
-            urlConnection.setRequestMethod("GET");
-            urlConnection.setDoOutput(true);
-            urlConnection.connect();
-
-            //file = File.createTempFile("Mustachify", "download");
-           File file =new File("test.ics");
-            // File.createTempFile("Mustachify", "download");
-            if(!file.createNewFile())
-            {
-                //Toast.makeText(this,"Error Create file",Toast.LENGTH_SHORT).show();
-                Log.d(TAG,"ERRRRRRRRRRRRRRRor");
-              // return null;
-            }
-            FileOutputStream   fos = new FileOutputStream(file);
-            InputStream  inputStream = urlConnection.getInputStream();
-
-            long totalSize = urlConnection.getContentLength();
-            int downloadedSize = 0;
-
-            byte[] buffer = new byte[1024];
-           int bufferLength = 0;
-
-            // читаем со входа и пишем в выход,
-            // с каждой итерацией публикуем прогресс
-            while ((bufferLength = inputStream.read(buffer)) > 0) {
-                fos.write(buffer, 0, bufferLength);
-                downloadedSize += bufferLength;
-                //publishProgress(downloadedSize, totalSize);
-            }
-
-            fos.close();
-            inputStream.close();
-
-           // return file;
-        } catch (MalformedURLException e) {
-            Log.d(TAG,"---------URLException "+e.getMessage());
-            e.printStackTrace();
-           // m_error = e;
-        } catch (IOException e) {
-            Log.d(TAG,"---------IOException "+e.getMessage());
-            e.printStackTrace();
-           // m_error = e;
-        }
-
-//        VEvent ve =new VEvent();
-//            PropertyList list=ve.getProperties();
-//          ve.getProperties().add(new Description("DESSSCRIPTION"));
-//          //  ve.getDescription().setValue("DEsripppppption");
-//        Log.d(TAG,"---------GetProperties ");
-//            for(int i=0;i<list.size();i++)
-//            {
-//        Log.d(TAG,"Proper i="+i+" : "+list.get(i));
-//        }
-    }
 //
     private void pickFile() {
         DialogProperties properties = new DialogProperties();
@@ -910,17 +859,17 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
     private net.fortuna.ical4j.model.Calendar createICal() {
         TimeZoneRegistry registry = TimeZoneRegistryFactory.getInstance().createRegistry();
         java.util.TimeZone tzDefault = java.util.TimeZone.getDefault();
-        // Log.d(TAG, "TIMEZONE ============" + tzDefault.getID());
         TimeZone timezone = registry.getTimeZone(tzDefault.getID());
 
         VTimeZone tz = timezone.getVTimeZone();
-        Log.d(TAG, "TIMEZONE ============" + tzDefault.getID());
+        //Log.d(TAG, "TIMEZONE ============" + tzDefault.getID());
 
         net.fortuna.ical4j.model.Calendar icsCalendar = new net.fortuna.ical4j.model.Calendar();
+        icsCalendar.getComponents().add(tz);
         icsCalendar.getProperties().add(new ProdId("-//Seminho"));
         icsCalendar.getProperties().add(CalScale.GREGORIAN);
         icsCalendar.getProperties().add(Version.VERSION_2_0);
-        Log.d(TAG, "Create Empty ICaL ============" + tzDefault.getID());
+       // Log.d(TAG, "Create Empty ICaL ============" + tzDefault.getID());
         ArrayList<AlarmEvent> events = dbHelper.getEvents();
 
         //  Log.d(TAG, "Create  ICaL  GET EVENTS============" + events.size());
@@ -941,17 +890,6 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                 startDate.set(java.util.Calendar.SECOND, startDate.get(Calendar.SECOND));
                 //    Log.d(TAG, "Create new VEVENT get Calendar ============" + tzDefault.getID());
 
-/*
-            java.util.Calendar endDate = startDate;
-            endDate.setTimeInMillis(startDate.getTimeInMillis() + 600000);
-            endDate.setTimeZone(timezone);
-            endDate.set(java.util.Calendar.MONTH, java.util.Calendar.NOVEMBER);
-            endDate.set(java.util.Calendar.DAY_OF_MONTH, 10);
-            endDate.set(java.util.Calendar.YEAR, 2013);
-            endDate.set(java.util.Calendar.HOUR_OF_DAY, 20);
-            endDate.set(java.util.Calendar.MINUTE, 0);
-            endDate.set(java.util.Calendar.SECOND, 0);
-            */
 
                 String eventName = events.get(i).getTitle();
                 DateTime start = new DateTime(startDate.getTime());
@@ -978,68 +916,46 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
                 icsCalendar.getComponents().add(vEvent);
             } catch (Exception e) {
-                Log.d(TAG, "Exception CREATE VEVENT  i=" + i + " Message = " + e.getMessage() + " Excep = " + e.getClass());
+               // Log.d(TAG, "Exception CREATE VEVENT  i=" + i + " Message = " + e.getMessage() + " Excep = " + e.getClass());
             }
         }
 
-        Log.d(TAG, "ICalendar =========" + icsCalendar);
+        //Log.d(TAG, "ICalendar =========" + icsCalendar);
         return icsCalendar;
     }
 
 
     private void parseCalendar(String path) {
-         //dbHelper = kodman.seminho.DatabaseHelper.getInstance(this);
-       // dbHelper.lookDB();
-        // Log.d(TAG, "Parse " + path);
+
         FileInputStream fin = null;
         try {
             fin = new FileInputStream(path);
         } catch (IOException ioe) {
-            Log.d(TAG, "EXCEPTION InputStream");
+            //Log.d(TAG, "EXCEPTION InputStream");
+            return;
         }
 
 
         CalendarBuilder builder = new CalendarBuilder();
         try {
-            net.fortuna.ical4j.model.Calendar calendar = builder.build(fin);
-           // calendar.getComponent(Component.VTIMEZONE);
-
-            //Log.d(TAG,"-----------Calendar ZONE= "
-              //      +calendar);//.getProperty(Property.TZOFFSETFROM).getValue());
-
-             Component c=calendar.getComponent(Component.VTIMEZONE);
-           // c.getProperty(Property.LOCATION).getParameter(Parameter.TZID)
-
-             Property p=c.getProperty(Property.TZOFFSETFROM);
-          //  Log.d(TAG,"----------------Property :"+p.getParameters().size());//.getProperty(Property.TZOFFSETFROM).getValue());
-            // Log.d(TAG,"----------------Component :"+c);//.getProperty(Property.TZOFFSETFROM).getValue());
-           PropertyList pList= c.getProperties();
-           // ComponentList cList.getComponents();
-            TimeZoneRegistry registry = builder.getRegistry();
-            TimeZone tZvEvent= registry.getTimeZone(((Property)pList.get(0)).getValue());
-            //TimeZone tZone= registry.getTimeZone();
             java.util.TimeZone tzDefault = java.util.TimeZone.getDefault();
+            long deltaTZ=0;
+            net.fortuna.ical4j.model.Calendar calendar = builder.build(fin);
 
-            long deltaTZ=tzDefault.getRawOffset()-tZvEvent.getRawOffset();
-            Log.d(TAG,"----------------TZDefaault :"+tzDefault.getRawOffset());//.getProperty(Property.TZOFFSETFROM).getValue());
+            try {
+                Component c=calendar.getComponent(Component.VTIMEZONE);
 
-           // for(int i=0;i<pList.size();i++)
-               // for(int i=0;i<cList.size();i++)
-            {
-               // PropertyList ll=pList.getProperties(Property.TZOFFSETFROM);
-
-            //    TimeZoneRegistry registry = builder.getRegistry();
-             //   TimeZone tBer= registry.getTimeZone(((Property)pList.get(i)).getValue());
-
-                //java.util.TimeZone tzDefault = java.util.TimeZone.getDefault();
-                // Log.d(TAG, "TIMEZONE ============" + tzDefault.getID());
-                //TimeZone tZap = registry.getTimeZone(tzDefault.getID());
-                //Log.d(TAG,"TZ+Ber"+tBer.getRawOffset()+" / "+tZap.getRawOffset());//timezone.getRawOffset()
-
-//                if(timezone-tz>0)
-               //Log.d(TAG," ------------Timezone:"+t);
-             //   Log.d(TAG," ------------Property:"+cList.get(i).toString());
+                PropertyList pList= c.getProperties();
+                // ComponentList cList.getComponents();
+                TimeZoneRegistry registry = builder.getRegistry();
+                TimeZone tZvEvent= registry.getTimeZone(((Property)pList.get(0)).getValue());
+                //TimeZone tZone= registry.getTimeZone();
+                deltaTZ=tzDefault.getRawOffset()-tZvEvent.getRawOffset();
+                // Log.d(TAG,"----------------TZDefaault :"+tzDefault.getRawOffset());//.getProperty(Property.TZOFFSETFROM).getValue());
+            } catch (Exception e) {
+              //  e.printStackTrace();
             }
+
 
             ComponentList listEvent = calendar.getComponents(Component.VEVENT);
           for (Object elem : listEvent) {
@@ -1069,44 +985,20 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                       e.printStackTrace();
                       continue;
                   }
-                //VAlarm vAlarm = null;
-//                try {
-//                    vAlarm = (VAlarm) (vEvent.getAlarms().get(0));
-//                    // Log.d(TAG," PARSE Vevent="+vEvent+"\n\n VALARM = "+vAlarm);
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-
-
-
-//                try {
-//                    ae.setAlarmName(vAlarm.getSummary().getValue());
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-
-                //     Log.d(TAG,"Valarm Description = "+vAlarm.getDescription().getValue());
-
-                //   Log.d(TAG,"Valarm Summary = "+vAlarm.getDescription().getValue());
-                //  Log.d(TAG,"Get Vevent OK ");
-
-
-                // String description = vEvent.getDescription().getValue();
-                //   Log.d(TAG,"Get Desription OK ");
-
-                //  String title = event.getSummary().getValue();
-                //Log.d(TAG,"Get TITLE OK ");
-                // Log.d(TAG, "Import:  AE: " + ae);
-
-                int res = dbHelper.replaceAlarmEvent(ae);
+            int res = dbHelper.replaceAlarmEvent(ae);
                  Log.d(TAG,"Import:   "+vEvent+"\n\nRES="+res);
                 if (res > 0) {
                     //Log.d(TAG,"parse OK");
                 }
-                Toast.makeText(MainActivity.this, R.string.importCompleted, Toast.LENGTH_SHORT).show();
-                // showEvent(new CalendarDay(calendarView.getCurrentDate().getCalendar()));
-
-            }
+              runOnUiThread(new Runnable() {
+                  @Override
+                  public void run() {
+                      //Toast.makeText(MainActivity.this, R.string.importCompleted, Toast.LENGTH_SHORT).show();
+                      //showEvent(new CalendarDay(calendarView.getCurrentDate().getCalendar()));
+                      decorateCalendar();
+                  }
+              });
+}
            // decorateCalendar();
         } catch (IOException e) {
             Log.d(TAG, "IOEXception " + e.getMessage());
@@ -1115,7 +1007,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
             Log.d(TAG, "ParseEXception " + e.getMessage());
             // e.printStackTrace();
         } catch (Exception e) {
-            Log.d(TAG, "AllCreateCalendarEXception " + e.getMessage());
+            Log.d(TAG, "AllCreateCalendarEXception " + e.getMessage()+" |"+e.getLocalizedMessage());
             // e.printStackTrace();
         }
 
@@ -1153,17 +1045,17 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                 FileOutputStream fos = null;
 
                 try {
-                    Log.d(TAG,"Download "+params[0]);
+                    //Log.d(TAG,"Download "+params[0]);
                     url = new URL(params[0]);
                     urlConnection = (HttpURLConnection) url.openConnection();
 
                     urlConnection.setRequestMethod("GET");
                     urlConnection.setDoOutput(true);
                     urlConnection.connect();
-                    Log.d(TAG,"Download connect");
+                    //Log.d(TAG,"Download connect");
                     //file = File.createTempFile("Mustachify", "download");
                     file =new File(MainActivity.this.getApplicationInfo().dataDir+"/test.ics");
-                    Log.d(TAG,"---------------Download New FILE");
+                    //Log.d(TAG,"---------------Download New FILE");
                     // File.createTempFile("Mustachify", "download");
                     if(!file.createNewFile())
                     {
@@ -1172,7 +1064,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                        Log.d(TAG,"ERRRRRRRRRRRRRRRor");
                         return null;
                     }
-                    Log.d(TAG,"Download FILE create OK");
+                    //Log.d(TAG,"Download FILE create OK");
                     fos = new FileOutputStream(file);
                     inputStream = urlConnection.getInputStream();
 

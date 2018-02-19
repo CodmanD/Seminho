@@ -151,7 +151,11 @@ public class PageFragment extends Fragment implements View.OnTouchListener {
     @Override
     public boolean onTouch(View view, MotionEvent event) {
 
-        if (event.getAction() == MotionEvent.ACTION_DOWN || isDialog) return true;
+
+      // event.
+        if (event.getAction() == MotionEvent.ACTION_DOWN
+                || isDialog
+                ||event.getAction() == MotionEvent.ACTION_MOVE) return true;
 
 
         switch (view.getId()) {
