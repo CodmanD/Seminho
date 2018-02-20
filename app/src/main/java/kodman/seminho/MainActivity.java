@@ -77,10 +77,12 @@ import net.fortuna.ical4j.model.component.VTimeZone;
 import net.fortuna.ical4j.model.property.Action;
 import net.fortuna.ical4j.model.property.CalScale;
 import net.fortuna.ical4j.model.property.Description;
+import net.fortuna.ical4j.model.property.LastModified;
 import net.fortuna.ical4j.model.property.ProdId;
 import net.fortuna.ical4j.model.property.Summary;
 import net.fortuna.ical4j.model.property.Uid;
 import net.fortuna.ical4j.model.property.Version;
+import net.fortuna.ical4j.util.CompatibilityHints;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -695,8 +697,9 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         dialog.setDialogSelectionListener(new DialogSelectionListener() {
             @Override
             public void onSelectedFilePaths(String[] files) {
+                dialog.dismiss();
                 parseCalendar(files[0]);
-                Toast.makeText(MainActivity.this, "Import file :" + files[0], Toast.LENGTH_SHORT).show();
+               // Toast.makeText(MainActivity.this, "Import file :" + files[0], Toast.LENGTH_SHORT).show();
             }
         });
         dialog.show();
@@ -732,7 +735,8 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                     CalendarOutputter out = new CalendarOutputter();
                     net.fortuna.ical4j.model.Calendar iCal = createICal();
                     out.output(iCal, fout);
-                    Toast.makeText(MainActivity.this, R.string.exportCompleted + " /Seminho.ics", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this,
+                            getResources().getString(R.string.exportCompleted) + " /Seminho.ics", Toast.LENGTH_SHORT).show();
 
                 } catch (Exception ex) {
                     Log.d(TAG, "EXCEPTION EXPORT :" + ex.getMessage() + "||||||" + ex.getLocalizedMessage());
@@ -875,6 +879,8 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
     ///////CREATED CALENDAR Ical4j
     private net.fortuna.ical4j.model.Calendar createICal() {
+
+        //net.fortuna.ical4j.parsing.relaxed=true;
         TimeZoneRegistry registry = TimeZoneRegistryFactory.getInstance().createRegistry();
         java.util.TimeZone tzDefault = java.util.TimeZone.getDefault();
         TimeZone timezone = registry.getTimeZone(tzDefault.getID());
@@ -883,6 +889,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         //Log.d(TAG, "TIMEZONE ============" + tzDefault.getID());
 
         net.fortuna.ical4j.model.Calendar icsCalendar = new net.fortuna.ical4j.model.Calendar();
+
         icsCalendar.getComponents().add(tz);
         icsCalendar.getProperties().add(new ProdId("-//Seminho"));
         icsCalendar.getProperties().add(CalScale.GREGORIAN);
@@ -912,13 +919,22 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                 String eventName = events.get(i).getTitle();
                 DateTime start = new DateTime(startDate.getTime());
                 //  DateTime end = new DateTime(endDate.getTime());
-                String[] ps = new String[]{events.get(i).getTitle(), events.get(i).getTitle()};
+                //String[] ps = new String[]{events.get(i).getTitle(), events.get(i).getTitle()};
+
                 VEvent vEvent = new VEvent(start, new Dur(0, 0, 15, 0), eventName);
+
+
+                //setLastModified
+                //DateTime lastModified = new DateTime(events.get(i).getLastModified());
+                //vEvent.getProperties(Property.LAST_MODIFIED).add(lastModified);
+                vEvent.getProperties()
+                        .add(new LastModified(new DateTime(events.get(i).getLastModified())));
 
                 vEvent.getProperties().add(new Uid(events.get(i).getUID()));
                 //      Log.d(TAG, "Create new UID  generate ============" );
 
                 //Add VAlarm
+
                 VAlarm vAlarm = new VAlarm(new Dur(-1000 * 60 * 60));
                 vAlarm.getProperties().add(new Description(events.get(i).getCategory()));
                 vAlarm.getProperties().add(Action.DISPLAY);
@@ -934,7 +950,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
                 icsCalendar.getComponents().add(vEvent);
             } catch (Exception e) {
-                // Log.d(TAG, "Exception CREATE VEVENT  i=" + i + " Message = " + e.getMessage() + " Excep = " + e.getClass());
+                 Log.d(TAG, "Exception CREATE VEVENT  i=" + i + " Message = " + e.getMessage() + " Excep = " + e.getClass());
             }
         }
 
@@ -944,6 +960,20 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
 
     private void parseCalendar(String path) {
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Importing ...");
+        progressDialog.setCancelable(false);
+        progressDialog.setMax(100);
+        progressDialog
+                .setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+
+        progressDialog.show();
+        Log.d(TAG,"SHOW PROGRESS");
+
+        CompatibilityHints.setHintEnabled(CompatibilityHints.KEY_RELAXED_PARSING, true);
+        CompatibilityHints.setHintEnabled(CompatibilityHints.KEY_OUTLOOK_COMPATIBILITY, true);
+        CompatibilityHints.setHintEnabled(CompatibilityHints.KEY_RELAXED_UNFOLDING, true);
+        CompatibilityHints.setHintEnabled(CompatibilityHints.KEY_RELAXED_VALIDATION, true);
 
         FileInputStream fin = null;
         try {
@@ -977,9 +1007,17 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
             ComponentList listEvent = calendar.getComponents(Component.VEVENT);
             for (Object elem : listEvent) {
+                progressDialog.setProgress(10);
                 AlarmEvent ae = new AlarmEvent();
 
                 VEvent vEvent = (VEvent) elem;
+                try {
+                    ae.setLastModified(vEvent.getLastModified().getDate().getTime());
+                }catch(Exception e)
+                {
+                    e.printStackTrace();
+                }
+
                 try {
                     ae.setTitle(vEvent.getSummary().getValue());
                 } catch (Exception e) {
@@ -1001,10 +1039,10 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                     ae.setUID(vEvent.getUid().getValue());
                 } catch (Exception e) {
                     e.printStackTrace();
-                    continue;
+                   // continue;
                 }
                 int res = dbHelper.replaceAlarmEvent(ae);
-                Log.d(TAG, "Import:   " + vEvent + "\n\nRES=" + res);
+                Log.d(TAG, "------Import:   " +ae + "RES=" + res);
                 if (res > 0) {
                     //Log.d(TAG,"parse OK");
                 }
@@ -1017,6 +1055,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                         createList();
                     }
                 });
+                Thread.sleep(2000);
             }
             // decorateCalendar();
         } catch (IOException e) {
@@ -1029,8 +1068,9 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
             Log.d(TAG, "AllCreateCalendarEXception " + e.getMessage() + " |" + e.getLocalizedMessage());
             // e.printStackTrace();
         }
-
+        progressDialog.dismiss();
         //dbHelper.lookDB();
+        Toast.makeText(MainActivity.this, "Import file :" + path, Toast.LENGTH_SHORT).show();
     }
 
     private void downloadFile(String url) {

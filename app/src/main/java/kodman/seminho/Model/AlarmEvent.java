@@ -8,6 +8,7 @@ public class AlarmEvent {
     String title;
     String content;
     long timeAlarm;
+    long lastModified;
     String category;
     String alarmName;
     long id = -1;
@@ -17,6 +18,7 @@ public class AlarmEvent {
         this.title = "";
         this.content = "";
         this.timeAlarm = System.currentTimeMillis();
+        this.lastModified=System.currentTimeMillis();
         this.category = "event";
         this.alarmName = "";
         this.uID="";
@@ -59,6 +61,9 @@ public class AlarmEvent {
     public void setTimeAlarm(long timeAlarm) {
         this.timeAlarm = timeAlarm;
     }
+    public void setLastModified(long  lastModified) {
+        this.lastModified= lastModified;
+    }
 
     public long getId() {
         return this.id;
@@ -87,6 +92,9 @@ public class AlarmEvent {
 
     public long getTimeAlarm() {
         return this.timeAlarm;
+    }
+    public long getLastModified() {
+        return this.lastModified;
     }
 
 

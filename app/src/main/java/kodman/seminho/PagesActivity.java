@@ -199,7 +199,7 @@ public class PagesActivity extends AppCompatActivity {
                     currentAE.setAlarmName(etAlarmName.getText().toString());
                     currentAE.setCategory(categories[spCategory.getSelectedItemPosition()]);
                     currentAE.setTimeAlarm(calendar.getTimeInMillis());
-
+                    currentAE.setLastModified(System.currentTimeMillis());
 
                     if (this.STATUS == STATUS_ADD) {
 

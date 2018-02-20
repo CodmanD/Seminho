@@ -37,6 +37,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COL_MONTH = "MONTH";
     private static final String COL_YEAR = "YEAR";
     private static final String COL_DATE_AND_TIME = "DATE_AND_TIME";
+    private static final String COL_LAST_MODIFIED = "LAST_MODIFIED";
 
 
     public static synchronized DatabaseHelper getInstance(Context context) {
@@ -66,6 +67,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + COL_DAY + " TEXT, "
                 + COL_MONTH + " TEXT, "
                 + COL_YEAR + " TEXT, "
+                + COL_LAST_MODIFIED + " INTEGER, "
                 + COL_DATE_AND_TIME + " INTEGER, CONSTRAINT unique_UID UNIQUE (" + COL_UID + "))"
         );
     }
@@ -91,6 +93,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COL_CATEGORY, ae.getCategory());
         values.put(COL_ALARMNAME, ae.getAlarmName());
         values.put(COL_DATE_AND_TIME, ae.getTimeAlarm());
+        values.put(COL_LAST_MODIFIED, ae.getLastModified());
 
         Log.d(TAG, " ADD to  DB=" + values);
 
@@ -142,8 +145,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 ae.setContent(cursor.getString(cursor.getColumnIndexOrThrow(COL_CONTENT)));
                 ae.setCategory(cursor.getString(cursor.getColumnIndexOrThrow(COL_CATEGORY)));
                 ae.setAlarmName(cursor.getString(cursor.getColumnIndexOrThrow(COL_ALARMNAME)));
-
-                ae.setTimeAlarm(Long.parseLong(cursor.getString(cursor.getColumnIndexOrThrow(COL_DATE_AND_TIME))));
+                ae.setLastModified(cursor.getLong(cursor.getColumnIndexOrThrow(COL_LAST_MODIFIED)));
+                //ae.setTimeAlarm(Long.parseLong(cursor.getString(cursor.getColumnIndexOrThrow(COL_DATE_AND_TIME))));
+                ae.setTimeAlarm(cursor.getLong(cursor.getColumnIndexOrThrow(COL_DATE_AND_TIME)));
                 Log.d(TAG, "AE:" + ae);
 
             } while (cursor.moveToNext());
@@ -166,6 +170,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 ae.setContent(cursor.getString(cursor.getColumnIndexOrThrow(COL_CONTENT)));
                 ae.setCategory(cursor.getString(cursor.getColumnIndexOrThrow(COL_CATEGORY)));
                 ae.setAlarmName(cursor.getString(cursor.getColumnIndexOrThrow(COL_ALARMNAME)));
+                ae.setLastModified(cursor.getLong(cursor.getColumnIndexOrThrow(COL_LAST_MODIFIED)));
                 ae.setTimeAlarm(cursor.getLong(cursor.getColumnIndexOrThrow(COL_DATE_AND_TIME)));
                 //Log.d(TAG,"GET EVENTS AE: "+ae.toString());
                 events.add(ae);
@@ -219,6 +224,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 ae.setCategory(cursor.getString(cursor.getColumnIndexOrThrow(COL_CATEGORY)));
                 ae.setAlarmName(cursor.getString(cursor.getColumnIndexOrThrow(COL_ALARMNAME)));
                 ae.setTimeAlarm(cursor.getLong(cursor.getColumnIndexOrThrow(COL_DATE_AND_TIME)));
+                ae.setLastModified(cursor.getLong(cursor.getColumnIndexOrThrow(COL_LAST_MODIFIED)));
                 //Log.d(TAG,"GET EVENTS AE: "+ae.toString());
                 events.add(ae);
             } while (cursor.moveToNext());
@@ -240,15 +246,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             String queryUp = "   UPDATE " + ALARMEVENT_TABLE + " SET " + COL_TITLE + " = " + ae.getTitle() + ", " + COL_DATE_AND_TIME + " = " + ae.getTimeAlarm() +
                     ", " + COL_CONTENT + " = " + ae.getContent() + COL_CATEGORY + " = " + ae.getCategory() + ", " + COL_ALARMNAME + " = " + ae.getAlarmName() +
-                    " WHERE " + COL_UID + " = '" + ae.getUID() + "'";
+                    " WHERE " + COL_UID + " = '" + ae.getUID() + "' AND "+COL_LAST_MODIFIED+" < "+ae.getLastModified();
 
 
             values.put(COL_TITLE, ae.getTitle());
             values.put(COL_CONTENT, ae.getContent());
             values.put(COL_CATEGORY, ae.getCategory());
             values.put(COL_ALARMNAME, ae.getAlarmName());
-
             values.put(COL_DATE_AND_TIME, ae.getTimeAlarm());
+            values.put(COL_LAST_MODIFIED, ae.getLastModified());
 
 
             int updCount = database.update(ALARMEVENT_TABLE, values, COL_UID + " = '" + ae.getUID() + "'",
@@ -265,6 +271,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(COL_CATEGORY, ae.getCategory());
             values.put(COL_ALARMNAME, ae.getAlarmName());
             values.put(COL_DATE_AND_TIME, ae.getTimeAlarm());
+            values.put(COL_LAST_MODIFIED, ae.getLastModified());
 
             long res = database.insert(DatabaseHelper.ALARMEVENT_TABLE, null, values);
 
@@ -331,6 +338,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             ae.setCategory(cursor.getString(cursor.getColumnIndexOrThrow(COL_CATEGORY)));
             ae.setAlarmName(cursor.getString(cursor.getColumnIndexOrThrow(COL_ALARMNAME)));
             ae.setTimeAlarm(cursor.getLong(cursor.getColumnIndexOrThrow(COL_DATE_AND_TIME)));
+            ae.setLastModified(cursor.getLong(cursor.getColumnIndexOrThrow(COL_LAST_MODIFIED)));
             aes[0]=ae;
             if (cursor.moveToNext()) {
             ae.setId(cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID)));
@@ -340,6 +348,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             ae.setCategory(cursor.getString(cursor.getColumnIndexOrThrow(COL_CATEGORY)));
             ae.setAlarmName(cursor.getString(cursor.getColumnIndexOrThrow(COL_ALARMNAME)));
             ae.setTimeAlarm(cursor.getLong(cursor.getColumnIndexOrThrow(COL_DATE_AND_TIME)));
+                ae.setLastModified(cursor.getLong(cursor.getColumnIndexOrThrow(COL_LAST_MODIFIED)));
             aes[1]=ae;
             }
             cursor.close();
@@ -374,7 +383,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             ae.setContent(cursor.getString(cursor.getColumnIndexOrThrow(COL_CONTENT)));
             ae.setCategory(cursor.getString(cursor.getColumnIndexOrThrow(COL_CATEGORY)));
             ae.setAlarmName(cursor.getString(cursor.getColumnIndexOrThrow(COL_ALARMNAME)));
-
+            ae.setLastModified(cursor.getLong(cursor.getColumnIndexOrThrow(COL_LAST_MODIFIED)));
             ae.setTimeAlarm(cursor.getLong(cursor.getColumnIndexOrThrow(COL_DATE_AND_TIME)));
             cursor.close();
             database.close();
@@ -407,7 +416,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             ae.setContent(cursor.getString(cursor.getColumnIndexOrThrow(COL_CONTENT)));
             ae.setCategory(cursor.getString(cursor.getColumnIndexOrThrow(COL_CATEGORY)));
             ae.setAlarmName(cursor.getString(cursor.getColumnIndexOrThrow(COL_ALARMNAME)));
-
+            ae.setLastModified(cursor.getLong(cursor.getColumnIndexOrThrow(COL_LAST_MODIFIED)));
             ae.setTimeAlarm(cursor.getLong(cursor.getColumnIndexOrThrow(COL_DATE_AND_TIME)));
             cursor.close();
             database.close();
@@ -438,7 +447,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             ae.setContent(cursor.getString(cursor.getColumnIndexOrThrow(COL_CONTENT)));
             ae.setCategory(cursor.getString(cursor.getColumnIndexOrThrow(COL_CATEGORY)));
             ae.setAlarmName(cursor.getString(cursor.getColumnIndexOrThrow(COL_ALARMNAME)));
-
+            ae.setLastModified(cursor.getLong(cursor.getColumnIndexOrThrow(COL_LAST_MODIFIED)));
             ae.setTimeAlarm(cursor.getLong(cursor.getColumnIndexOrThrow(COL_DATE_AND_TIME)));
             cursor.close();
             database.close();
@@ -471,7 +480,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             ae.setContent(cursor.getString(cursor.getColumnIndexOrThrow(COL_CONTENT)));
             ae.setCategory(cursor.getString(cursor.getColumnIndexOrThrow(COL_CATEGORY)));
             ae.setAlarmName(cursor.getString(cursor.getColumnIndexOrThrow(COL_ALARMNAME)));
-
+            ae.setLastModified(cursor.getLong(cursor.getColumnIndexOrThrow(COL_LAST_MODIFIED)));
             ae.setTimeAlarm(cursor.getLong(cursor.getColumnIndexOrThrow(COL_DATE_AND_TIME)));
             cursor.close();
             database.close();
@@ -507,7 +516,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 ae.setContent(cursor.getString(cursor.getColumnIndexOrThrow(COL_CONTENT)));
                 ae.setCategory(cursor.getString(cursor.getColumnIndexOrThrow(COL_CATEGORY)));
                 ae.setAlarmName(cursor.getString(cursor.getColumnIndexOrThrow(COL_ALARMNAME)));
-
+                ae.setLastModified(cursor.getLong(cursor.getColumnIndexOrThrow(COL_LAST_MODIFIED)));
                 ae.setTimeAlarm(cursor.getLong(cursor.getColumnIndexOrThrow(COL_DATE_AND_TIME)));
                 // Log.d(TAG, "GET EVENTS AE: " + ae.toString());
 
@@ -534,7 +543,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ae.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(COL_TITLE)));
         ae.setContent(cursor.getString(cursor.getColumnIndexOrThrow(COL_CONTENT)));
         ae.setCategory(cursor.getString(cursor.getColumnIndexOrThrow(COL_CATEGORY)));
-
+        ae.setLastModified(cursor.getLong(cursor.getColumnIndexOrThrow(COL_LAST_MODIFIED)));
         ae.setTimeAlarm(cursor.getLong(cursor.getColumnIndexOrThrow(COL_DATE_AND_TIME)));
         // Log.d(TAG,"getAlarmEvent = "+ae);
         cursor.close();
@@ -552,7 +561,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COL_CONTENT, ae.getContent());
         values.put(COL_CATEGORY, ae.getCategory());
         values.put(COL_ALARMNAME, ae.getAlarmName());
-
+        values.put(COL_LAST_MODIFIED, ae.getLastModified());
         values.put(COL_DATE_AND_TIME, ae.getTimeAlarm());
         values.put(COL_UID, ae.getUID());
 
