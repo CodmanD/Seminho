@@ -17,6 +17,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 
+import android.os.Handler;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -681,6 +683,36 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
     }
 
 
+    class ImportTask extends AsyncTask<String, Void, Void> {
+        final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog.setMessage("IMporting ...");
+            progressDialog.setCancelable(false);
+            progressDialog.setMax(100);
+            progressDialog
+                    .setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+
+            progressDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(String... params) {
+            parseCalendar(params[0],progressDialog);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            progressDialog.dismiss();
+            decorateCalendar();
+            createList();
+        }
+    }
+
+
     //
     private void pickFile() {
         DialogProperties properties = new DialogProperties();
@@ -694,11 +726,21 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         dialog = new FilePickerDialog(MainActivity.this, properties);
 
 
+
+
+
+
+
+
+       // final String p="";
         dialog.setDialogSelectionListener(new DialogSelectionListener() {
             @Override
-            public void onSelectedFilePaths(String[] files) {
+            public void onSelectedFilePaths(final String[] files) {
                 dialog.dismiss();
-                parseCalendar(files[0]);
+
+                ImportTask iT= new ImportTask();
+                iT.execute(files);
+
                // Toast.makeText(MainActivity.this, "Import file :" + files[0], Toast.LENGTH_SHORT).show();
             }
         });
@@ -959,18 +1001,10 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
     }
 
 
-    private void parseCalendar(String path) {
-        final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Importing ...");
-        progressDialog.setCancelable(false);
-        progressDialog.setMax(100);
-        progressDialog
-                .setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+    private void parseCalendar(String path,ProgressDialog pDialog) {
 
-        progressDialog.show();
-        Log.d(TAG,"SHOW PROGRESS");
 
-        CompatibilityHints.setHintEnabled(CompatibilityHints.KEY_RELAXED_PARSING, true);
+       CompatibilityHints.setHintEnabled(CompatibilityHints.KEY_RELAXED_PARSING, true);
         CompatibilityHints.setHintEnabled(CompatibilityHints.KEY_OUTLOOK_COMPATIBILITY, true);
         CompatibilityHints.setHintEnabled(CompatibilityHints.KEY_RELAXED_UNFOLDING, true);
         CompatibilityHints.setHintEnabled(CompatibilityHints.KEY_RELAXED_VALIDATION, true);
@@ -999,63 +1033,49 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                 TimeZone tZvEvent = registry.getTimeZone(((Property) pList.get(0)).getValue());
                 //TimeZone tZone= registry.getTimeZone();
                 deltaTZ = tzDefault.getRawOffset() - tZvEvent.getRawOffset();
-                // Log.d(TAG,"----------------TZDefaault :"+tzDefault.getRawOffset());//.getProperty(Property.TZOFFSETFROM).getValue());
+                Log.d(TAG,"----------------DeltaTZ :"+deltaTZ);//.getProperty(Property.TZOFFSETFROM).getValue());
             } catch (Exception e) {
                 //  e.printStackTrace();
             }
 
 
             ComponentList listEvent = calendar.getComponents(Component.VEVENT);
-            for (Object elem : listEvent) {
-                progressDialog.setProgress(10);
+            //int delta=100/listEvent.size();
+            //int step=0;
+            for (int i=0;i<listEvent.size();i++){//Object elem : listEvent) {
+                if(i<pDialog.getMax())
+                pDialog.setProgress(i);
                 AlarmEvent ae = new AlarmEvent();
 
-                VEvent vEvent = (VEvent) elem;
-                try {
-                    ae.setLastModified(vEvent.getLastModified().getDate().getTime());
-                }catch(Exception e)
+                VEvent vEvent = (VEvent) listEvent.get(i);
+                if(vEvent.getLastModified()!=null)
                 {
-                    e.printStackTrace();
+                    ae.setLastModified(vEvent.getLastModified().getDate().getTime());
+                   // Log.d(TAG,"Last Modified = "+vEvent.getLastModified().getDate());
                 }
+                else
+                    {
+                       // Log.d(TAG,"Not Last Modified = ");
+                    }
 
-                try {
+                if(vEvent.getSummary()!=null)
+                {
                     ae.setTitle(vEvent.getSummary().getValue());
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
-
-                try {
+                if(vEvent.getDescription()!=null)
                     ae.setContent(vEvent.getDescription().getValue());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                try {
-                    // Log.d(TAG,"Tinezone = "+vEvent.getStartDate().getTimeZone().);
+                if(vEvent.getStartDate()!=null)
                     ae.setTimeAlarm(vEvent.getStartDate().getDate().getTime() - deltaTZ);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                try {
+                if(vEvent.getUid()!=null)
                     ae.setUID(vEvent.getUid().getValue());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                   // continue;
-                }
+
                 int res = dbHelper.replaceAlarmEvent(ae);
-                Log.d(TAG, "------Import:   " +ae + "RES=" + res);
+               Log.d(TAG, "------Import:   " +ae + "\tRES=" + res);
                 if (res > 0) {
                     //Log.d(TAG,"parse OK");
                 }
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //Toast.makeText(MainActivity.this, R.string.importCompleted, Toast.LENGTH_SHORT).show();
-                        //showEvent(new CalendarDay(calendarView.getCurrentDate().getCalendar()));
-                        decorateCalendar();
-                        createList();
-                    }
-                });
-                Thread.sleep(2000);
+
+              //  Thread.sleep(2000);
             }
             // decorateCalendar();
         } catch (IOException e) {
@@ -1068,9 +1088,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
             Log.d(TAG, "AllCreateCalendarEXception " + e.getMessage() + " |" + e.getLocalizedMessage());
             // e.printStackTrace();
         }
-        progressDialog.dismiss();
-        //dbHelper.lookDB();
-        Toast.makeText(MainActivity.this, "Import file :" + path, Toast.LENGTH_SHORT).show();
+
     }
 
     private void downloadFile(String url) {
@@ -1145,7 +1163,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                     inputStream.close();
 
 
-                    parseCalendar(file.getAbsolutePath());
+                    parseCalendar(file.getAbsolutePath(),progressDialog);
                     return file;
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
@@ -1168,14 +1186,16 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
             @Override
             protected void onPostExecute(File file) {
-                // отображаем сообщение, если возникла ошибка
+
                 if (m_error != null) {
                     m_error.printStackTrace();
                     return;
                 }
-                // закрываем прогресс и удаляем временный файл
+
                 progressDialog.hide();
                 file.delete();
+                decorateCalendar();
+                createList();
             }
         }.execute(url);
     }

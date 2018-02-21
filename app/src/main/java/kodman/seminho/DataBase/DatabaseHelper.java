@@ -243,12 +243,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = database.rawQuery(query, null);
         Log.d(TAG, "CURSOR = " + cursor);
         if (cursor.moveToFirst()) {
-
-            String queryUp = "   UPDATE " + ALARMEVENT_TABLE + " SET " + COL_TITLE + " = " + ae.getTitle() + ", " + COL_DATE_AND_TIME + " = " + ae.getTimeAlarm() +
-                    ", " + COL_CONTENT + " = " + ae.getContent() + COL_CATEGORY + " = " + ae.getCategory() + ", " + COL_ALARMNAME + " = " + ae.getAlarmName() +
-                    " WHERE " + COL_UID + " = '" + ae.getUID() + "' AND "+COL_LAST_MODIFIED+" < "+ae.getLastModified();
-
-
             values.put(COL_TITLE, ae.getTitle());
             values.put(COL_CONTENT, ae.getContent());
             values.put(COL_CATEGORY, ae.getCategory());
@@ -257,9 +251,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(COL_LAST_MODIFIED, ae.getLastModified());
 
 
-            int updCount = database.update(ALARMEVENT_TABLE, values, COL_UID + " = '" + ae.getUID() + "'",
+
+            Log.d(TAG,"InDB LastModified="+cursor.getLong(cursor.getColumnIndexOrThrow(COL_LAST_MODIFIED))+" : "+ae.getLastModified());
+            int updCount = database.update(ALARMEVENT_TABLE, values,
+                    COL_UID + " = '" + ae.getUID() + "' AND "+COL_LAST_MODIFIED+" < "+ae.getLastModified(),
                     null);
-            //Log.d(TAG, "--DB ---------------Update            :: " + updCount);
+
             cursor.close();
             database.close();
             return updCount;
@@ -275,7 +272,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             long res = database.insert(DatabaseHelper.ALARMEVENT_TABLE, null, values);
 
-           // Log.d(TAG, "---DB--------------- ADD");
             cursor.close();
             database.close();
             return (int) res;
@@ -497,9 +493,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public ArrayList<AlarmEvent> getEventForMain() {
 
-        // Calendar date=Calendar.getInstance();
-
-        SQLiteDatabase database = this.getReadableDatabase();
+ SQLiteDatabase database = this.getReadableDatabase();
         String query = "SELECT * FROM " + ALARMEVENT_TABLE + " WHERE " + COL_DATE_AND_TIME + " >= " + System.currentTimeMillis() +
                 " ORDER BY " + COL_DATE_AND_TIME;
 
@@ -565,7 +559,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COL_DATE_AND_TIME, ae.getTimeAlarm());
         values.put(COL_UID, ae.getUID());
 
-        Log.d(TAG, "---------------UPDATE : " + ae.getId());
+        Log.d(TAG, "---------------UPDATE : " + ae.getLastModified());
         int updCount = database.update(ALARMEVENT_TABLE, values, "id = ?",
                 new String[]{String.valueOf(ae.getId())});
         return true;
