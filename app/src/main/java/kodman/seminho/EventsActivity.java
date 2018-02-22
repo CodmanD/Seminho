@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -52,7 +53,8 @@ public class EventsActivity extends AppCompatActivity {
     ArrayList<AlarmEvent> events;
     String head;
     int year,month,day;
-
+    int id;
+    private static final DateFormat FORMATTER = SimpleDateFormat.getDateInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -69,21 +71,6 @@ public class EventsActivity extends AppCompatActivity {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             ButterKnife.bind(this);
             setSupportActionBar(toolbar);
-
-
-
-            LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
-            rv = (RecyclerView) findViewById(R.id.rv);
-            rv.setLayoutManager(mLayoutManager);
-
-            Intent intent = getIntent();
-            Bundle data = intent.getExtras();
-             day = data.getInt("day");
-             month = data.getInt("month");
-             year = data.getInt("year");
-
-            head=day + "." + month + "." + year;
-           // toolbar.setTitle("" + day + "." + month + "." + year);
             toolbar.setNavigationIcon(R.drawable.ic_keyboard_arrow_left_white_24dp);
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
@@ -92,10 +79,38 @@ public class EventsActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
+
+            LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
+            rv = (RecyclerView) findViewById(R.id.rv);
+            rv.setLayoutManager(mLayoutManager);
+
+            Intent intent = getIntent();
+            Bundle data = intent.getExtras();
+            id=data.getInt("ID",0);
+           // Log.d(TAG,"EventsActivity ID="+id);
+
+            calendar = Calendar.getInstance();
+            if(id==0)
+            {
+                day = data.getInt("day");
+                month = data.getInt("month");
+                year = data.getInt("year");
+                calendar.set(year, month, day);
+                //head=day + "." + month + "." + year;
+               // head=FORMATTER.format(new Date(calendar.getTimeInMillis()));
+            }
+           else
+               {
+
+                   //head=calendar.get(Calendar.DAY_OF_MONTH) + "." + (calendar.get(Calendar.MONTH)+1) + "." + calendar.get(Calendar.YEAR);
+               }
+            head=FORMATTER.format(new Date(calendar.getTimeInMillis()));
+           // toolbar.setTitle("" + day + "." + month + "." + year);
+
            // getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.RED));
            // toolbar.setSubtitle((Html.fromHtml("<font color=\"#999999\">" + getString(R.string.app_subname) + "</font>")))
-            calendar = Calendar.getInstance();
-            calendar.set(year, month, day);
+
+
         } catch (Exception e) {
           Log.d(TAG,"Exception "+e.getMessage());
         }
@@ -122,9 +137,6 @@ public class EventsActivity extends AppCompatActivity {
 
 
         startActivity(intent);
-       // return true;
-
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -132,8 +144,18 @@ public class EventsActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
+if(id==0)
+{
+    events =  DatabaseHelper.getInstance(this).getEvents(calendar);
+   // Log.d(TAG,"EventsActivity ID=0 events="+events.size());
+}
+else
+{
 
-        events =  DatabaseHelper.getInstance(this).getEvents(calendar);
+    events =  DatabaseHelper.getInstance(this).getFutureEvents();
+   // Log.d(TAG,"EventsActivity events="+events.size()+" ID+"+id);
+}
+
         RecyclerViewAdapter adapter = new RecyclerViewAdapter(events);
         rv.setAdapter(adapter);
 
@@ -146,7 +168,6 @@ public class EventsActivity extends AppCompatActivity {
         toolbar.setTitle(head);
         if (events.size() <= 0) {
             Intent intent = new Intent(EventsActivity.this, MainActivity.class);
-
             startActivity(intent);
         }
     }

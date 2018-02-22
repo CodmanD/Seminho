@@ -19,6 +19,7 @@
         android:textSize="15sp"
         android:gravity="center"
         android:textColor="?attr/colorButtonNormal"
+        android:singleLine="true"
         />
     <TextView
         android:layout_width="0dp"

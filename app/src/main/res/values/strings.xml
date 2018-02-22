@@ -21,9 +21,9 @@
     <string name="description">Description</string>
     <string name="Time">Time</string>
     <string name="ErrorAdding">ERROR ADDING</string>
-    <string name="add">Add event</string>
-    <string name="update">Update event</string>
-    <string name="notEvents">Not events</string>
+    <string name="add">Added event</string>
+    <string name="update">Updated event</string>
+    <string name="notEvents">No events</string>
     <string name="day"> day </string>
     <string name="days"> days </string>
     <string name="hour"> hour </string>

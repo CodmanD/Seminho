@@ -226,16 +226,18 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
 
     private void createList() {
-        final ArrayList<AlarmEvent> events = dbHelper.getEventForMain();
-        String[] arr = new String[events.size()];
-       final Calendar cal = Calendar.getInstance();
-        for (int i = 0; i < events.size(); i++) {
+        final ArrayList<AlarmEvent> events = dbHelper.getFutureEventsForListView();
+        final Calendar cal = Calendar.getInstance();
+       /*
+        String[] arr = new String[(events.size()>=3?4:events.size())];
+       for (int i = 0; i < (events.size()>=3?3:events.size()); i++) {
             AlarmEvent ae = events.get(i);
             cal.setTimeInMillis(ae.getTimeAlarm());
             arr[i] = cal.get(Calendar.DAY_OF_MONTH) + "/" + (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.YEAR) +
                     " | " + ae.getTitle() + " | " + cal.get(Calendar.HOUR) + " : " + cal.get(Calendar.MINUTE) +
                     " " + (cal.get(Calendar.AM_PM) == 0 ? "AM" : "PM");
         }
+        */
        /*
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, arr) {
@@ -251,21 +253,33 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
             }
         };
 */
+AlarmEvent ae=new AlarmEvent();
+
+events.add(ae);
         ArrayAdapter<AlarmEvent> adapter = new ArrayAdapter<AlarmEvent>(this,
                 R.layout.item_list,R.id.tvTitleLV, events) {
 
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
-
-                TextView tvData = (TextView) view.findViewById(R.id.tvDataLV);
                 TextView tvTitle = (TextView) view.findViewById(R.id.tvTitleLV);
+                if((events.size()-1)>position)
+                {
+                TextView tvData = (TextView) view.findViewById(R.id.tvDataLV);
+
                 TextView tvTime = (TextView) view.findViewById(R.id.tvTimeLV);
                 cal.setTimeInMillis(events.get(position).getTimeAlarm());
                 tvData.setText( cal.get(Calendar.DAY_OF_MONTH) + "/" + (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.YEAR));
-                tvTitle.setText( events.get(position).getTitle());
+
                 tvTime.setText( cal.get(Calendar.HOUR) + " : " + cal.get(Calendar.MINUTE) +
                         " " + (cal.get(Calendar.AM_PM) == 0 ? "AM" : "PM"));
+                    tvTitle.setText( events.get(position).getTitle());
+                }
+                else
+                    {
+                        tvTitle.setTextSize(20);
+                        tvTitle.setText( "The "+dbHelper.getCountFutureEvents()+" next events");
+                    }
               //  textView.setTextColor(Color.WHITE);
 
                 return view;
@@ -275,6 +289,19 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(position==events.size()-1)
+                {
+                    Intent intent = new Intent(MainActivity.this, EventsActivity.class);
+                    //intent.putExtra("ID", Integer.parseInt(id.getText().toString()));
+                    Log.d(TAG, "===============AE = " + events.get(position).getId() + " | " + events.get(position).getTitle());
+                    intent.putExtra("ID", (int) events.get(position).getId());
+
+                    Log.d(TAG, "GET ID=" + intent.getIntExtra("ID", -1));
+                    //ntent.putExtra("MS", events.get(position).getTimeAlarm());
+                    startActivity(intent);
+
+                }
+                else{
                 Intent intent = new Intent(MainActivity.this, PagesActivity.class);
                 //intent.putExtra("ID", Integer.parseInt(id.getText().toString()));
                 Log.d(TAG, "===============AE = " + events.get(position).getId() + " | " + events.get(position).getTitle());
@@ -282,6 +309,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                 Log.d(TAG, "GET ID=" + intent.getIntExtra("ID", -1));
                 intent.putExtra("MS", events.get(position).getTimeAlarm());
                 startActivity(intent);
+                }
             }
         });
         lv.setAdapter(adapter);
@@ -413,9 +441,9 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         } else {
             ae = dbHelper.getFirstEvent(System.currentTimeMillis() - 900000);
             if (ae != null) {
-                tv1.setText(" now " + ae.getTitle());
+                tv1.setText(" Now " + ae.getTitle());
             } else
-                tv1.setText("no next event");
+                tv1.setText("No next event");
         }
     }
 
@@ -424,14 +452,14 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         //tvDate.setText(getSelectedDatesString());
         Calendar cal = Calendar.getInstance();
         cal.set(date.getYear(), date.getMonth(), date.getDay(), 0, 0, 0);
-        if (dbHelper.getItemsEvents(cal) > 0) {
+        if (dbHelper.getCountEvents(cal) > 0) {
             Intent intent = new Intent(MainActivity.this, EventsActivity.class);
             intent.putExtra("day", date.getDay());
             intent.putExtra("month", date.getMonth());
             intent.putExtra("year", date.getYear());
             startActivity(intent);
         } else
-            Toast.makeText(this, "Not Events", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "No Events", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -454,7 +482,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         for (int i = 0, count = 0; i < 31; i++) {
 
             CalendarDay day = new CalendarDay(2018, calendarView.getCurrentDate().getMonth(), i + 1);
-            count = dbHelper.getItemsEvents(day.getCalendar());
+            count = dbHelper.getCountEvents(day.getCalendar());
 
             int color = 1;
 
@@ -883,17 +911,18 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         }
         if (requestCode == RINGTONES_REQUEST_CODE) {
 
-            this.ringtone = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+            if(data!=null) {
+                this.ringtone = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
 
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putString(TAG + "ringtone", ringtone.toString());
-            editor.commit();
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString(TAG + "ringtone", ringtone.toString());
+                editor.commit();
 
 
-            Toast.makeText(this, ringtone.toString(), Toast.LENGTH_SHORT).show();
-            Log.d(TAG, "--------------------RINGTONES :" + ringtone.getAuthority());
-
+                Toast.makeText(this, ringtone.toString(), Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "--------------------RINGTONES :" + ringtone.getAuthority());
+            }
             return;
         }
         super.onActivityResult(requestCode, resultCode, data);

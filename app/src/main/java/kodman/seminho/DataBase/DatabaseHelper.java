@@ -183,7 +183,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public int getItemsEvents(Calendar calendar) {
+    public int getCountEvents(Calendar calendar) {
         calendar.setTimeZone(TimeZone.getDefault());
         CalendarDay date = new CalendarDay(calendar);
         Calendar dateStart = Calendar.getInstance();
@@ -194,6 +194,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getReadableDatabase();
         String query = "SELECT * FROM " + ALARMEVENT_TABLE + " WHERE " + COL_DATE_AND_TIME + " BETWEEN " + dateStart.getTimeInMillis() +
                 " AND " + dateEnd.getTimeInMillis();
+        Cursor cursor = database.rawQuery(query, null);
+        return cursor.getCount();
+    }
+
+    public int getCountFutureEvents() {
+        SQLiteDatabase database = this.getReadableDatabase();
+        String query = "SELECT * FROM " + ALARMEVENT_TABLE + " WHERE " + COL_DATE_AND_TIME + " > " + System.currentTimeMillis();
         Cursor cursor = database.rawQuery(query, null);
         return cursor.getCount();
     }
@@ -496,6 +503,68 @@ public class DatabaseHelper extends SQLiteOpenHelper {
  SQLiteDatabase database = this.getReadableDatabase();
         String query = "SELECT * FROM " + ALARMEVENT_TABLE + " WHERE " + COL_DATE_AND_TIME + " >= " + System.currentTimeMillis() +
                 " ORDER BY " + COL_DATE_AND_TIME;
+
+        // Log.d(TAG,query);
+
+        Cursor cursor = database.rawQuery(query, null);
+        //Log.d(TAG,"GET FROM DB Cursor ="+cursor.getCount());
+        ArrayList<AlarmEvent> events = new ArrayList<>();
+        if (cursor.moveToFirst())
+            do {
+                AlarmEvent ae = new AlarmEvent();
+                ae.setId(cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID)));
+                ae.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(COL_TITLE)));
+                ae.setContent(cursor.getString(cursor.getColumnIndexOrThrow(COL_CONTENT)));
+                ae.setCategory(cursor.getString(cursor.getColumnIndexOrThrow(COL_CATEGORY)));
+                ae.setAlarmName(cursor.getString(cursor.getColumnIndexOrThrow(COL_ALARMNAME)));
+                ae.setLastModified(cursor.getLong(cursor.getColumnIndexOrThrow(COL_LAST_MODIFIED)));
+                ae.setTimeAlarm(cursor.getLong(cursor.getColumnIndexOrThrow(COL_DATE_AND_TIME)));
+                // Log.d(TAG, "GET EVENTS AE: " + ae.toString());
+
+                events.add(ae);
+            } while (cursor.moveToNext());
+        cursor.close();
+        database.close();
+
+        return events;
+    }
+
+    public ArrayList<AlarmEvent> getFutureEvents() {
+
+        SQLiteDatabase database = this.getReadableDatabase();
+        String query = "SELECT * FROM " + ALARMEVENT_TABLE + " WHERE " + COL_DATE_AND_TIME + " >= " + System.currentTimeMillis() +
+                " ORDER BY " + COL_DATE_AND_TIME;
+
+        // Log.d(TAG,query);
+
+        Cursor cursor = database.rawQuery(query, null);
+        //Log.d(TAG,"GET FROM DB Cursor ="+cursor.getCount());
+        ArrayList<AlarmEvent> events = new ArrayList<>();
+        if (cursor.moveToFirst())
+            do {
+                AlarmEvent ae = new AlarmEvent();
+                ae.setId(cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID)));
+                ae.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(COL_TITLE)));
+                ae.setContent(cursor.getString(cursor.getColumnIndexOrThrow(COL_CONTENT)));
+                ae.setCategory(cursor.getString(cursor.getColumnIndexOrThrow(COL_CATEGORY)));
+                ae.setAlarmName(cursor.getString(cursor.getColumnIndexOrThrow(COL_ALARMNAME)));
+                ae.setLastModified(cursor.getLong(cursor.getColumnIndexOrThrow(COL_LAST_MODIFIED)));
+                ae.setTimeAlarm(cursor.getLong(cursor.getColumnIndexOrThrow(COL_DATE_AND_TIME)));
+                // Log.d(TAG, "GET EVENTS AE: " + ae.toString());
+
+                events.add(ae);
+            } while (cursor.moveToNext());
+        cursor.close();
+        database.close();
+
+        return events;
+    }
+
+    public ArrayList<AlarmEvent> getFutureEventsForListView() {
+
+        SQLiteDatabase database = this.getReadableDatabase();
+        String query = "SELECT * FROM " + ALARMEVENT_TABLE + " WHERE " + COL_DATE_AND_TIME + " >= " + System.currentTimeMillis() +
+                " ORDER BY " + COL_DATE_AND_TIME+" LIMIT 3";
 
         // Log.d(TAG,query);
 
