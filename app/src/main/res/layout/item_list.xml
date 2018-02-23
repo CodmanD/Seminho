@@ -9,7 +9,7 @@
     android:id="@+id/tvDataLV"
     android:textSize="15sp"
     android:textColor="?attr/colorButtonNormal"
-    android:gravity="center"
+    android:gravity="left"
     />
     <TextView
         android:layout_width="0dp"
@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/tvTitleLV"
         android:textSize="15sp"
-        android:gravity="center"
+        android:gravity="left"
         android:textColor="?attr/colorButtonNormal"
         android:singleLine="true"
         />
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/tvTimeLV"
         android:textSize="15sp"
-        android:gravity="center"
+        android:gravity="right"
         android:textColor="?attr/colorButtonNormal"
         />
 </LinearLayout>

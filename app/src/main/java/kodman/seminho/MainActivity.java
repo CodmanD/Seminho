@@ -116,6 +116,8 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
     final Calendar calendar = Calendar.getInstance();
     final CalendarDay curDate = new CalendarDay();
     private static final DateFormat FORMATTER = SimpleDateFormat.getDateInstance();
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd ");
+    SimpleDateFormat timeFormat = new SimpleDateFormat("HH : mm ");
     private static final int PERMISSION_REQUEST_CODE = 123;
     private static final int RINGTONES_REQUEST_CODE = 124;
     private FilePickerDialog dialog;
@@ -269,10 +271,15 @@ events.add(ae);
 
                 TextView tvTime = (TextView) view.findViewById(R.id.tvTimeLV);
                 cal.setTimeInMillis(events.get(position).getTimeAlarm());
-                tvData.setText( cal.get(Calendar.DAY_OF_MONTH) + "/" + (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.YEAR));
 
-                tvTime.setText( cal.get(Calendar.HOUR) + " : " + cal.get(Calendar.MINUTE) +
-                        " " + (cal.get(Calendar.AM_PM) == 0 ? "AM" : "PM"));
+                   String date=dateFormat.format(new Date(cal.getTimeInMillis()));
+                    String time=timeFormat.format(new Date(cal.getTimeInMillis()));
+                   tvData.setText(date);
+                    tvTime.setText(time);
+                    // tvData.setText( cal.get(Calendar.DAY_OF_MONTH) + "/" + (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.YEAR));
+
+               // tvTime.setText( cal.get(Calendar.HOUR) + " : " + cal.get(Calendar.MINUTE) +
+                 //       " " + (cal.get(Calendar.AM_PM) == 0 ? "AM" : "PM"));
                     tvTitle.setText( events.get(position).getTitle());
                 }
                 else
@@ -403,16 +410,18 @@ events.add(ae);
         Calendar cal = Calendar.getInstance();
 
         AlarmEvent ae = dbHelper.getFirstEvent(System.currentTimeMillis());
-
+        int days;
+        int hours;
+        int minutes;
         // Log.d(TAG,"showCurrentEvents = "+ae);
         if (ae != null) {
             long t = ae.getTimeAlarm();
             long res = t - System.currentTimeMillis();
             //Log.d(TAG, "Res :" + res);
 
-            int days = (int) (res / 86400000);
-            int hours = (int) ((res % 86400000) / 3600000);
-            int minutes = (int) ((res % 3600000) / 60000);
+             days = (int) (res / 86400000);
+             hours = (int) ((res % 86400000) / 3600000);
+            minutes = (int) ((res % 3600000) / 60000);
 
             //  Log.d(TAG, "TTIME :" + days + "/" + hours + "/" + minutes);
 
@@ -437,7 +446,10 @@ events.add(ae);
                     (hours > 0 ? hours + " " + h + " " : h) +
                     (minutes > 0 ? minutes + " " + m + " " : m);
 
-            tv1.setText(time + "  till " + ae.getTitle());
+if(days==0&&hours==0&&minutes==0)
+    tv1.setText(" Now " + ae.getTitle());
+else
+            tv1.setText(time + " till " + ae.getTitle());
         } else {
             ae = dbHelper.getFirstEvent(System.currentTimeMillis() - 900000);
             if (ae != null) {
