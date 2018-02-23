@@ -154,11 +154,18 @@ public class NotificationUtil extends ContextWrapper {
         // mManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         try {
             //builder.setSound(Uri.parse("content://settings/system/notification_sound"));
-            builder.setSound(ringtone);
+           if(!ringtone.toString().equals("none"))
+           {
+               builder.setSound(ringtone);
+               //Log.d(TAG, "----------------------- MUSIC "+builder.toString()+"Ringtone = "+ringtone);
+           }
+           else
+               builder.setSound(null);
+           //Log.d(TAG, "-----------------------NONE MUSIC");
 
         } catch (Exception e) {
-            Log.d(TAG, "-----------------------EXCEPTION MUSIC");
-            e.printStackTrace();
+            //Log.d(TAG, "-----------------------EXCEPTION MUSIC");
+           // e.printStackTrace();
         }
         getManager().notify((int) ae.getId(), builder.build());
     }

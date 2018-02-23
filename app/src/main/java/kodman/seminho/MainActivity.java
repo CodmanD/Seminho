@@ -765,14 +765,7 @@ else
 
         dialog = new FilePickerDialog(MainActivity.this, properties);
 
-
-
-
-
-
-
-
-       // final String p="";
+ // final String p="";
         dialog.setDialogSelectionListener(new DialogSelectionListener() {
             @Override
             public void onSelectedFilePaths(final String[] files) {
@@ -928,12 +921,18 @@ else
 
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
                 SharedPreferences.Editor editor = preferences.edit();
-                editor.putString(TAG + "ringtone", ringtone.toString());
-                editor.commit();
+                if(ringtone!=null){
+                    editor.putString(TAG + "ringtone", ringtone.toString());
+                    editor.commit();
+                    Toast.makeText(this, ringtone.toString(), Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    Log.d(TAG,"NONE");
+                    editor.putString(TAG + "ringtone", "none");
+                    editor.commit();
 
-
-                Toast.makeText(this, ringtone.toString(), Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "--------------------RINGTONES :" + ringtone.getAuthority());
+                }
             }
             return;
         }
