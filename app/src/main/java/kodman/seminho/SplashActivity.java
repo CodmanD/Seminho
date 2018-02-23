@@ -19,7 +19,7 @@ public class SplashActivity extends AppCompatActivity {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         int theme = preferences.getInt(TAG + "theme", 0);
         if (theme == 1) super.setTheme(R.style.AppThemeBlue);
-        Log.d(TAG, "N =" + theme);
+        //Log.d(TAG, "N =" + theme);
         //   if(theme==0)
         setContentView(R.layout.activity_splash);
 //else

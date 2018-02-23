@@ -112,7 +112,7 @@ public class EventsActivity extends AppCompatActivity {
 
 
         } catch (Exception e) {
-          Log.d(TAG,"Exception "+e.getMessage());
+         // Log.d(TAG,"Exception "+e.getMessage());
         }
 
         // TextView tv=this.findViewById(R.id.tvDate);
@@ -132,7 +132,7 @@ public class EventsActivity extends AppCompatActivity {
 
         CalendarDay date=new CalendarDay(year,month,day);
 
-            Log.d(TAG, "SEND SelectDate" +new CalendarDay());
+           // Log.d(TAG, "SEND SelectDate" +new CalendarDay());
             intent.putExtra("selectedDate", date);
 
 

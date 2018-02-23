@@ -50,59 +50,6 @@ public class AlarmUtil {
         alarmManager.cancel(pendingIntent);
     }
 
-//    /*
-//    public static void setNextAlarm(Context context, AlarmEvent ae, DatabaseHelper database) {
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.setTimeInMillis(ae.getTimeAlarm());
-//
-//        Calendar now = Calendar.getInstance();
-//        calendar.set(Calendar.SECOND, 0);
-///*
-//        switch (reminder.getRepeatType()) {
-//            case Reminder.HOURLY:
-//                while (calendar.before(now)) {
-//                    calendar.add(Calendar.HOUR, reminder.getInterval());
-//                }
-//                break;
-//            case Reminder.DAILY:
-//                while (calendar.before(now)) {
-//                    calendar.add(Calendar.DATE, reminder.getInterval());
-//                }
-//                break;
-//            case Reminder.WEEKLY:
-//                while (calendar.before(now)) {
-//                    calendar.add(Calendar.WEEK_OF_YEAR, reminder.getInterval());
-//                }
-//                break;
-//            case Reminder.MONTHLY:
-//                while(calendar.before(now)) {
-//                    calendar.add(Calendar.MONTH, reminder.getInterval());
-//                }
-//                break;
-//            case Reminder.YEARLY:
-//                while(calendar.before(now)) {
-//                    calendar.add(Calendar.YEAR, reminder.getInterval());
-//                }
-//                break;
-//            case Reminder.SPECIFIC_DAYS:
-//                Calendar weekCalendar = (Calendar) calendar.clone();
-//                weekCalendar.add(Calendar.DATE, 1);
-//                for (int i = 0; i < 7; i++) {
-//                    int position = (i + (weekCalendar.get(Calendar.DAY_OF_WEEK) - 1)) % 7;
-//                    if (reminder.getDaysOfWeek()[position]) {
-//                        calendar.add(Calendar.DATE, i + 1);
-//                        break;
-//                    }
-//                }
-//                break;
-//        }
-//
 
-   //     reminder.setDateAndTime(DateAndTimeUtil.toStringDateAndTime(calendar));
-  //      database.addNotification(reminder);
-
-   //    Intent alarmIntent = new Intent(context, AlarmReceiver.class);
-    //    setAlarm(context, alarmIntent, (int)ae.getId(), calendar);
-   // }
 
 }

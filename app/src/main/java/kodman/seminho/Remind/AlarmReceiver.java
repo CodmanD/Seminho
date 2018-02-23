@@ -24,7 +24,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         int id = intent.getIntExtra("NOTIFICATION_ID", 0);
         long advance=intent.getLongExtra("advance",0);
         Uri ringtone= intent.getParcelableExtra("ringtone");
-        Log.d(TAG, "OnReceive BroadCast ID=" + id+" Ringtone "+ringtone);
+       // Log.d(TAG, "OnReceive BroadCast ID=" + id+" Ringtone "+ringtone);
         AlarmEvent ae = database.select(id);
         try
         {

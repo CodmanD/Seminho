@@ -10,6 +10,7 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+
 import java.util.Date;
 
 /**
@@ -39,7 +40,7 @@ public class OneDayDecorator implements DayViewDecorator {
     @Override
     public void decorate(DayViewFacade view) {
         view.addSpan(new StyleSpan(Typeface.BOLD));
-        kodman.seminho.Calendar.DotSpan ds = new kodman.seminho.Calendar.DotSpan(1, String.valueOf(count),color);
+        kodman.seminho.Calendar.DotSpan ds = new kodman.seminho.Calendar.DotSpan(1, String.valueOf(count), color);
         view.addSpan(ds);
     }
 

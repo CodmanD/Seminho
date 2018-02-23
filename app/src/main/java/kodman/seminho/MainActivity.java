@@ -10,15 +10,13 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.Point;
+
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 
-import android.os.Handler;
-import android.os.Message;
+
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -33,7 +31,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.SubMenu;
+
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -66,7 +64,7 @@ import net.fortuna.ical4j.model.ComponentList;
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.Dur;
 
-import net.fortuna.ical4j.model.Parameter;
+
 import net.fortuna.ical4j.model.Property;
 import net.fortuna.ical4j.model.PropertyList;
 import net.fortuna.ical4j.model.TimeZone;
@@ -174,13 +172,13 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         lv.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(View view, int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
-                Log.d(TAG, "LayoutChangeLisyener");
+                // Log.d(TAG, "LayoutChangeLisyener");
 
                 // if(start)
                 {
-                    Log.d(TAG, "ScrollTo");
+                    // Log.d(TAG, "ScrollTo");
                     sv.scrollTo(0, 0);
-                    start = false;
+                    // start = false;
                 }
             }
         });
@@ -195,13 +193,6 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                                     public void run() {
                                         //  Log.d(TAG,"Timer Tick");
                                         showCurrentEvent();
-//                                        if(start)
-//                                        {
-//                                            Log.d(TAG,"ScrollTo");
-//                                            sv.scrollTo(0,0);
-//                                            start=false;
-//                                        }
-
                                     }
 
 
@@ -230,64 +221,37 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
     private void createList() {
         final ArrayList<AlarmEvent> events = dbHelper.getFutureEventsForListView();
         final Calendar cal = Calendar.getInstance();
-       /*
-        String[] arr = new String[(events.size()>=3?4:events.size())];
-       for (int i = 0; i < (events.size()>=3?3:events.size()); i++) {
-            AlarmEvent ae = events.get(i);
-            cal.setTimeInMillis(ae.getTimeAlarm());
-            arr[i] = cal.get(Calendar.DAY_OF_MONTH) + "/" + (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.YEAR) +
-                    " | " + ae.getTitle() + " | " + cal.get(Calendar.HOUR) + " : " + cal.get(Calendar.MINUTE) +
-                    " " + (cal.get(Calendar.AM_PM) == 0 ? "AM" : "PM");
-        }
-        */
-       /*
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, arr) {
 
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
+        AlarmEvent ae = new AlarmEvent();
 
-                TextView textView = (TextView) view.findViewById(android.R.id.text1);
-                textView.setTextColor(Color.WHITE);
-
-                return view;
-            }
-        };
-*/
-AlarmEvent ae=new AlarmEvent();
-
-events.add(ae);
+        events.add(ae);
         ArrayAdapter<AlarmEvent> adapter = new ArrayAdapter<AlarmEvent>(this,
-                R.layout.item_list,R.id.tvTitleLV, events) {
+                R.layout.item_list, R.id.tvTitleLV, events) {
 
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
                 TextView tvTitle = (TextView) view.findViewById(R.id.tvTitleLV);
-                if((events.size()-1)>position)
-                {
-                TextView tvData = (TextView) view.findViewById(R.id.tvDataLV);
+                if ((events.size() - 1) > position) {
+                    TextView tvData = (TextView) view.findViewById(R.id.tvDataLV);
 
-                TextView tvTime = (TextView) view.findViewById(R.id.tvTimeLV);
-                cal.setTimeInMillis(events.get(position).getTimeAlarm());
+                    TextView tvTime = (TextView) view.findViewById(R.id.tvTimeLV);
+                    cal.setTimeInMillis(events.get(position).getTimeAlarm());
 
-                   String date=dateFormat.format(new Date(cal.getTimeInMillis()));
-                    String time=timeFormat.format(new Date(cal.getTimeInMillis()));
-                   tvData.setText(date);
+                    String date = dateFormat.format(new Date(cal.getTimeInMillis()));
+                    String time = timeFormat.format(new Date(cal.getTimeInMillis()));
+                    tvData.setText(date);
                     tvTime.setText(time);
                     // tvData.setText( cal.get(Calendar.DAY_OF_MONTH) + "/" + (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.YEAR));
 
-               // tvTime.setText( cal.get(Calendar.HOUR) + " : " + cal.get(Calendar.MINUTE) +
-                 //       " " + (cal.get(Calendar.AM_PM) == 0 ? "AM" : "PM"));
-                    tvTitle.setText( events.get(position).getTitle());
+                    // tvTime.setText( cal.get(Calendar.HOUR) + " : " + cal.get(Calendar.MINUTE) +
+                    //       " " + (cal.get(Calendar.AM_PM) == 0 ? "AM" : "PM"));
+                    tvTitle.setText(events.get(position).getTitle());
+                } else {
+                    tvTitle.setTextSize(20);
+                    tvTitle.setText("The " + dbHelper.getCountFutureEvents() + " next events");
                 }
-                else
-                    {
-                        tvTitle.setTextSize(20);
-                        tvTitle.setText( "The "+dbHelper.getCountFutureEvents()+" next events");
-                    }
-              //  textView.setTextColor(Color.WHITE);
+                //  textView.setTextColor(Color.WHITE);
 
                 return view;
             }
@@ -296,33 +260,31 @@ events.add(ae);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(position==events.size()-1)
-                {
+                if (position == events.size() - 1) {
                     Intent intent = new Intent(MainActivity.this, EventsActivity.class);
                     //intent.putExtra("ID", Integer.parseInt(id.getText().toString()));
-                    Log.d(TAG, "===============AE = " + events.get(position).getId() + " | " + events.get(position).getTitle());
+                    //Log.d(TAG, "===============AE = " + events.get(position).getId() + " | " + events.get(position).getTitle());
                     intent.putExtra("ID", (int) events.get(position).getId());
 
-                    Log.d(TAG, "GET ID=" + intent.getIntExtra("ID", -1));
+                    // Log.d(TAG, "GET ID=" + intent.getIntExtra("ID", -1));
                     //ntent.putExtra("MS", events.get(position).getTimeAlarm());
                     startActivity(intent);
 
-                }
-                else{
-                Intent intent = new Intent(MainActivity.this, PagesActivity.class);
-                //intent.putExtra("ID", Integer.parseInt(id.getText().toString()));
-                Log.d(TAG, "===============AE = " + events.get(position).getId() + " | " + events.get(position).getTitle());
-                intent.putExtra("ID", (int) events.get(position).getId());
-                Log.d(TAG, "GET ID=" + intent.getIntExtra("ID", -1));
-                intent.putExtra("MS", events.get(position).getTimeAlarm());
-                startActivity(intent);
+                } else {
+                    Intent intent = new Intent(MainActivity.this, PagesActivity.class);
+                    //intent.putExtra("ID", Integer.parseInt(id.getText().toString()));
+                    // Log.d(TAG, "===============AE = " + events.get(position).getId() + " | " + events.get(position).getTitle());
+                    intent.putExtra("ID", (int) events.get(position).getId());
+                    // Log.d(TAG, "GET ID=" + intent.getIntExtra("ID", -1));
+                    intent.putExtra("MS", events.get(position).getTimeAlarm());
+                    startActivity(intent);
                 }
             }
         });
         lv.setAdapter(adapter);
         getListViewSize(lv, adapter);
         if (start) {
-            Log.d(TAG, "ScrollTo");
+            //Log.d(TAG, "ScrollTo");
             sv.scrollTo(0, 0);
             start = false;
         }
@@ -419,8 +381,8 @@ events.add(ae);
             long res = t - System.currentTimeMillis();
             //Log.d(TAG, "Res :" + res);
 
-             days = (int) (res / 86400000);
-             hours = (int) ((res % 86400000) / 3600000);
+            days = (int) (res / 86400000);
+            hours = (int) ((res % 86400000) / 3600000);
             minutes = (int) ((res % 3600000) / 60000);
 
             //  Log.d(TAG, "TTIME :" + days + "/" + hours + "/" + minutes);
@@ -446,10 +408,10 @@ events.add(ae);
                     (hours > 0 ? hours + " " + h + " " : h) +
                     (minutes > 0 ? minutes + " " + m + " " : m);
 
-if(days==0&&hours==0&&minutes==0)
-    tv1.setText(" Now " + ae.getTitle());
-else
-            tv1.setText(time + " till " + ae.getTitle());
+            if (days == 0 && hours == 0 && minutes == 0)
+                tv1.setText(" Now " + ae.getTitle());
+            else
+                tv1.setText(time + " till " + ae.getTitle());
         } else {
             ae = dbHelper.getFirstEvent(System.currentTimeMillis() - 900000);
             if (ae != null) {
@@ -725,6 +687,7 @@ else
 
     class ImportTask extends AsyncTask<String, Void, Void> {
         final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -739,7 +702,7 @@ else
 
         @Override
         protected Void doInBackground(String... params) {
-            parseCalendar(params[0],progressDialog);
+            parseCalendar(params[0], progressDialog);
             return null;
         }
 
@@ -765,16 +728,16 @@ else
 
         dialog = new FilePickerDialog(MainActivity.this, properties);
 
- // final String p="";
+        // final String p="";
         dialog.setDialogSelectionListener(new DialogSelectionListener() {
             @Override
             public void onSelectedFilePaths(final String[] files) {
                 dialog.dismiss();
 
-                ImportTask iT= new ImportTask();
+                ImportTask iT = new ImportTask();
                 iT.execute(files);
 
-               // Toast.makeText(MainActivity.this, "Import file :" + files[0], Toast.LENGTH_SHORT).show();
+                // Toast.makeText(MainActivity.this, "Import file :" + files[0], Toast.LENGTH_SHORT).show();
             }
         });
         dialog.show();
@@ -798,7 +761,7 @@ else
             public void onSelectedFilePaths(String[] files) {
                 try {
                     File file = new File(files[0] + "/seminho.ics");
-                    Log.d(TAG, "GET PATH ===" + file.getAbsolutePath());
+                    // Log.d(TAG, "GET PATH ===" + file.getAbsolutePath());
                     if (!file.exists()) {
                         try {
                             file.createNewFile();
@@ -814,7 +777,7 @@ else
                             getResources().getString(R.string.exportCompleted) + " /Seminho.ics", Toast.LENGTH_SHORT).show();
 
                 } catch (Exception ex) {
-                    Log.d(TAG, "EXCEPTION EXPORT :" + ex.getMessage() + "||||||" + ex.getLocalizedMessage());
+                    // Log.d(TAG, "EXCEPTION EXPORT :" + ex.getMessage() + "||||||" + ex.getLocalizedMessage());
                     Toast.makeText(MainActivity.this, "Export Error", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -916,19 +879,17 @@ else
         }
         if (requestCode == RINGTONES_REQUEST_CODE) {
 
-            if(data!=null) {
+            if (data != null) {
                 this.ringtone = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
 
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
                 SharedPreferences.Editor editor = preferences.edit();
-                if(ringtone!=null){
+                if (ringtone != null) {
                     editor.putString(TAG + "ringtone", ringtone.toString());
                     editor.commit();
                     Toast.makeText(this, ringtone.toString(), Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
-                    Log.d(TAG,"NONE");
+                } else {
+                    // Log.d(TAG,"NONE");
                     editor.putString(TAG + "ringtone", "none");
                     editor.commit();
 
@@ -1032,7 +993,7 @@ else
 
                 icsCalendar.getComponents().add(vEvent);
             } catch (Exception e) {
-                 Log.d(TAG, "Exception CREATE VEVENT  i=" + i + " Message = " + e.getMessage() + " Excep = " + e.getClass());
+                Log.d(TAG, "Exception CREATE VEVENT  i=" + i + " Message = " + e.getMessage() + " Excep = " + e.getClass());
             }
         }
 
@@ -1041,10 +1002,10 @@ else
     }
 
 
-    private void parseCalendar(String path,ProgressDialog pDialog) {
+    private void parseCalendar(String path, ProgressDialog pDialog) {
 
 
-       CompatibilityHints.setHintEnabled(CompatibilityHints.KEY_RELAXED_PARSING, true);
+        CompatibilityHints.setHintEnabled(CompatibilityHints.KEY_RELAXED_PARSING, true);
         CompatibilityHints.setHintEnabled(CompatibilityHints.KEY_OUTLOOK_COMPATIBILITY, true);
         CompatibilityHints.setHintEnabled(CompatibilityHints.KEY_RELAXED_UNFOLDING, true);
         CompatibilityHints.setHintEnabled(CompatibilityHints.KEY_RELAXED_VALIDATION, true);
@@ -1073,7 +1034,7 @@ else
                 TimeZone tZvEvent = registry.getTimeZone(((Property) pList.get(0)).getValue());
                 //TimeZone tZone= registry.getTimeZone();
                 deltaTZ = tzDefault.getRawOffset() - tZvEvent.getRawOffset();
-                Log.d(TAG,"----------------DeltaTZ :"+deltaTZ);//.getProperty(Property.TZOFFSETFROM).getValue());
+                // Log.d(TAG,"----------------DeltaTZ :"+deltaTZ);//.getProperty(Property.TZOFFSETFROM).getValue());
             } catch (Exception e) {
                 //  e.printStackTrace();
             }
@@ -1082,51 +1043,48 @@ else
             ComponentList listEvent = calendar.getComponents(Component.VEVENT);
             //int delta=100/listEvent.size();
             //int step=0;
-            for (int i=0;i<listEvent.size();i++){//Object elem : listEvent) {
-                if(i<pDialog.getMax())
-                pDialog.setProgress(i);
+            for (int i = 0; i < listEvent.size(); i++) {//Object elem : listEvent) {
+                if (i < pDialog.getMax())
+                    pDialog.setProgress(i);
                 AlarmEvent ae = new AlarmEvent();
 
                 VEvent vEvent = (VEvent) listEvent.get(i);
-                if(vEvent.getLastModified()!=null)
-                {
+                if (vEvent.getLastModified() != null) {
                     ae.setLastModified(vEvent.getLastModified().getDate().getTime());
-                   // Log.d(TAG,"Last Modified = "+vEvent.getLastModified().getDate());
+                    // Log.d(TAG,"Last Modified = "+vEvent.getLastModified().getDate());
+                } else {
+                    // Log.d(TAG,"Not Last Modified = ");
                 }
-                else
-                    {
-                       // Log.d(TAG,"Not Last Modified = ");
-                    }
 
-                if(vEvent.getSummary()!=null)
-                {
+                if (vEvent.getSummary() != null) {
                     ae.setTitle(vEvent.getSummary().getValue());
                 }
-                if(vEvent.getDescription()!=null)
+                if (vEvent.getDescription() != null)
                     ae.setContent(vEvent.getDescription().getValue());
-                if(vEvent.getStartDate()!=null)
+                if (vEvent.getStartDate() != null)
                     ae.setTimeAlarm(vEvent.getStartDate().getDate().getTime() - deltaTZ);
-                if(vEvent.getUid()!=null)
+                if (vEvent.getUid() != null)
                     ae.setUID(vEvent.getUid().getValue());
 
                 int res = dbHelper.replaceAlarmEvent(ae);
-               Log.d(TAG, "------Import:   " +ae + "\tRES=" + res);
+                // Log.d(TAG, "------Import:   " +ae + "\tRES=" + res);
                 if (res > 0) {
                     //Log.d(TAG,"parse OK");
                 }
 
-              //  Thread.sleep(2000);
+                //  Thread.sleep(2000);
             }
             // decorateCalendar();
         } catch (IOException e) {
-            Log.d(TAG, "IOEXception " + e.getMessage());
+            //Log.d(TAG, "IOEXception " + e.getMessage());
             // e.printStackTrace();
         } catch (ParserException e) {
-            Log.d(TAG, "ParseEXception " + e.getMessage());
+            // Log.d(TAG, "ParseEXception " + e.getMessage());
             // e.printStackTrace();
         } catch (Exception e) {
-            Log.d(TAG, "AllCreateCalendarEXception " + e.getMessage() + " |" + e.getLocalizedMessage());
+            // Log.d(TAG, "AllCreateCalendarEXception " + e.getMessage() + " |" + e.getLocalizedMessage());
             // e.printStackTrace();
+
         }
 
     }
@@ -1177,7 +1135,7 @@ else
                     if (!file.createNewFile()) {
                         //Toast.makeText(this,"Error Create file",Toast.LENGTH_SHORT).show();
                         progressDialog.hide();
-                        Log.d(TAG, "ERRRRRRRRRRRRRRRor");
+                        // Log.d(TAG, "ERRRRRRRRRRRRRRRor");
                         return null;
                     }
                     //Log.d(TAG,"Download FILE create OK");
@@ -1196,14 +1154,14 @@ else
                         fos.write(buffer, 0, bufferLength);
                         downloadedSize += bufferLength;
                         publishProgress(downloadedSize, totalSize);
-                        Log.d(TAG, "Download READ :" + downloadedSize);
+                        // Log.d(TAG, "Download READ :" + downloadedSize);
                     }
 
                     fos.close();
                     inputStream.close();
 
 
-                    parseCalendar(file.getAbsolutePath(),progressDialog);
+                    parseCalendar(file.getAbsolutePath(), progressDialog);
                     return file;
                 } catch (MalformedURLException e) {
                     e.printStackTrace();

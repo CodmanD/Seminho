@@ -72,7 +72,7 @@ public class PagesActivity extends AppCompatActivity {
         themeNumber = preferences.getInt(TAG + "theme", 0);
         ringtone = Uri.parse(preferences.getString(TAG + "ringtone", "content://settings/system/notification_sound"));
         advance = preferences.getLong(TAG + "advance", 0);
-        Log.d(TAG, "----------PagesActivity ringtone " + ringtone + " Advance = " + advance);
+       //Log.d(TAG, "----------PagesActivity ringtone " + ringtone + " Advance = " + advance);
         if (themeNumber == 1) {
             setTheme(R.style.AppThemeBlue);
             // Log.d(TAG,"ChangeTheme");
@@ -85,7 +85,7 @@ public class PagesActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         int id = intent.getIntExtra("ID", -1);
-        Log.d(TAG, "Pages ID=" + id);
+        //Log.d(TAG, "Pages ID=" + id);
         long date = (long) intent.getIntExtra("MS", -1);
 
         dbHelper = DatabaseHelper.getInstance(this);
@@ -233,7 +233,7 @@ public class PagesActivity extends AppCompatActivity {
                     AlarmEvent ae = getPrev(currentAE.getId());
                     if (ae != null)
                         currentAE = ae;
-                    Log.d(TAG, "  cuRAE" + currentAE);
+                    //Log.d(TAG, "  cuRAE" + currentAE);
                     pager.setCurrentItem(prevPos);
                     pagerAdapter.notifyDataSetChanged();
                 }

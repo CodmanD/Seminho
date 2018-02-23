@@ -48,7 +48,7 @@ public class NotificationUtil extends ContextWrapper {
     public NotificationUtil(Context base) {
         super(base);
         createChannels();
-        Log.d(TAG, "Create Notif CHANNEL");
+       // Log.d(TAG, "Create Notif CHANNEL");
     }
 
     private static NotificationManager getManager() {
@@ -78,7 +78,7 @@ public class NotificationUtil extends ContextWrapper {
         }
 
 
-        Log.d(TAG, "createNotificattion :" + ringtone);
+       // Log.d(TAG, "createNotificattion :" + ringtone);
         // Create intent for notification onClick behaviour
         Intent viewIntent = new Intent(context, MainActivity.class);
         viewIntent.putExtra("NOTIFICATION_ID", ae.getId());
@@ -178,7 +178,7 @@ public class NotificationUtil extends ContextWrapper {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void createChannels() {
-        Log.d(TAG, " createChannels");
+        //Log.d(TAG, " createChannels");
 
         // create android channel
         NotificationChannel androidChannel = new NotificationChannel(ANDROID_CHANNEL_ID,
