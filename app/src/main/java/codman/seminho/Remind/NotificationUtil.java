@@ -1,6 +1,5 @@
-package kodman.seminho.Remind;
+package codman.seminho.Remind;
 
-import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -8,27 +7,21 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
-import kodman.seminho.R;
+import codman.seminho.R;
 
 
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Calendar;
 
-import kodman.seminho.Model.AlarmEvent;
-import kodman.seminho.MainActivity;
+import codman.seminho.Model.AlarmEvent;
+import codman.seminho.MainActivity;
 
 public class NotificationUtil extends ContextWrapper {
 

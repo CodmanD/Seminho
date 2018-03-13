@@ -1,4 +1,4 @@
-package kodman.seminho;
+package codman.seminho;
 
 import org.junit.Test;
 

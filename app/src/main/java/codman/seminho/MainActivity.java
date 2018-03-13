@@ -1,7 +1,12 @@
-package kodman.seminho;
+package codman.seminho;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+
+
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -50,6 +55,15 @@ import com.github.angads25.filepicker.controller.DialogSelectionListener;
 import com.github.angads25.filepicker.model.DialogConfigs;
 import com.github.angads25.filepicker.model.DialogProperties;
 import com.github.angads25.filepicker.view.FilePickerDialog;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
@@ -71,15 +85,12 @@ import net.fortuna.ical4j.model.TimeZone;
 import net.fortuna.ical4j.model.TimeZoneRegistry;
 import net.fortuna.ical4j.model.TimeZoneRegistryFactory;
 
-import net.fortuna.ical4j.model.component.VAlarm;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.component.VTimeZone;
-import net.fortuna.ical4j.model.property.Action;
 import net.fortuna.ical4j.model.property.CalScale;
 import net.fortuna.ical4j.model.property.Description;
 import net.fortuna.ical4j.model.property.LastModified;
 import net.fortuna.ical4j.model.property.ProdId;
-import net.fortuna.ical4j.model.property.Summary;
 import net.fortuna.ical4j.model.property.Uid;
 import net.fortuna.ical4j.model.property.Version;
 import net.fortuna.ical4j.util.CompatibilityHints;
@@ -101,11 +112,11 @@ import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import kodman.seminho.Calendar.OneDayDecorator;
-import kodman.seminho.Remind.AlarmReceiver;
-import kodman.seminho.Remind.AlarmUtil;
-import kodman.seminho.DataBase.DatabaseHelper;
-import kodman.seminho.Model.AlarmEvent;
+import codman.seminho.Calendar.OneDayDecorator;
+import codman.seminho.Remind.AlarmReceiver;
+import codman.seminho.Remind.AlarmUtil;
+import codman.seminho.DataBase.DatabaseHelper;
+import codman.seminho.Model.AlarmEvent;
 
 
 public class MainActivity extends AppCompatActivity implements OnDateSelectedListener, OnMonthChangedListener {
@@ -118,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
     SimpleDateFormat timeFormat = new SimpleDateFormat("HH : mm ");
     private static final int PERMISSION_REQUEST_CODE = 123;
     private static final int RINGTONES_REQUEST_CODE = 124;
+    private static final int RC_SIGN_IN = 9001;
     private FilePickerDialog dialog;
 
     @BindView(R.id.toolbar)
@@ -140,9 +152,12 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
     int themeNumber = 0;
     DatabaseHelper dbHelper;
 
+    private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        mAuth = FirebaseAuth.getInstance();
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         themeNumber = preferences.getInt(TAG + "theme", 0);
         ringtone = Uri.parse(preferences.getString(TAG + "ringtone", "content://settings/system/notification_sound"));
@@ -204,7 +219,28 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
 
         restartNotify();
+
+
+        //Google Sign_iN
+    gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        Log.d(TAG,"GoogleSignIn = "+gso);
+
     }
+
+    private GoogleSignInClient mGoogleSignInClient;
+    GoogleSignInOptions gso;
+
+    private void signIn() {
+   Log.d(TAG,"Sign In");
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+
 
 
     private void restartNotify() {
@@ -217,6 +253,14 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        Log.d(TAG,"onStart getCurrentUser : "+currentUser);
+        //updateUI(currentUser);
+    }
 
     private void createList() {
         final ArrayList<AlarmEvent> events = dbHelper.getFutureEventsForListView();
@@ -569,6 +613,16 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                 return true;
             case R.id.actionAbout:
 
+                if(!sIn){
+                signIn();
+                sIn=true;
+                }
+                else
+                    {
+                        signOut();
+                        sIn=false;
+                    }
+                /*
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setTitle("Seminho " + getResources().getString(R.string.aboutVersion))
                         .setMessage(R.string.aboutCompany)
@@ -577,10 +631,13 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
                 AlertDialog dialog = builder.create();
                 dialog.show();
+                */
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
+private boolean  sIn=false;
 
     private void actionImportURL() {
         final View viewDialog = getLayoutInflater().inflate(R.layout.dialog_download, null);
@@ -871,6 +928,72 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         startActivityForResult(appSettingsIntent, PERMISSION_REQUEST_CODE);
     }
 
+
+
+
+    // [START auth_with_google]
+    private void signOut() {
+        // Firebase sign out
+        mAuth.signOut();
+
+        Log.d(TAG,"Sign Out complete");
+        // Google sign out
+        mGoogleSignInClient.signOut().addOnCompleteListener(this,
+                new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        //updateUI(null);
+                        Log.d(TAG,"Sign OUT complete");
+                    }
+                });
+    }
+
+    private void revokeAccess() {
+        // Firebase sign out
+        mAuth.signOut();
+
+        // Google revoke access
+        mGoogleSignInClient.revokeAccess().addOnCompleteListener(this,
+                new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                       // updateUI(null);
+                    }
+                });
+    }
+
+
+    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+        Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
+        // [START_EXCLUDE silent]
+       //showProgressDialog();
+        // [END_EXCLUDE]
+
+        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithCredential:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                           // updateUI(user);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            Snackbar.make(findViewById(R.id.root), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
+                           // updateUI(null);
+                        }
+
+                        // [START_EXCLUDE]
+                      //  hideProgressDialog();
+                        // [END_EXCLUDE]
+                    }
+                });
+    }
+    // [END auth_with_google]
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PERMISSION_REQUEST_CODE) {
@@ -896,6 +1019,22 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                 }
             }
             return;
+        }
+
+
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                // Google Sign In was successful, authenticate with Firebase
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                firebaseAuthWithGoogle(account);
+            } catch (ApiException e) {
+                // Google Sign In failed, update UI appropriately
+                Log.w(TAG, "Google sign in failed", e);
+                // [START_EXCLUDE]
+               // updateUI(null);
+                // [END_EXCLUDE]
+            }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -978,13 +1117,13 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
                 //Add VAlarm
 
-                VAlarm vAlarm = new VAlarm(new Dur(-1000 * 60 * 60));
-                vAlarm.getProperties().add(new Description(events.get(i).getCategory()));
-                vAlarm.getProperties().add(Action.DISPLAY);
-                vAlarm.getProperties().add(new Summary(events.get(i).getAlarmName()));
-
-                // vAlarm.getDescription().setValue(events.get(i).getAlarmName());
-                vEvent.getAlarms().add(vAlarm);
+//                VAlarm vAlarm = new VAlarm(new Dur(-1000 * 60 * 60));
+//                vAlarm.getProperties().add(new Description(events.get(i).getCategory()));
+//                vAlarm.getProperties().add(Action.DISPLAY);
+//                vAlarm.getProperties().add(new Summary(events.get(i).getAlarmName()));
+//
+//                // vAlarm.getDescription().setValue(events.get(i).getAlarmName());
+//                vEvent.getAlarms().add(vAlarm);
 
 
                 vEvent.getProperties().add(tz.getTimeZoneId());
@@ -1166,9 +1305,13 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                     m_error = e;
+                    Log.d(TAG,"Not URL");
+                    progressDialog.dismiss();
                 } catch (IOException e) {
                     e.printStackTrace();
                     m_error = e;
+                    Log.d(TAG,"Not URL Ioexception");
+                    progressDialog.dismiss();
                 }
 
                 return null;

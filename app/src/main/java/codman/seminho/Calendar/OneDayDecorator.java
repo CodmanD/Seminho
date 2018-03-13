@@ -1,4 +1,4 @@
-package kodman.seminho.Calendar;
+package codman.seminho.Calendar;
 
 
 import android.graphics.Typeface;
@@ -40,7 +40,7 @@ public class OneDayDecorator implements DayViewDecorator {
     @Override
     public void decorate(DayViewFacade view) {
         view.addSpan(new StyleSpan(Typeface.BOLD));
-        kodman.seminho.Calendar.DotSpan ds = new kodman.seminho.Calendar.DotSpan(1, String.valueOf(count), color);
+        codman.seminho.Calendar.DotSpan ds = new codman.seminho.Calendar.DotSpan(1, String.valueOf(count), color);
         view.addSpan(ds);
     }
 

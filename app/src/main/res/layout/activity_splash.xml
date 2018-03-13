@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<!--FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorPrimaryDark"
@@ -13,4 +13,30 @@
         android:src="?attr/background"
 
         />
-</FrameLayout>
+</FrameLayout-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="bottom"
+    android:background="?attr/background"
+android:orientation="vertical"
+
+    >
+    <!--ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:id="@+id/ivMain"
+        android:src="?attr/background"
+
+        /-->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:id="@+id/ivSignIn"
+        android:src="@drawable/google_sign_in"
+
+        />
+</LinearLayout>

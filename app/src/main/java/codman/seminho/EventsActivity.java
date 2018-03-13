@@ -1,12 +1,10 @@
-package kodman.seminho;
+package codman.seminho;
 
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.preference.PreferenceManager;
 
 import android.support.v7.app.AppCompatActivity;
@@ -15,8 +13,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 
 import android.view.Menu;
@@ -25,7 +21,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
@@ -38,8 +33,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import kodman.seminho.Model.AlarmEvent;
-import kodman.seminho.DataBase.DatabaseHelper;
+import codman.seminho.Model.AlarmEvent;
+import codman.seminho.DataBase.DatabaseHelper;
 
 
 public class EventsActivity extends AppCompatActivity {

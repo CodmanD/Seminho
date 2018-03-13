@@ -1,4 +1,4 @@
-package kodman.seminho.Model;
+package codman.seminho.Model;
 
 import java.util.Calendar;
 
@@ -8,6 +8,7 @@ public class AlarmEvent {
     String title;
     String content;
     long timeAlarm;
+    long finishTime;
     long lastModified;
     String category;
     String alarmName;
@@ -31,6 +32,14 @@ public class AlarmEvent {
         this.category = category;
         this.alarmName = alarmName;
         this.uID = uID;
+    }
+
+    public long getFinishTime() {
+        return finishTime;
+    }
+
+    public void setFinishTime(long finishTime) {
+        this.finishTime = finishTime;
     }
 
     public void setId(int id) {

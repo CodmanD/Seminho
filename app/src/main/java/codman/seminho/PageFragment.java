@@ -1,4 +1,4 @@
-package kodman.seminho;
+package codman.seminho;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -13,7 +13,6 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -24,8 +23,8 @@ import android.widget.Spinner;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import kodman.seminho.Model.AlarmEvent;
-import kodman.seminho.DataBase.DatabaseHelper;
+import codman.seminho.Model.AlarmEvent;
+import codman.seminho.DataBase.DatabaseHelper;
 
 public class PageFragment extends Fragment implements View.OnTouchListener {
 

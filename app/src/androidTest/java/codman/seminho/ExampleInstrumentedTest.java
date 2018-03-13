@@ -1,4 +1,4 @@
-package kodman.seminho;
+package codman.seminho;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

@@ -1,4 +1,4 @@
-package kodman.seminho.Remind;
+package codman.seminho.Remind;
 
 
 import android.content.BroadcastReceiver;
@@ -6,12 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
 import java.net.URISyntaxException;
 
-import kodman.seminho.Model.AlarmEvent;
-import kodman.seminho.DataBase.DatabaseHelper;
+import codman.seminho.Model.AlarmEvent;
+import codman.seminho.DataBase.DatabaseHelper;
 
 
 public class AlarmReceiver extends BroadcastReceiver {

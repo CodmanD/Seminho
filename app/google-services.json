@@ -1,43 +1,35 @@
 {
   "project_info": {
-    "project_number": "669388799120",
-    "firebase_url": "https://stopspamcallmanagerapp.firebaseio.com",
-    "project_id": "stopspamcallmanagerapp",
-    "storage_bucket": "stopspamcallmanagerapp.appspot.com"
+    "project_number": "426894638525",
+    "firebase_url": "https://seminho-android.firebaseio.com",
+    "project_id": "seminho-android",
+    "storage_bucket": "seminho-android.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:669388799120:android:c5662da815196179",
+        "mobilesdk_app_id": "1:426894638525:android:2d1845f6c6f72a24",
         "android_client_info": {
-          "package_name": "com.example.artur.stopspamcallmanagerapp"
+          "package_name": "codman.seminho"
         }
       },
       "oauth_client": [
         {
-          "client_id": "669388799120-u6qd63c16pe6t8flnib0gc0tdnvmcvp4.apps.googleusercontent.com",
+          "client_id": "426894638525-kgnkk5de17a6q98a0u8qu1rh977rm6iv.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.artur.stopspamcallmanagerapp",
-            "certificate_hash": "61881a7f2b16d850bae074eb64cc1237ff30429b"
+            "package_name": "codman.seminho",
+            "certificate_hash": "0d96792ca43813ef2056beb41ba75e15b23c597f"
           }
         },
         {
-          "client_id": "669388799120-a89fjkdil3gevumm1j9bj8fmojbotntd.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.artur.stopspamcallmanagerapp",
-            "certificate_hash": "90de420a4d3486e87184714a607ea2170e5a0382"
-          }
-        },
-        {
-          "client_id": "669388799120-hstarktfqlpvmbthfpc0qacn1hfka1no.apps.googleusercontent.com",
+          "client_id": "426894638525-msa3q20o0kamvb4vlt14k57cg86ekeqv.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyALXs0fDWFq2Xe6F0vdFQcv3osGK2a5nUc"
+          "current_key": "AIzaSyAGfWXUQfbaHAjgj3AQk-waOZ_SaT5t6ws"
         }
       ],
       "services": {
@@ -48,95 +40,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "669388799120-hstarktfqlpvmbthfpc0qacn1hfka1no.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:669388799120:android:e6a22ee0b1192079",
-        "android_client_info": {
-          "package_name": "com.innovations.djnig.truecallerclone"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "669388799120-2116qakr4krhuc8b85v2i8gaovo3i6iq.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.innovations.djnig.truecallerclone",
-            "certificate_hash": "90de420a4d3486e87184714a607ea2170e5a0382"
-          }
-        },
-        {
-          "client_id": "669388799120-hstarktfqlpvmbthfpc0qacn1hfka1no.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyALXs0fDWFq2Xe6F0vdFQcv3osGK2a5nUc"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "669388799120-hstarktfqlpvmbthfpc0qacn1hfka1no.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:669388799120:android:06f834f42d61cf61",
-        "android_client_info": {
-          "package_name": "kodman.seminho"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "669388799120-d1cj1ckvuggg5nitqbt9atarbqprka9j.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "kodman.seminho",
-            "certificate_hash": "70f32ac94d8d3947516de992122886ca05a71477"
-          }
-        },
-        {
-          "client_id": "669388799120-hstarktfqlpvmbthfpc0qacn1hfka1no.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyALXs0fDWFq2Xe6F0vdFQcv3osGK2a5nUc"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "669388799120-hstarktfqlpvmbthfpc0qacn1hfka1no.apps.googleusercontent.com",
+              "client_id": "426894638525-msa3q20o0kamvb4vlt14k57cg86ekeqv.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

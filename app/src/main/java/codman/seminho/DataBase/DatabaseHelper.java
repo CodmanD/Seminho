@@ -1,4 +1,4 @@
-package kodman.seminho.DataBase;
+package codman.seminho.DataBase;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import kodman.seminho.Model.AlarmEvent;
+import codman.seminho.Model.AlarmEvent;
 
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;

@@ -1,4 +1,4 @@
-package kodman.seminho;
+package codman.seminho;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -29,10 +29,10 @@ import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import kodman.seminho.Remind.AlarmReceiver;
-import kodman.seminho.Remind.AlarmUtil;
-import kodman.seminho.Model.AlarmEvent;
-import kodman.seminho.DataBase.DatabaseHelper;
+import codman.seminho.Remind.AlarmReceiver;
+import codman.seminho.Remind.AlarmUtil;
+import codman.seminho.Model.AlarmEvent;
+import codman.seminho.DataBase.DatabaseHelper;
 
 public class PagesActivity extends AppCompatActivity {
 

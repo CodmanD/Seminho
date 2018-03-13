@@ -12,6 +12,7 @@
         <item name="colorButtonNormal">#FFF8E1</item>
         <item name="colorControlActivated">#ffcc80</item>
         <item name="android:actionMenuTextColor">@color/colorAccent</item>
+
         <!--item name="android:popupMenuStyle">@style/PopupMenu</item-->
         <!--item name="android:actionMenuTextColor">@color/colorContent_blue</item-->
         <!--item name="searchViewStyle">@style/AppSearchViewStyle</item-->
@@ -24,6 +25,7 @@
         <item name="colorControlNormal">#FFFFFF</item>
         <!--item name="colorControlNormal">#000000</item-->
         <item name="background">@drawable/seminho_image_blue</item>
+
         <item name="colorButtonNormal">#f0f5fb</item>
         <item name="colorControlActivated">#e4f2fd</item>
 
