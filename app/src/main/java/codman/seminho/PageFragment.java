@@ -2,6 +2,7 @@ package codman.seminho;
 
 import java.util.Calendar;
 import java.util.Date;
+
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
@@ -20,7 +21,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+
 import com.prolificinteractive.materialcalendarview.CalendarDay;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import codman.seminho.Model.AlarmEvent;
@@ -49,12 +52,17 @@ public class PageFragment extends Fragment implements View.OnTouchListener {
     EditText etMonth;
     @BindView(R.id.etYear)
     EditText etYear;
-    @BindView(R.id.etAlarmName)
-    EditText etAlarmName;
-    @BindView(R.id.etHours)
-    EditText etHours;
-    @BindView(R.id.etMin)
-    EditText etMin;
+    // @BindView(R.id.etAlarmName)
+    // EditText etAlarmName;
+    @BindView(R.id.etStartHours)
+    EditText etStartHours;
+    @BindView(R.id.etStartMin)
+    EditText etStartMin;
+    @BindView(R.id.etFinishHours)
+    EditText etFinishHours;
+    @BindView(R.id.etFinishMin)
+    EditText etFinishMin;
+
     @BindView(R.id.spinnerCategories)
     Spinner spinner;
 
@@ -93,17 +101,18 @@ public class PageFragment extends Fragment implements View.OnTouchListener {
 
         ButterKnife.bind(this, view);
         final Calendar calendar = Calendar.getInstance();
-        categories=getResources().getStringArray(R.array.categories);
-         etDay.setOnTouchListener(this);
+        categories = getResources().getStringArray(R.array.categories);
+        etDay.setOnTouchListener(this);
         etMonth.setOnTouchListener(this);
         etYear.setOnTouchListener(this);
-        etHours.setOnTouchListener(this);
-        etMin.setOnTouchListener(this);
+        etStartHours.setOnTouchListener(this);
+        etStartMin.setOnTouchListener(this);
+        etFinishHours.setOnTouchListener(this);
+        etFinishMin.setOnTouchListener(this);
 
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), themeNumber == 0 ? R.layout.spin : R.layout.spin_blue, R.id.tvCategory, categories);
         adapter.setDropDownViewResource(themeNumber == 0 ? R.layout.spin_dropdown : R.layout.spin_dropdown_blue);
-
 
 
         if (themeNumber == 1 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
@@ -116,18 +125,20 @@ public class PageFragment extends Fragment implements View.OnTouchListener {
             //Log.d(TAG, "SPINNER =" + cat);
             spinner.setSelection(cat);
 
-             Date date = new Date(ae.getTimeAlarm());
+            calendar.setTimeInMillis(ae.getStartTime());
 
-            calendar.setTime(date);
 
             etContent.setText(ae.getContent());
-            etAlarmName.setText(ae.getAlarmName());
+            // etAlarmName.setText(ae.getAlarmName());
             etDay.setText("" + calendar.get(Calendar.DAY_OF_MONTH));
             etMonth.setText("" + (calendar.get(Calendar.MONTH) + 1));
             etYear.setText("" + calendar.get(Calendar.YEAR));
-            etHours.setText("" + calendar.get(Calendar.HOUR_OF_DAY));
-            etMin.setText("" + calendar.get(Calendar.MINUTE));
+            etStartHours.setText("" + calendar.get(Calendar.HOUR_OF_DAY));
+            etStartMin.setText("" + calendar.get(Calendar.MINUTE));
 
+            calendar.setTimeInMillis(ae.getFinishTime());
+            etFinishHours.setText("" + calendar.get(Calendar.HOUR_OF_DAY));
+            etFinishMin.setText("" + calendar.get(Calendar.MINUTE));
 
         }
         if (selectedDate != null) {
@@ -151,10 +162,10 @@ public class PageFragment extends Fragment implements View.OnTouchListener {
     public boolean onTouch(View view, MotionEvent event) {
 
 
-      // event.
+        // event.
         if (event.getAction() == MotionEvent.ACTION_DOWN
                 || isDialog
-                ||event.getAction() == MotionEvent.ACTION_MOVE) return true;
+                || event.getAction() == MotionEvent.ACTION_MOVE) return true;
 
 
         switch (view.getId()) {
@@ -186,16 +197,16 @@ public class PageFragment extends Fragment implements View.OnTouchListener {
 
                 return true;
 
-            case R.id.etHours:
-            case R.id.etMin:
+            case R.id.etStartHours:
+            case R.id.etStartMin: {
                 isDialog = true;
                 TimePickerDialog TimePicker = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(android.widget.TimePicker timePicker, int hour, int minute) {
                         calendar.set(Calendar.HOUR_OF_DAY, hour);
                         calendar.set(Calendar.MINUTE, minute);
-                        etHours.setText(String.valueOf(hour));
-                        etMin.setText(String.valueOf(minute));
+                        etStartHours.setText(String.valueOf(hour));
+                        etStartMin.setText(String.valueOf(minute));
                         isDialog = false;
                     }
                 }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), DateFormat.is24HourFormat(getContext()));
@@ -208,6 +219,31 @@ public class PageFragment extends Fragment implements View.OnTouchListener {
                 });
                 TimePicker.show();
                 return true;
+            }
+
+            case R.id.etFinishHours:
+            case R.id.etFinishMin: {
+                isDialog = true;
+                TimePickerDialog TimePicker = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(android.widget.TimePicker timePicker, int hour, int minute) {
+                        calendar.set(Calendar.HOUR_OF_DAY, hour);
+                        calendar.set(Calendar.MINUTE, minute);
+                        etFinishHours.setText(String.valueOf(hour));
+                        etFinishMin.setText(String.valueOf(minute));
+                        isDialog = false;
+                    }
+                }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), DateFormat.is24HourFormat(getContext()));
+                TimePicker.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        isDialog = false;
+                        dialog.cancel();
+                    }
+                });
+                TimePicker.show();
+                return true;
+            }
         }
         return true;
     }

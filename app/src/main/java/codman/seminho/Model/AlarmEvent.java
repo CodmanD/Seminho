@@ -5,34 +5,52 @@ import java.util.Calendar;
 public class AlarmEvent {
 
     final static String TAG = "Seminho";
+
+    long id = -1;
     String title;
     String content;
-    long timeAlarm;
+    String category;
+    String uID ;
+
+    long startTime;
     long finishTime;
     long lastModified;
-    String category;
-    String alarmName;
-    long id = -1;
-    String uID ;
+
+//    String alarmName;
+
+
 
     public AlarmEvent() {
         this.title = "";
         this.content = "";
-        this.timeAlarm = System.currentTimeMillis();
+        this.startTime = System.currentTimeMillis();
         this.lastModified=System.currentTimeMillis();
+        this.finishTime=System.currentTimeMillis();
         this.category = "event";
-        this.alarmName = "";
+      //  this.alarmName = "";
         this.uID="";
     }
-
-    public AlarmEvent(String title, String content, String category, String alarmName, long timeAlarm, String uID) {
+/*
+    public AlarmEvent(String title, String content, String category, String alarmName, long startTime, String uID) {
         this.title = title;
         this.content = content;
-        this.timeAlarm = timeAlarm;
+        this.startTime = startTime;
         this.category = category;
         this.alarmName = alarmName;
         this.uID = uID;
     }
+*/
+    public AlarmEvent(String title, String content, String category, long startTime,long finishTime, String uID) {
+        this.title = title;
+        this.content = content;
+        this.startTime = startTime;
+        this.category = category;
+       // this.alarmName = alarmName;
+
+        this.uID = uID;
+    }
+
+
 
     public long getFinishTime() {
         return finishTime;
@@ -62,13 +80,13 @@ public class AlarmEvent {
         this.category = category;
     }
 
-    public void setAlarmName(String alarmName) {
-        this.alarmName = alarmName;
-    }
+    //public void setAlarmName(String alarmName) {
+    //    this.alarmName = alarmName;
+   // }
 
 
-    public void setTimeAlarm(long timeAlarm) {
-        this.timeAlarm = timeAlarm;
+    public void setStartTime(long startTime) {
+        this.startTime =startTime;
     }
     public void setLastModified(long  lastModified) {
         this.lastModified= lastModified;
@@ -94,13 +112,13 @@ public class AlarmEvent {
         return this.category;
     }
 
-    public String getAlarmName() {
-        return this.alarmName;
-    }
+    //public String getAlarmName() {
+    //    return this.alarmName;
+    //}
 
 
-    public long getTimeAlarm() {
-        return this.timeAlarm;
+    public long getStartTime() {
+        return this.startTime;
     }
     public long getLastModified() {
         return this.lastModified;
@@ -110,9 +128,9 @@ public class AlarmEvent {
     @Override
     public String toString() {
         Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(this.timeAlarm);
+        cal.setTimeInMillis(this.startTime);
 
-        return this.id + " | " + this.title + " | " + this.category + " | " + this.alarmName + "|" + this.timeAlarm + " | " +
+        return this.id + " | " + this.title + " | " + this.category + " | " +  "|" + this.startTime + " | " +
                 cal.get(Calendar.DAY_OF_MONTH) + "/" + cal.get(Calendar.MONTH) + "/" + cal.get(Calendar.YEAR) + " | " + this.uID;
     }
 

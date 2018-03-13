@@ -15,7 +15,8 @@
     <string name="category">Category</string>
     <string name="dateTime">Date</string>
     <string name="alarmName">Alarm Name</string>
-    <string name="alarmTime">Alarm Time</string>
+    <string name="startTime">Start Time</string>
+    <string name="finishTime">Finish Time</string>
     <string name="titleMain">Date</string>
     <string name="title">Title</string>
     <string name="description">Description</string>

@@ -98,7 +98,7 @@ public class PagesActivity extends AppCompatActivity {
             etTitle.setText(currentAE.getTitle());
             // Log.d(TAG, "GetCurrentAE FROM DB");
 
-            calendar.setTimeInMillis(currentAE.getTimeAlarm());
+            calendar.setTimeInMillis(currentAE.getStartTime());
             events = dbHelper.getEvents(calendar);
 
         } else {
@@ -155,12 +155,14 @@ public class PagesActivity extends AppCompatActivity {
             case R.id.tvAdd: {
                 try {
                     EditText etContent = pager.findViewById(R.id.etContent);
-                    EditText etAlarmName = pager.findViewById(R.id.etAlarmName);
+                    //EditText etAlarmName = pager.findViewById(R.id.etAlarmName);
                     EditText etDay = pager.findViewById(R.id.etDay);
                     EditText etMonth = pager.findViewById(R.id.etMonth);
                     EditText etYear = pager.findViewById(R.id.etYear);
-                    EditText etHours = pager.findViewById(R.id.etHours);
-                    EditText etMin = pager.findViewById(R.id.etMin);
+                    EditText etStartHours = pager.findViewById(R.id.etStartHours);
+                    EditText etStartMin = pager.findViewById(R.id.etStartMin);
+                    EditText etFinishHours = pager.findViewById(R.id.etFinishHours);
+                    EditText etFinishMin = pager.findViewById(R.id.etFinishMin);
                     Spinner spCategory = pager.findViewById(R.id.spinnerCategories);
 
                     Calendar calendar = Calendar.getInstance();
@@ -185,8 +187,8 @@ public class PagesActivity extends AppCompatActivity {
                         calendar.set(Integer.parseInt(etYear.getText().toString()),
                                 Integer.parseInt(etMonth.getText().toString()) - 1
                                 , Integer.parseInt(etDay.getText().toString()),
-                                Integer.parseInt(etHours.getText().toString()),
-                                Integer.parseInt(etMin.getText().toString()));
+                                Integer.parseInt(etStartHours.getText().toString()),
+                                Integer.parseInt(etStartMin.getText().toString()));
 
                     } catch (Exception ex) {
                         //Log.d(TAG, "ADD Exception curTime-----------Update Event");
@@ -196,9 +198,9 @@ public class PagesActivity extends AppCompatActivity {
 
                     currentAE.setTitle(etTitle.getText().toString());
                     currentAE.setContent(etContent.getText().toString());
-                    currentAE.setAlarmName(etAlarmName.getText().toString());
+                    //currentAE.setAlarmName(etAlarmName.getText().toString());
                     currentAE.setCategory(categories[spCategory.getSelectedItemPosition()]);
-                    currentAE.setTimeAlarm(calendar.getTimeInMillis());
+                    currentAE.setStartTime(calendar.getTimeInMillis());
                     currentAE.setLastModified(System.currentTimeMillis());
 
                     if (this.STATUS == STATUS_ADD) {
@@ -277,7 +279,7 @@ public class PagesActivity extends AppCompatActivity {
                 if (currentAE != null && dbHelper.removeEventFromDB(currentAE.getId())) {
                     int pos = pager.getCurrentItem();
 
-                    calendar.setTimeInMillis(currentAE.getTimeAlarm());
+                    calendar.setTimeInMillis(currentAE.getStartTime());
                     events = dbHelper.getEvents(calendar);
 
                     ((MyFragmentPagerAdapter) pagerAdapter).notifyChangeInPosition(pos);
@@ -405,7 +407,7 @@ public class PagesActivity extends AppCompatActivity {
         if (ae != null) {
             Intent alarmIntent = new Intent(this, AlarmReceiver.class);
             calendar.set(Calendar.SECOND, 0);
-            AlarmUtil.setAlarm(this, alarmIntent, (int) ae.getId(), ringtone, ae.getTimeAlarm(), advance);
+            AlarmUtil.setAlarm(this, alarmIntent, (int) ae.getId(), ringtone, ae.getStartTime(), advance);
         }
 
     }

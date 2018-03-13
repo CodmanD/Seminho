@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
     SimpleDateFormat timeFormat = new SimpleDateFormat("HH : mm ");
     private static final int PERMISSION_REQUEST_CODE = 123;
     private static final int RINGTONES_REQUEST_CODE = 124;
-    private static final int RC_SIGN_IN = 9001;
+
     private FilePickerDialog dialog;
 
     @BindView(R.id.toolbar)
@@ -152,12 +152,11 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
     int themeNumber = 0;
     DatabaseHelper dbHelper;
 
-    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        mAuth = FirebaseAuth.getInstance();
+
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         themeNumber = preferences.getInt(TAG + "theme", 0);
         ringtone = Uri.parse(preferences.getString(TAG + "ringtone", "content://settings/system/notification_sound"));
@@ -222,23 +221,12 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
 
         //Google Sign_iN
-    gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        Log.d(TAG,"GoogleSignIn = "+gso);
+
 
     }
 
-    private GoogleSignInClient mGoogleSignInClient;
-    GoogleSignInOptions gso;
 
-    private void signIn() {
-   Log.d(TAG,"Sign In");
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
+
 
 
 
@@ -248,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         AlarmEvent ae = dbHelper.getNextEvent(advance);
         if (ae != null) {
             Intent alarmIntent = new Intent(this, AlarmReceiver.class);
-            AlarmUtil.setAlarm(this, alarmIntent, (int) ae.getId(), ringtone, ae.getTimeAlarm(), advance);
+            AlarmUtil.setAlarm(this, alarmIntent, (int) ae.getId(), ringtone, ae.getStartTime(), advance);
         }
 
     }
@@ -257,8 +245,8 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
     protected void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        Log.d(TAG,"onStart getCurrentUser : "+currentUser);
+      //  FirebaseUser currentUser = mAuth.getCurrentUser();
+       // Log.d(TAG,"onStart getCurrentUser : "+currentUser);
         //updateUI(currentUser);
     }
 
@@ -280,7 +268,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                     TextView tvData = (TextView) view.findViewById(R.id.tvDataLV);
 
                     TextView tvTime = (TextView) view.findViewById(R.id.tvTimeLV);
-                    cal.setTimeInMillis(events.get(position).getTimeAlarm());
+                    cal.setTimeInMillis(events.get(position).getStartTime());
 
                     String date = dateFormat.format(new Date(cal.getTimeInMillis()));
                     String time = timeFormat.format(new Date(cal.getTimeInMillis()));
@@ -320,7 +308,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                     // Log.d(TAG, "===============AE = " + events.get(position).getId() + " | " + events.get(position).getTitle());
                     intent.putExtra("ID", (int) events.get(position).getId());
                     // Log.d(TAG, "GET ID=" + intent.getIntExtra("ID", -1));
-                    intent.putExtra("MS", events.get(position).getTimeAlarm());
+                    intent.putExtra("MS", events.get(position).getStartTime());
                     startActivity(intent);
                 }
             }
@@ -421,7 +409,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         int minutes;
         // Log.d(TAG,"showCurrentEvents = "+ae);
         if (ae != null) {
-            long t = ae.getTimeAlarm();
+            long t = ae.getStartTime();
             long res = t - System.currentTimeMillis();
             //Log.d(TAG, "Res :" + res);
 
@@ -612,7 +600,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                 Toast.makeText(this, "Advanced", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.actionAbout:
-
+/*
                 if(!sIn){
                 signIn();
                 sIn=true;
@@ -622,7 +610,8 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                         signOut();
                         sIn=false;
                     }
-                /*
+                    */
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setTitle("Seminho " + getResources().getString(R.string.aboutVersion))
                         .setMessage(R.string.aboutCompany)
@@ -631,7 +620,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
                 AlertDialog dialog = builder.create();
                 dialog.show();
-                */
+
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -931,68 +920,7 @@ private boolean  sIn=false;
 
 
 
-    // [START auth_with_google]
-    private void signOut() {
-        // Firebase sign out
-        mAuth.signOut();
 
-        Log.d(TAG,"Sign Out complete");
-        // Google sign out
-        mGoogleSignInClient.signOut().addOnCompleteListener(this,
-                new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        //updateUI(null);
-                        Log.d(TAG,"Sign OUT complete");
-                    }
-                });
-    }
-
-    private void revokeAccess() {
-        // Firebase sign out
-        mAuth.signOut();
-
-        // Google revoke access
-        mGoogleSignInClient.revokeAccess().addOnCompleteListener(this,
-                new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                       // updateUI(null);
-                    }
-                });
-    }
-
-
-    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
-        // [START_EXCLUDE silent]
-       //showProgressDialog();
-        // [END_EXCLUDE]
-
-        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                           // updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Snackbar.make(findViewById(R.id.root), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
-                           // updateUI(null);
-                        }
-
-                        // [START_EXCLUDE]
-                      //  hideProgressDialog();
-                        // [END_EXCLUDE]
-                    }
-                });
-    }
-    // [END auth_with_google]
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -1022,20 +950,7 @@ private boolean  sIn=false;
         }
 
 
-        if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                // Google Sign In was successful, authenticate with Firebase
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                firebaseAuthWithGoogle(account);
-            } catch (ApiException e) {
-                // Google Sign In failed, update UI appropriately
-                Log.w(TAG, "Google sign in failed", e);
-                // [START_EXCLUDE]
-               // updateUI(null);
-                // [END_EXCLUDE]
-            }
-        }
+
         super.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -1087,7 +1002,7 @@ private boolean  sIn=false;
 
             try {
                 java.util.Calendar startDate = Calendar.getInstance();
-                startDate.setTimeInMillis(events.get(i).getTimeAlarm());
+                startDate.setTimeInMillis(events.get(i).getStartTime());
                 startDate.setTimeZone(timezone);
                 startDate.set(java.util.Calendar.MONTH, startDate.get(java.util.Calendar.MONTH));
                 startDate.set(java.util.Calendar.DAY_OF_MONTH, startDate.get(Calendar.DAY_OF_MONTH));
@@ -1201,7 +1116,9 @@ private boolean  sIn=false;
                 if (vEvent.getDescription() != null)
                     ae.setContent(vEvent.getDescription().getValue());
                 if (vEvent.getStartDate() != null)
-                    ae.setTimeAlarm(vEvent.getStartDate().getDate().getTime() - deltaTZ);
+                    ae.setStartTime(vEvent.getStartDate().getDate().getTime() - deltaTZ);
+                if (vEvent.getEndDate() != null)
+                    ae.setFinishTime(vEvent.getEndDate().getDate().getTime() - deltaTZ);
                 if (vEvent.getUid() != null)
                     ae.setUID(vEvent.getUid().getValue());
 

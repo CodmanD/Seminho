@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 
 import android.view.Menu;
@@ -77,6 +78,7 @@ public class EventsActivity extends AppCompatActivity {
 
             LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
             rv = (RecyclerView) findViewById(R.id.rv);
+
             rv.setLayoutManager(mLayoutManager);
 
             Intent intent = getIntent();
@@ -103,7 +105,7 @@ public class EventsActivity extends AppCompatActivity {
            // toolbar.setTitle("" + day + "." + month + "." + year);
 
            // getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.RED));
-           // toolbar.setSubtitle((Html.fromHtml("<font color=\"#999999\">" + getString(R.string.app_subname) + "</font>")))
+
 
 
         } catch (Exception e) {
@@ -153,7 +155,7 @@ else
 
         RecyclerViewAdapter adapter = new RecyclerViewAdapter(events);
         rv.setAdapter(adapter);
-
+        Log.d(TAG,"EventsActivity events="+events.size()+" ID+"+id+events.get(0).getTitle());
     }
 
     @Override
@@ -178,7 +180,7 @@ else
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            //Log.d(TAG,"onCreateViewHolder");
+            Log.d(TAG,"onCreateViewHolder");
             // View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.event_item, viewGroup, false);
             View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_event, viewGroup, false);
 
@@ -190,14 +192,14 @@ else
         public void onBindViewHolder(ViewHolder viewHolder, int i) {
 
             AlarmEvent event = events.get(i);
-            //  Log.d(TAG,"onBindViewHolder event = "+event.getTitle());
+             Log.d(TAG,"onBindViewHolder event = "+event.getTitle());
             viewHolder.title.setText(event.getTitle());
             //viewHolder.alarmName.setText(event.getAlarmName());
             viewHolder.category.setText(event.getCategory());
 
 
             SimpleDateFormat format = new SimpleDateFormat("HH:mm");
-            String date = format.format(new Date(event.getTimeAlarm()));
+            String date = format.format(new Date(event.getStartTime()));
             viewHolder.date.setText(date);
             viewHolder.id=(int)event.getId();
 

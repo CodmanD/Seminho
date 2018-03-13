@@ -21,6 +21,75 @@
     android:background="?attr/colorButtonNormal">
 
 
+    <LinearLayout
+
+        android:id="@+id/llStartTime"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginRight="8dp"
+
+
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline8"
+        app:layout_constraintLeft_toRightOf="@+id/guideline2"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guideline7">
+
+        <EditText
+            android:id="@+id/etStartHours"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:background="@drawable/edit_text_style"
+            android:gravity="center"
+            android:hint="hh"
+            android:inputType="datetime"
+            android:text=""
+            android:textColor="?attr/colorPrimaryDark"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text=":"
+            android:textColor="?attr/colorPrimaryDark"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/etStartMin"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:background="@drawable/edit_text_style"
+            android:gravity="center"
+            android:hint="mm"
+            android:inputType="date"
+            android:text=""
+            android:textColor="?attr/colorPrimaryDark"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvFinishTime"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_column="0"
+        android:layout_gravity="left|center_vertical"
+        android:layout_marginTop="8dp"
+        android:layout_row="3"
+        android:gravity="center"
+        android:text="@string/finishTime"
+        android:textColor="?attr/colorPrimaryDark"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline10"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/guideline2"
+        app:layout_constraintTop_toBottomOf="@+id/guideline9" />
+
     <EditText
         android:id="@+id/etContent"
         android:layout_width="0dp"
@@ -78,7 +147,7 @@
         app:layout_constraintTop_toBottomOf="@+id/guideline3" />
 
     <TextView
-        android:id="@+id/tvDateTime"
+        android:id="@+id/tvDate"
         android:layout_width="0dp"
 
         android:layout_height="0dp"
@@ -167,7 +236,7 @@
 
     </LinearLayout>
 
-    <EditText
+    <!--EditText
         android:id="@+id/etAlarmName"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -199,10 +268,10 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline8"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/guideline2"
-        app:layout_constraintTop_toBottomOf="@+id/guideline7" />
+        app:layout_constraintTop_toBottomOf="@+id/guideline7" /-->
 
     <TextView
-        android:id="@+id/tvAlarmTime"
+        android:id="@+id/tvStartTime"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_column="0"
@@ -210,17 +279,17 @@
         android:layout_marginTop="8dp"
         android:layout_row="3"
         android:gravity="center"
-        android:text="@string/alarmTime"
+        android:text="@string/startTime"
         android:textColor="?attr/colorPrimaryDark"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/guideline10"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline8"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/guideline2"
-        app:layout_constraintTop_toBottomOf="@+id/guideline9" />
+        app:layout_constraintTop_toBottomOf="@+id/guideline7" />
 
     <LinearLayout
 
-        android:id="@+id/llAlarmTime"
+        android:id="@+id/llFinishTime"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
@@ -234,7 +303,7 @@
         app:layout_constraintTop_toBottomOf="@+id/guideline9">
 
         <EditText
-            android:id="@+id/etHours"
+            android:id="@+id/etFinishHours"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
@@ -256,7 +325,7 @@
             android:textSize="18sp" />
 
         <EditText
-            android:id="@+id/etMin"
+            android:id="@+id/etFinishMin"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"

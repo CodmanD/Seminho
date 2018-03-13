@@ -37,7 +37,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         //ae = database.getFirstEvent();
         ae = database.getNextEvent(advance);
         if (ae != null)
-            AlarmUtil.setAlarm(context, intent, (int) ae.getId(),ringtone, ae.getTimeAlarm(),advance);
+            AlarmUtil.setAlarm(context, intent, (int) ae.getId(),ringtone, ae.getStartTime(),advance);
         database.close();
 
     }
