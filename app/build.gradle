@@ -29,6 +29,8 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
+
+
     }
     buildTypes {
         release {
@@ -70,6 +72,8 @@ dependencies {
     compile 'commons-codec:commons-codec:1.8'
     compile 'commons-lang:commons-lang:2.6'
 
+
+    compile 'com.android.support:multidex:1.0.1'
     // compile group: 'backport-util-concurrent', name: 'backport-util-concurrent', version: '3.1'
 }
 

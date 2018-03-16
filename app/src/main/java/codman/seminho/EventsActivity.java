@@ -180,7 +180,7 @@ else
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            Log.d(TAG,"onCreateViewHolder");
+          //  Log.d(TAG,"onCreateViewHolder");
             // View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.event_item, viewGroup, false);
             View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_event, viewGroup, false);
 
@@ -192,7 +192,7 @@ else
         public void onBindViewHolder(ViewHolder viewHolder, int i) {
 
             AlarmEvent event = events.get(i);
-             Log.d(TAG,"onBindViewHolder event = "+event.getTitle());
+           //  Log.d(TAG,"onBindViewHolder event = "+event.getTitle());
             viewHolder.title.setText(event.getTitle());
             //viewHolder.alarmName.setText(event.getAlarmName());
             viewHolder.category.setText(event.getCategory());
@@ -200,6 +200,7 @@ else
 
             SimpleDateFormat format = new SimpleDateFormat("HH:mm");
             String date = format.format(new Date(event.getStartTime()));
+            date+=" - "+format.format(new Date(event.getFinishTime()));
             viewHolder.date.setText(date);
             viewHolder.id=(int)event.getId();
 

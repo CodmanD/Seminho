@@ -1,5 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="codman.seminho.EventsActivity"
+    android:orientation="vertical"
+    android:background="?attr/colorPrimary"
+    android:id="@+id/cl"
+    >
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbarAE"
+        android:layout_width="match_parent"
+
+        android:layout_height="60dp"
+        android:background="?attr/colorPrimaryDark"
+
+        android:minHeight="?attr/actionBarSize"
+
+        app:subtitleTextColor="?attr/colorButtonNormal"
+        app:titleTextColor="?attr/colorButtonNormal" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+    <TextView
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+
+        android:gravity="center"
+        android:text="@string/title"
+        android:textColor="?attr/colorButtonNormal"
+        android:textSize="22sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/guideline1"
+        app:layout_constraintTop_toBottomOf="@+id/toolbarAE" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:gravity="center"
+        android:text="@string/category"
+        android:textColor="?attr/colorButtonNormal"
+        android:textSize="22sp"
+        />
+
+    <TextView
+        android:id="@+id/tvTimeAE"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:gravity="center"
+        android:text="@string/Time"
+        android:textColor="?attr/colorButtonNormal"
+        android:textSize="22sp"
+        />
+    </LinearLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv"
+        android:layout_width="match_parent"
+
+
+        android:layout_height="match_parent"
+
+        android:minHeight="?attr/actionBarSize"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTimeAE"
+        app:subtitleTextColor="?attr/colorButtonNormal"
+        app:titleTextColor="?attr/colorButtonNormal" />
+
+    <!--TextView
+    android:text="id"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:background="?attr/colorPrimary"
+    android:gravity="center"
+    android:textColor="?attr/colorButtonNormal"
+    android:textSize="22sp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintLeft_toRightOf="@+id/guideline4"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintTop_toTopOf="parent" /-->
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.33" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.66" />
+
+
+</LinearLayout>
+<!--android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -80,18 +191,7 @@
         app:subtitleTextColor="?attr/colorButtonNormal"
         app:titleTextColor="?attr/colorButtonNormal" />
 
-        <!--TextView
-        android:text="id"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="?attr/colorPrimary"
-        android:gravity="center"
-        android:textColor="?attr/colorButtonNormal"
-        android:textSize="22sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@+id/guideline4"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" /-->
+
 
         <android.support.constraint.Guideline
             android:id="@+id/guideline1"
@@ -108,4 +208,4 @@
             app:layout_constraintGuide_percent="0.66" />
 
 
-</android.support.constraint.ConstraintLayout>
+</android.support.constraint.ConstraintLayout-->

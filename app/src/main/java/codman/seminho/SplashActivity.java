@@ -37,7 +37,7 @@ public class SplashActivity extends AppCompatActivity  implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        Toast.makeText(this,"Click",Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this,"Click",Toast.LENGTH_SHORT).show();
 
         signIn();
     }
@@ -87,6 +87,7 @@ public class SplashActivity extends AppCompatActivity  implements View.OnClickLi
 
     private void signIn() {
         Log.d(TAG,"Sign In");
+        Toast.makeText(this,"Wait",Toast.LENGTH_SHORT).show();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
