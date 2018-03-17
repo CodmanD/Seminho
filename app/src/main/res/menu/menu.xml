@@ -12,6 +12,12 @@
 
 
     <item
+        android:id="@+id/actionAuth"
+        android:orderInCategory="100"
+        android:title="@string/actionAuth"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/actionImport"
         android:orderInCategory="100"
         android:title="@string/actionImport"

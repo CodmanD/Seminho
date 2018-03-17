@@ -45,8 +45,8 @@ public class SplashActivity extends AppCompatActivity  implements View.OnClickLi
     protected void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        Log.d(TAG,"onStart getCurrentUser : "+currentUser);
+      //  FirebaseUser currentUser = mAuth.getCurrentUser();
+     //   Log.d(TAG,"onStart getCurrentUser : "+currentUser);
         //updateUI(currentUser);
     }
     @Override
@@ -59,8 +59,8 @@ public class SplashActivity extends AppCompatActivity  implements View.OnClickLi
         //   if(theme==0)
         setContentView(R.layout.activity_splash);
 
-        ImageView ivSignIn=this.findViewById(R.id.ivSignIn);
-        ivSignIn.setOnClickListener(this);
+       // ImageView ivSignIn=this.findViewById(R.id.ivSignIn);
+       // ivSignIn.setOnClickListener(this);
 //else
 //        {
 //            super.setTheme(R.style.AppThemeBlue);
@@ -68,7 +68,7 @@ public class SplashActivity extends AppCompatActivity  implements View.OnClickLi
 //        }
         super.onCreate(savedInstanceState);
         // deferred action
-      /*  new Handler().postDelayed(new Runnable() {
+        new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 Intent i = new Intent(SplashActivity.this, MainActivity.class);
@@ -76,13 +76,15 @@ public class SplashActivity extends AppCompatActivity  implements View.OnClickLi
                 finish();
             }
         }, 2000);
-        */
+
+      /*
         mAuth = FirebaseAuth.getInstance();
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
         Log.d(TAG,"GoogleSignIn = "+gso);
+        */
     }
 
     private void signIn() {

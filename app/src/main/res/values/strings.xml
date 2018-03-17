@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Seminho</string>
     <string name="actionNewEvent">New Event</string>
+    <string name="actionAuth">Login</string>
     <string name="actionChangeTheme">Change theme</string>
     <string name="actionImport">Import file</string>
     <string name="actionImportFromUrl">Import file from URL</string>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--FrameLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorPrimaryDark"
 
-    android:padding="-10dp"
+
     >
     <ImageView
         android:layout_width="match_parent"
@@ -13,24 +13,24 @@
         android:src="?attr/background"
 
         />
-</FrameLayout-->
-<LinearLayout
+</FrameLayout>
+<!--LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="bottom"
-    android:background="?attr/background"
+
 android:orientation="vertical"
 
     >
-    <!--ImageView
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
 
         android:id="@+id/ivMain"
         android:src="?attr/background"
 
-        /-->
+        />
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -39,4 +39,4 @@ android:orientation="vertical"
         android:src="@drawable/google_sign_in"
         android:layout_margin="10dp"
         />
-</LinearLayout>
+</LinearLayout-->

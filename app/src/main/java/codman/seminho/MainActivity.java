@@ -63,7 +63,10 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.Query;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
@@ -129,6 +132,15 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
     SimpleDateFormat timeFormat = new SimpleDateFormat("HH : mm ");
     private static final int PERMISSION_REQUEST_CODE = 123;
     private static final int RINGTONES_REQUEST_CODE = 124;
+    private static final int RC_SIGN_IN = 9001;
+    private GoogleSignInClient mGoogleSignInClient;
+    private  GoogleSignInOptions gso;
+    private FirebaseAuth mAuth;
+
+    // variables Firebase
+    private FirebaseFirestore mFirestore;
+    private Query mQuery;
+
 
     private FilePickerDialog dialog;
 
@@ -151,6 +163,92 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
     int themeNumber = 0;
     DatabaseHelper dbHelper;
+
+
+
+    /*
+    google SignIn
+     */
+    private void signIn() {
+        Log.d(TAG,"Sign In");
+        Toast.makeText(this,"Wait",Toast.LENGTH_SHORT).show();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+    // [START auth_with_google]
+    private void signOut() {
+        // Firebase sign out
+        mAuth.signOut();
+
+        Log.d(TAG,"Sign Out complete");
+        // Google sign out
+        mGoogleSignInClient.signOut().addOnCompleteListener(this,
+                new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        //updateUI(null);
+                        Log.d(TAG,"Sign OUT complete");
+                    }
+                });
+    }
+
+    private void revokeAccess() {
+        // Firebase sign out
+        mAuth.signOut();
+
+        // Google revoke access
+        mGoogleSignInClient.revokeAccess().addOnCompleteListener(this,
+                new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        // updateUI(null);
+                    }
+                });
+    }
+
+
+    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+        Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
+        // [START_EXCLUDE silent]
+        // showProgressDialog();
+        // [END_EXCLUDE]
+
+        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithCredential:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+
+                            Log.d(TAG, "signInWithCredential:success"+user.getEmail());
+                            Snackbar.make(findViewById(R.id.root), "Authentication success.", Snackbar.LENGTH_SHORT).show();
+                            //Toast.makeText(MainActivity.this,"Login succes",Toast.LENGTH_SHORT).show();
+                            //Intent intent= new Intent(MainActivity.this,MainActivity.class);
+                            //intent.putExtra("user",user.getDisplayName());
+                            //startActivity(intent);
+                            // updateUI(user);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            Snackbar.make(findViewById(R.id.root), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
+                            // updateUI(null);
+                        }
+
+                        // [START_EXCLUDE]
+                        //  hideProgressDialog();
+                        // [END_EXCLUDE]
+                    }
+                });
+    }
+    // [END auth_with_google]
+    ///
+
+
+
 
 
     @Override
@@ -221,7 +319,11 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
 
         //Google Sign_iN
-
+        mAuth = FirebaseAuth.getInstance();
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
 
     }
 
@@ -523,7 +625,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
-        MenuItem item = menu.getItem(4).getSubMenu().getItem(0);
+        MenuItem item = menu.getItem(5).getSubMenu().getItem(0);
         item.setTitle(getResources().getString(R.string.actionAdvance) + " : " + (advance / 60000) + " min");
         return true;
     }
@@ -554,6 +656,22 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
                 return true;
             }
+            case R.id.actionAuth: {
+
+                signIn();
+                //Toast.makeText(this, "NEW EVENT", Toast.LENGTH_SHORT).show();
+             /*
+                Intent intent = new Intent(MainActivity.this, PagesActivity.class);
+                if (calendarView.getSelectedDate() != null) {
+                    Log.d(TAG, "SEND SelectDate" + calendarView.getSelectedDate());
+                    intent.putExtra("selectedDate", calendarView.getSelectedDate());
+                }
+
+                startActivity(intent);
+                */
+                return true;
+            }
+
             case R.id.actionImport:
                 if (hasPermissions()) {
                     pickFile();
@@ -924,6 +1042,24 @@ private boolean  sIn=false;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                // Google Sign In was successful, authenticate with Firebase
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                firebaseAuthWithGoogle(account);
+
+
+            } catch (ApiException e) {
+                // Google Sign In failed, update UI appropriately
+                Log.w(TAG, "Google sign in failed", e);
+                // [START_EXCLUDE]
+                // updateUI(null);
+                // [END_EXCLUDE]
+            }
+        }
+
+
         if (requestCode == PERMISSION_REQUEST_CODE) {
             // makeFolder();
             return;
