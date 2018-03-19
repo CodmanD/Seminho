@@ -32,6 +32,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -115,6 +117,7 @@ import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import codman.seminho.Adapters.AdapterCategories;
 import codman.seminho.Calendar.OneDayDecorator;
 import codman.seminho.Remind.AlarmReceiver;
 import codman.seminho.Remind.AlarmUtil;
@@ -717,6 +720,11 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                 setAdvance();
                 Toast.makeText(this, "Advanced", Toast.LENGTH_SHORT).show();
                 return true;
+
+            case R.id.actionEditCategories:
+                editCategories();
+                Toast.makeText(this, "EditCategories", Toast.LENGTH_SHORT).show();
+                return true;
             case R.id.actionAbout:
 /*
                 if(!sIn){
@@ -745,6 +753,80 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
     }
 
 private boolean  sIn=false;
+
+
+    private void editCategories(){
+
+        View view = getLayoutInflater().inflate(R.layout.edit_categories, null);
+       RecyclerView rv = view.findViewById(R.id.rvCategories);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
+        rv.setLayoutManager(mLayoutManager);
+
+
+      // String[] categories= getResources().getStringArray(R.array.categories);
+       final ArrayList<String>cats= dbHelper.getCategories();
+       if(cats.size()==0)
+       {
+           String[] categories= getResources().getStringArray(R.array.categories);
+           for(String c:categories)
+           {
+               dbHelper.putCategory(c);
+               cats.add(c);
+           }
+
+       }
+
+        Log.d(TAG,"Count ="+cats.size());
+
+       final AdapterCategories adapter=new AdapterCategories(this,getLayoutInflater(), cats);
+       rv.setAdapter(adapter);
+        //AlertDialog.Builder builder= new AlertDialog.Builder(this);
+        android.app.AlertDialog.Builder adb = new android.app.AlertDialog.Builder(this)
+        .setTitle("Categories")
+        .setView(view)
+        .setCancelable(true)
+        .setNegativeButton(R.string.buttonCancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })
+        .setPositiveButton(R.string.buttonAdd, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(MainActivity.this,"New Category",Toast.LENGTH_SHORT).show();
+              final  View view=getLayoutInflater().inflate(R.layout.dialog_category,null);
+                AlertDialog.Builder builder=new AlertDialog.Builder(MainActivity.this);
+
+                builder.setCancelable(true).setView(view).setTitle(R.string.newCategory);
+                builder.setPositiveButton(R.string.addNewCategory, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+
+
+                        EditText et= view.findViewById(R.id.etCategory);
+                       long res= dbHelper.putCategory(et.getText().toString());
+                        cats.add(0,et.getText().toString());
+                        //cats.remove(position+1);
+                        adapter.notifyDataSetChanged();
+                        Toast.makeText(MainActivity.this,"Save res="+res,Toast.LENGTH_SHORT).show();
+                        dialog.cancel();
+                    }
+                }).setNeutralButton(R.string.buttonCancel,new DialogInterface.OnClickListener()
+                { @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Toast.makeText(MainActivity.this,"Cancel",Toast.LENGTH_SHORT).show();
+                    dialog.cancel();
+                }
+                });
+                dialog.cancel();
+                builder.create().show();
+            }
+        });
+        adb.create().show();
+
+    }
 
     private void actionImportURL() {
         final View viewDialog = getLayoutInflater().inflate(R.layout.dialog_download, null);
@@ -828,7 +910,7 @@ private boolean  sIn=false;
 
                 //Set value in menuItem
                 toolbar.getMenu().
-                        getItem(4).
+                        getItem(5).
                         getSubMenu().
                         getItem(0).
                         setTitle(getResources().getString(R.string.actionAdvance) + " : " + (MainActivity.this.advance / 60000) + " min");

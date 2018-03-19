@@ -3,6 +3,7 @@
     <string name="actionNewEvent">New Event</string>
     <string name="actionAuth">Login</string>
     <string name="actionChangeTheme">Change theme</string>
+    <string name="actionEditCategory">Edit categories</string>
     <string name="actionImport">Import file</string>
     <string name="actionImportFromUrl">Import file from URL</string>
     <string name="actionExport">Export file</string>
@@ -37,6 +38,11 @@
     <string name="importCompleted">Calendar imported</string>
     <string name="zeroMinutes">0 minutes</string>
     <string name="buttonOk">Ok</string>
+    <string name="buttonAdd">New Category</string>
+    <string name="buttonDeleteCategory">Delete Category</string>
+
+    <string name="newCategory">New Category</string>
+    <string name="addNewCategory">Add</string>
     <string name="buttonCancel">Cancel</string>
     <string name="buttonDownload">Download</string>
     <string name="pathURL">https://inss.ch/downloads/Test.ics</string>

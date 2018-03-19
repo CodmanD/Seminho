@@ -1,5 +1,6 @@
 package codman.seminho;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -37,6 +38,7 @@ public class PageFragment extends Fragment implements View.OnTouchListener {
     boolean isDialog = false;
 
     String[] categories;// = {"Event", "Date", "Business", "Private"};
+
     int pageNumber;
 
     int themeNumber = 0;
@@ -101,7 +103,24 @@ public class PageFragment extends Fragment implements View.OnTouchListener {
 
         ButterKnife.bind(this, view);
         final Calendar calendar = Calendar.getInstance();
-        categories = getResources().getStringArray(R.array.categories);
+
+
+
+        //categories = getResources().getStringArray(R.array.categories);
+
+        ArrayList<String> cats= DatabaseHelper.getInstance(getContext()).getCategories();
+        if(cats.size()==0)
+        {
+            categories = getResources().getStringArray(R.array.categories);
+        }
+        else
+        {
+            categories= new String[cats.size()];
+            for(int i=0;i<cats.size();i++)
+                categories[i]=cats.get(i);
+        }
+
+
         etDay.setOnTouchListener(this);
         etMonth.setOnTouchListener(this);
         etYear.setOnTouchListener(this);

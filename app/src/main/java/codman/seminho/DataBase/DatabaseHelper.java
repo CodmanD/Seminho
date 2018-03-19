@@ -43,6 +43,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COL_LAST_MODIFIED = "LAST_MODIFIED";
 
 
+    private static final String TABLE_CATEGORIES = "CATEGORIES";
+    private static final String COL_ID_CATEGORY = "ID";
+    private static final String COL_TITLE_CATEGORY = "CATEGORY";
+
+
     public static synchronized DatabaseHelper getInstance(Context context) {
         if (instance == null) {
             instance = new DatabaseHelper(context.getApplicationContext());
@@ -74,12 +79,65 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + COL_START_TIME + " INTEGER, "
                 + COL_FINISH_TIME + " INTEGER, CONSTRAINT unique_UID UNIQUE (" + COL_UID + "))"
         );
+
+
+        database.execSQL("CREATE TABLE " + TABLE_CATEGORIES + " ("
+                + COL_ID_CATEGORY + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + COL_TITLE_CATEGORY + " TEXT , CONSTRAINT unique_UID UNIQUE (" + COL_TITLE_CATEGORY + "))"
+        );
     }
 
     public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
         //  Log.d(TAG, "onUpgrade");
     }
 
+public long putCategory(String category){
+
+    SQLiteDatabase database = this.getWritableDatabase();
+    ContentValues values = new ContentValues();
+
+    values.put(COL_TITLE_CATEGORY, category);
+    long res = database.insert(DatabaseHelper.TABLE_CATEGORIES, null, values);
+    database.close();
+    //  Log.d(TAG, " ADD to  RES=" + res);
+    return res;
+}
+
+    public long removeCategory(String category){
+
+        SQLiteDatabase database = this.getWritableDatabase();
+        long res=database.delete(TABLE_CATEGORIES,COL_TITLE_CATEGORY+"='"+category+"'",null);
+        database.close();
+        return res;
+    }
+
+    public long updateCategory(String category,String oldCategory){
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(COL_TITLE_CATEGORY, category);
+        long res = database.update(DatabaseHelper.TABLE_CATEGORIES, values,COL_TITLE_CATEGORY + " = '" + oldCategory+"'",null);
+        database.close();
+        //  Log.d(TAG, " ADD to  RES=" + res);
+        return res;
+
+    }
+    public ArrayList<String> getCategories(){
+        SQLiteDatabase database = this.getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_CATEGORIES;
+        Cursor cursor = database.rawQuery(query, null);
+        ArrayList<String> categories = new ArrayList<>();
+        if (cursor.moveToFirst())
+            do {
+             categories.add(cursor.getString(cursor.getColumnIndexOrThrow(COL_TITLE_CATEGORY)));
+
+            } while (cursor.moveToNext());
+
+        cursor.close();
+        database.close();
+        // Log.d(TAG,"GET EVENTS eventsList: "+events);
+        return categories;
+    }
 
     public Cursor getCursor() {
         SQLiteDatabase database = this.getReadableDatabase();

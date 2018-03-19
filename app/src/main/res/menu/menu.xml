@@ -56,6 +56,12 @@
                 android:title="@string/actionSelectSound"
                 app:showAsAction="never" />
             <item
+                android:id="@+id/actionEditCategories"
+                android:orderInCategory="100"
+                android:title="@string/actionEditCategory"
+                app:showAsAction="never" />
+
+            <item
                 android:id="@+id/actionChangeTheme"
                 android:orderInCategory="100"
                 android:title="@string/actionChangeTheme"
