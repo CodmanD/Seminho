@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -20,12 +21,21 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import net.fortuna.ical4j.util.UidGenerator;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -64,6 +74,89 @@ public class PagesActivity extends AppCompatActivity {
 
     Calendar calendar;
     CalendarDay selectedDate;
+    FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
+    String user="dd";
+
+
+    private void addToFirestore()
+    {
+        Log.d(TAG,"TOOOOOOOOOOOO Firestore");
+        Map<String,Object> event = new HashMap<>();
+        event.put("owner", user);
+        event.put("title", currentAE.getTitle());
+        event.put("category",currentAE.getCategory());
+        event.put("description",currentAE.getContent());
+        //event.put("uid",currentAE.getUID());
+        event.put("lastModified",currentAE.getLastModified());
+        event.put("startTime", currentAE.getStartTime());
+        event.put("finishTime", currentAE.getFinishTime());
+
+        mFirestore.collection("events").document(currentAE.getUID())
+                .set(event)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                    }
+                });
+    }
+
+    private void updateFirestore()
+    {
+
+// Remove the 'capital' field from the document
+
+
+
+
+                Log.d(TAG,"Update Firestore");
+        Map<String,Object> event = new HashMap<>();
+        event.put("owner", user);
+        event.put("title", currentAE.getTitle());
+        event.put("category",currentAE.getCategory());
+        event.put("description",currentAE.getContent());
+        //event.put("uid",currentAE.getUID());
+        event.put("lastModified",currentAE.getLastModified());
+        event.put("startTime", currentAE.getStartTime());
+        event.put("finishTime", currentAE.getFinishTime());
+
+        mFirestore.collection("events").document(currentAE.getUID()).update(event)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully update!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error updating document", e);
+                    }
+                });
+    }
+
+
+    private void deleteFromFirestore()
+    {
+        Log.d(TAG,"Delete event from Firestore");
+
+        mFirestore.collection("events").document(currentAE.getUID()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful())
+                {
+                    Toast.makeText(PagesActivity.this,"DELETE FROM Firestore",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+    }
 
 
     @Override
@@ -81,7 +174,17 @@ public class PagesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_pages);
         ButterKnife.bind(this);
 
-        categories = getResources().getStringArray(R.array.categories);
+        ArrayList<String> cats= DatabaseHelper.getInstance(this).getCategories();
+        if(cats.size()==0)
+        {
+            categories = getResources().getStringArray(R.array.categories);
+        }
+        else
+        {
+            categories= new String[cats.size()];
+            for(int i=0;i<cats.size();i++)
+                categories[i]=cats.get(i);
+        }
 
         Intent intent = getIntent();
         int id = intent.getIntExtra("ID", -1);
@@ -219,17 +322,22 @@ public class PagesActivity extends AppCompatActivity {
                     //currentAE.setAlarmName(etAlarmName.getText().toString());
                     currentAE.setCategory(categories[spCategory.getSelectedItemPosition()]);
 
+                    Log.d(TAG,"Category = "+currentAE.getCategory());
+
+
                     currentAE.setLastModified(System.currentTimeMillis());
 
                     if (this.STATUS == STATUS_ADD) {
 
                         if (DatabaseHelper.getInstance(this).addEventToDB(currentAE) >= 0) {
                             // Log.d(TAG, "ADD to Base----------ADD Event");
+                            addToFirestore();
                             Toast.makeText(this, getResources().getString(R.string.add) + " " + currentAE.getTitle(), Toast.LENGTH_SHORT).show();
                         }
                     } else {
 
                         if (DatabaseHelper.getInstance(this).updateEventToDB(currentAE)) {
+                            updateFirestore();
                             Toast.makeText(this, getResources().getString(R.string.update) + " " + currentAE.getTitle(), Toast.LENGTH_SHORT).show();
                             // Log.d(TAG, "UPADTE to Base-----------" + currentAE);
                         }
@@ -295,6 +403,8 @@ public class PagesActivity extends AppCompatActivity {
             case R.id.tvDel:
                 DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
                 if (currentAE != null && dbHelper.removeEventFromDB(currentAE.getId())) {
+
+                    deleteFromFirestore();
                     int pos = pager.getCurrentItem();
 
                     calendar.setTimeInMillis(currentAE.getStartTime());

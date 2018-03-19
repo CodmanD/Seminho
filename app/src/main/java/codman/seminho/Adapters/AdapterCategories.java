@@ -39,15 +39,15 @@ private Context context;
     public AdapterCategories(Context context,LayoutInflater inflater,final List<String> categories) {
         this.context=context;
         this.categories = categories;
-        this.inflater=inflater;
+        //this.inflater=inflater;
     }
 
 
     @Override
     public AdapterCategories.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        //  Log.d(TAG,"onCreateViewHolder");
-        // View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.event_item, viewGroup, false);
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_category, viewGroup, false);
+
+        inflater=LayoutInflater.from(viewGroup.getContext());
+        View v = inflater.inflate(R.layout.item_category, viewGroup, false);
 
         return new AdapterCategories.ViewHolder(v);
     }
@@ -60,16 +60,7 @@ private Context context;
           Log.d(TAG,"onBindViewHolder event = "+category);
         viewHolder.tv.setText(category);
         viewHolder.position=i;
-        //viewHolder.alarmName.setText(event.getAlarmName());
-      //  viewHolder.category.setText(event.getCategory());
 
-/*
-        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
-        String date = format.format(new Date(event.getStartTime()));
-        date+=" - "+format.format(new Date(event.getFinishTime()));
-        viewHolder.date.setText(date);
-        viewHolder.id=(int)event.getId();
-*/
     }
 
     @Override
@@ -85,21 +76,11 @@ private Context context;
 
     class ViewHolder extends RecyclerView.ViewHolder {
         private TextView tv;
-        //private TextView alarmName;
-        private TextView category;
-        private TextView date;
-        //private TextView id;
         private int position;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            //this.id = (TextView) itemView.findViewById(R.id.tvItemID);
             this.tv = (TextView) itemView.findViewById(R.id.tvCategory);
-            // this.alarmName = (TextView) itemView.findViewById(R.id.tvItemAlarmName);
-           // this.category = (TextView) itemView.findViewById(R.id.tvItemCategory);
-           // this.date = (TextView) itemView.findViewById(R.id.tvItemDate);
-
-
             tv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -108,8 +89,11 @@ private Context context;
                     final  View view=inflater.inflate(R.layout.dialog_category,null);
                     final EditText et=view.findViewById(R.id.etCategory);
                     et.setText(tv.getText());
-                    builder.setCancelable(true).setView(view).setTitle(R.string.newCategory);
-                    builder.setPositiveButton(R.string.addNewCategory, new DialogInterface.OnClickListener() {
+                    builder
+                            .setCancelable(true)
+                            .setView(view)
+                            .setTitle(R.string.newCategory)
+                            .setPositiveButton(R.string.changeCategory, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
@@ -122,7 +106,8 @@ private Context context;
                             categories.remove(position+1);
                             AdapterCategories.this.notifyDataSetChanged();
                         }
-                    }).setNeutralButton(R.string.buttonCancel,new DialogInterface.OnClickListener()
+                    })
+                            .setNeutralButton(R.string.buttonCancel,new DialogInterface.OnClickListener()
                     { @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Toast.makeText(context,"Cancel",Toast.LENGTH_SHORT).show();
@@ -139,11 +124,11 @@ private Context context;
                                 AdapterCategories.this.notifyDataSetChanged();
                             }
                             })
-                    ;
-                    //dialog.cancel();
-                    builder.create().show();
 
-                       Toast.makeText(context, "CLICK Category = " +((TextView)v).getText(), Toast.LENGTH_SHORT).show();
+                    //dialog.cancel();
+                    .create().show();
+
+                       //Toast.makeText(context, "CLICK Category = " +((TextView)v).getText(), Toast.LENGTH_SHORT).show();
 
                 }
             });
