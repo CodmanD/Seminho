@@ -61,11 +61,13 @@ public class NotificationActivity extends AppCompatActivity {
                 .inflate(R.layout.dialog_advance, null);
 
         final SeekBar seekBar = view.findViewById(R.id.seekBar);
-        Log.d(TAG,"View = "+view+"  |||  sekbar = "+seekBar);
+       // Log.d(TAG,"View = "+view+"  |||  sekbar = "+seekBar);
         seekBar.setProgress((int) this.advance / 60000);
         final TextView tvAdvance = view.findViewById(R.id.tvAdvance);
+        tvAdvance.setText(String.valueOf(seekBar.getProgress()) + " min");
         // final Button btnOk = view.findViewById(R.id.btnOk);
         // final Button btnCancel = view.findViewById(R.id.btnCancel);
+
 
         builder.setTitle("Please Select Advance ")
                 .setView(view)
@@ -78,11 +80,12 @@ public class NotificationActivity extends AppCompatActivity {
 
 
                 Intent intent= getIntent();
-                int id=intent.getIntExtra("NOTIFICATION_ID",-1);
 
-                Toast.makeText(NotificationActivity.this,"Del notif id="+id,Toast.LENGTH_SHORT).show();
+               long id=intent.getLongExtra("NOTIFICATION_ID",-1);
+                String uid=intent.getStringExtra("EVENT_UID");
+                Toast.makeText(NotificationActivity.this,"Del notif id="+id+" | "+uid,Toast.LENGTH_SHORT).show();
                if(id>0)
-                nManager.cancel(id);
+                nManager.cancel((int)id);
                else
                    {
                        Toast.makeText(NotificationActivity.this," Not Del notif id="+id,Toast.LENGTH_SHORT).show();
@@ -96,7 +99,7 @@ public class NotificationActivity extends AppCompatActivity {
                         nManager.cancelAll();
                     }
                     */
-                 dialog.cancel();
+                // dialog.cancel();
             }
         }).setNeutralButton(R.string.saveAdvance,new  DialogInterface.OnClickListener()
         {
@@ -104,10 +107,15 @@ public class NotificationActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
 
            Toast.makeText(NotificationActivity.this,"Save advance",Toast.LENGTH_SHORT).show();
-            dialog.cancel();
+
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putLong(TAG + "advance", advance);
+                editor.commit();
+               // dialog.cancel();
         }
         })
-                .setPositiveButton(R.string.buttonOk, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.lookEvent, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
@@ -123,10 +131,18 @@ public class NotificationActivity extends AppCompatActivity {
 
                         //Set value in menuItem
 
+
                         Intent intent= getIntent();
+
+                        long id=intent.getLongExtra("NOTIFICATION_ID",-1);
+                        long ms=intent.getLongExtra("EVENT_MS",-1);
                         String uid=intent.getStringExtra("EVENT_UID");
 
                         dialog.dismiss();
+                        intent=new Intent(NotificationActivity.this,PagesActivity.class);
+                        intent.putExtra("ID",(int)id);
+                        //intent.putExtra("MS",id);
+                        startActivity(intent);
                         // restartNotify();
                     }
                 })

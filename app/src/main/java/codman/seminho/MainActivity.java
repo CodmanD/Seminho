@@ -835,7 +835,8 @@ private boolean  sIn=false;
     private void actionImportURL() {
         final View viewDialog = getLayoutInflater().inflate(R.layout.dialog_download, null);
         final EditText et = viewDialog.findViewById(R.id.etPathURL);
-        et.setText(pathURL);
+        et.setHint("INPUT URL");
+       // et.setText(pathURL);
         AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Holo_Light_Dialog);
         builder.setTitle(R.string.actionImportFromUrl)
                 .setCancelable(true)

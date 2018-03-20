@@ -16,6 +16,7 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import codman.seminho.NotificationActivity;
 import codman.seminho.R;
@@ -79,11 +80,13 @@ public class NotificationUtil extends ContextWrapper {
        // Intent viewIntent = new Intent(context, MainActivity.class);
         Intent viewIntent = new Intent(context, NotificationActivity.class);
         viewIntent.putExtra("EVENT_UID", ae.getUID());
-        viewIntent.putExtra("NOTIFICATION_ID", ae.getUID());
+        viewIntent.putExtra("NOTIFICATION_ID", ae.getId());
+       // viewIntent.putExtra("EVENT_MS", ae.getStartTime());
+        Log.d(TAG,"put Extra id="+ae.getId());
         viewIntent.putExtra("NOTIFICATION_DISMISS", true);
         // PendingIntent pending = PendingIntent.getActivity(context, (int)ae.getId(), viewIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        PendingIntent pending = PendingIntent.getActivity(context, 0, viewIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
+       // PendingIntent pending = PendingIntent.getActivity(context, 0, viewIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pending = PendingIntent.getActivity(context, 0, viewIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         // Create intent for notification snooze click behaviour
         //Intent intent = new Intent(context, MainActivity.class);
         Intent intent = new Intent(context, NotificationActivity.class);

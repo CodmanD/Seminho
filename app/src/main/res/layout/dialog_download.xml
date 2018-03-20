@@ -6,7 +6,8 @@
     android:id="@+id/etPathURL"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:text="http://inss.ch/downloads/Test.ics"
+
     android:textSize="20sp"
     />
 </LinearLayout>
+    <!--android:text="http://inss.ch/downloads/Test.ics"-->
