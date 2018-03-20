@@ -263,6 +263,8 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         ringtone = Uri.parse(preferences.getString(TAG + "ringtone", "content://settings/system/notification_sound"));
         advance = preferences.getLong(TAG + "advance", 0);
         pathURL = preferences.getString(TAG + "pathURL", getResources().getString(R.string.pathURL));
+
+       // Boolean notif = preferences.getBoolean("notification", false);
         // Log.d(TAG,"Theme = "+themeNumber+" ringtone"+ringtone+" Advance = "+advance);
         if (themeNumber == 1) {
             setTheme(R.style.AppThemeBlue);
@@ -283,6 +285,8 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         String title = FORMATTER.format(new Date(System.currentTimeMillis()));
         getSupportActionBar().setTitle(title);
 
+
+        //if(notif)
 
         lv.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
@@ -863,13 +867,43 @@ private boolean  sIn=false;
         View view = (LinearLayout) getLayoutInflater()
                 .inflate(R.layout.dialog_advance, null);
         final SeekBar seekBar = view.findViewById(R.id.seekBar);
+        seekBar.setProgress((int)MainActivity.this.advance/60000);
         final TextView tvAdvance = view.findViewById(R.id.tvAdvance);
-        final Button btnOk = view.findViewById(R.id.btnOk);
-        final Button btnCancel = view.findViewById(R.id.btnCancel);
+       // final Button btnOk = view.findViewById(R.id.btnOk);
+       // final Button btnCancel = view.findViewById(R.id.btnCancel);
 
         builder.setTitle("Please Select Advance ");
         builder.setView(view);
-        builder.setCancelable(true);
+        builder.setCancelable(true).setNegativeButton(R.string.buttonCancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        }).setPositiveButton(R.string.buttonOk, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                MainActivity.this.advance = (seekBar.getProgress() * 60000);
+
+                Toast.makeText(MainActivity.this, getResources().getString(R.string.advanceResult)
+                        + " " + advance, Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putLong(TAG + "advance", MainActivity.this.advance);
+                editor.commit();
+
+                //Set value in menuItem
+                toolbar.getMenu().
+                        getItem(5).
+                        getSubMenu().
+                        getItem(0).
+                        setTitle(getResources().getString(R.string.actionAdvance) + " : " + (MainActivity.this.advance / 60000) + " min");
+
+                dialog.dismiss();
+                restartNotify();
+            }
+        })
+        ;
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -891,6 +925,8 @@ private boolean  sIn=false;
 
 //            }
         final AlertDialog popDialog = builder.create();
+
+        /*
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -919,6 +955,7 @@ private boolean  sIn=false;
                 restartNotify();
             }
         });
+        */
         popDialog.show();
     }
 

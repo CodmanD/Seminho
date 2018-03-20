@@ -43,6 +43,9 @@
     <string name="changeCategory">Change</string>
     <string name="newCategory">New Category</string>
     <string name="addNewCategory">Add</string>
+    <string name="deleteNotification">Delete notfication</string>
+    <string name="saveAdvance">Save advance </string>
+    <string name="lookEvent">Look event</string>
     <string name="buttonCancel">Cancel</string>
     <string name="buttonDownload">Download</string>
     <string name="pathURL">https://inss.ch/downloads/Test.ics</string>

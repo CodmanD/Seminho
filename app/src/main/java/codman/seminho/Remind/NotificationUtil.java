@@ -7,14 +7,17 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 
+import codman.seminho.NotificationActivity;
 import codman.seminho.R;
 
 
@@ -73,14 +76,20 @@ public class NotificationUtil extends ContextWrapper {
 
        // Log.d(TAG, "createNotificattion :" + ringtone);
         // Create intent for notification onClick behaviour
-        Intent viewIntent = new Intent(context, MainActivity.class);
-        viewIntent.putExtra("NOTIFICATION_ID", ae.getId());
+       // Intent viewIntent = new Intent(context, MainActivity.class);
+        Intent viewIntent = new Intent(context, NotificationActivity.class);
+        viewIntent.putExtra("EVENT_UID", ae.getUID());
+        viewIntent.putExtra("NOTIFICATION_ID", ae.getUID());
         viewIntent.putExtra("NOTIFICATION_DISMISS", true);
         // PendingIntent pending = PendingIntent.getActivity(context, (int)ae.getId(), viewIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent pending = PendingIntent.getActivity(context, 0, viewIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Create intent for notification snooze click behaviour
-        Intent intent = new Intent(context, MainActivity.class);
+        //Intent intent = new Intent(context, MainActivity.class);
+        Intent intent = new Intent(context, NotificationActivity.class);
+        //SharedPreferences sPref= PreferenceManager.getDefaultSharedPreferences(context);
+        //sPref.edit().putBoolean("notification",true);
+        //sPref.edit().commit();
         //  snoozeIntent.putExtra("NOTIFICATION_ID", reminder.getId());
         PendingIntent pendingSnooze = PendingIntent.getBroadcast(context, (int) ae.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -93,10 +102,13 @@ public class NotificationUtil extends ContextWrapper {
                 //.setColor(Color.parseColor(reminder.getColour()))
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(ae.getContent()))
                 .setChannelId(ANDROID_CHANNEL_ID)
+                .setGroup("SeminhoNotification")
                 .setContentTitle(ae.getTitle())
                 .setContentText(ae.getContent())
                 .setTicker(ae.getTitle())
                 .setContentIntent(pending);
+
+
         //PendingIntent pendingDismiss = PendingIntent.getBroadcast(context, reminder.getId(), swipeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         //builder.setDeleteIntent(pendingDismiss);
 
@@ -160,6 +172,7 @@ public class NotificationUtil extends ContextWrapper {
             //Log.d(TAG, "-----------------------EXCEPTION MUSIC");
            // e.printStackTrace();
         }
+
         getManager().notify((int) ae.getId(), builder.build());
     }
 
