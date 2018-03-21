@@ -223,6 +223,9 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         {
             mFirestoreHelper.addToFirestore(ae);
         }
+
+
+
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {

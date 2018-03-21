@@ -155,7 +155,7 @@ else
 
         RecyclerViewAdapter adapter = new RecyclerViewAdapter(events);
         rv.setAdapter(adapter);
-        Log.d(TAG,"EventsActivity events="+events.size()+" ID+"+id+events.get(0).getTitle());
+      //  Log.d(TAG,"EventsActivity events="+events.size()+" ID+"+id+events.get(0).getTitle());
     }
 
     @Override
