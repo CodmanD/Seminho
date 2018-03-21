@@ -123,6 +123,7 @@ import codman.seminho.Remind.AlarmReceiver;
 import codman.seminho.Remind.AlarmUtil;
 import codman.seminho.DataBase.DatabaseHelper;
 import codman.seminho.Model.AlarmEvent;
+import codman.seminho.Util.FirestoreHelper;
 
 
 public class MainActivity extends AppCompatActivity implements OnDateSelectedListener, OnMonthChangedListener {
@@ -211,6 +212,19 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
     }
 
 
+    private void addToServer(){
+
+
+
+        //FirestoreHelper mFirestoreHelper= new FirestoreHelper(this,mAuth.getCurrentUser().getUid());
+        FirestoreHelper mFirestoreHelper= new FirestoreHelper(this,"user");
+        ArrayList<AlarmEvent> list=dbHelper.getEvents();
+        for(AlarmEvent ae:list)
+        {
+            mFirestoreHelper.addToFirestore(ae);
+        }
+    }
+
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
         // [START_EXCLUDE silent]
@@ -262,6 +276,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         themeNumber = preferences.getInt(TAG + "theme", 0);
         ringtone = Uri.parse(preferences.getString(TAG + "ringtone", "content://settings/system/notification_sound"));
         advance = preferences.getLong(TAG + "advance", 0);
+        Log.d(TAG,"Main onCreate advance="+advance);
         pathURL = preferences.getString(TAG + "pathURL", getResources().getString(R.string.pathURL));
 
        // Boolean notif = preferences.getBoolean("notification", false);
@@ -679,6 +694,22 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                 return true;
             }
 
+            case R.id.actionExportToServer: {
+                addToServer();
+                //signIn();
+                //Toast.makeText(this, "NEW EVENT", Toast.LENGTH_SHORT).show();
+             /*
+                Intent intent = new Intent(MainActivity.this, PagesActivity.class);
+                if (calendarView.getSelectedDate() != null) {
+                    Log.d(TAG, "SEND SelectDate" + calendarView.getSelectedDate());
+                    intent.putExtra("selectedDate", calendarView.getSelectedDate());
+                }
+
+                startActivity(intent);
+                */
+                return true;
+            }
+
             case R.id.actionImport:
                 if (hasPermissions()) {
                     pickFile();
@@ -836,7 +867,7 @@ private boolean  sIn=false;
         final View viewDialog = getLayoutInflater().inflate(R.layout.dialog_download, null);
         final EditText et = viewDialog.findViewById(R.id.etPathURL);
         et.setHint("INPUT URL");
-       // et.setText(pathURL);
+        et.setText(pathURL);
         AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Holo_Light_Dialog);
         builder.setTitle(R.string.actionImportFromUrl)
                 .setCancelable(true)

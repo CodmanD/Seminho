@@ -7,6 +7,7 @@
     <string name="actionImport">Import file</string>
     <string name="actionImportFromUrl">Import file from URL</string>
     <string name="actionExport">Export file</string>
+    <string name="actionExportToServer">Export to server</string>
     <string name="actionSettings">Settings</string>
     <string name="actionSelectSound">Select sound</string>
     <string name="actionAdvance">Time advance</string>
@@ -45,7 +46,7 @@
     <string name="addNewCategory">Add</string>
     <string name="deleteNotification">Delete notfication</string>
     <string name="saveAdvance">Save advance </string>
-    <string name="lookEvent">Look event</string>
+    <string name="showEvent">Show event</string>
     <string name="buttonCancel">Cancel</string>
     <string name="buttonDownload">Download</string>
     <string name="pathURL">https://inss.ch/downloads/Test.ics</string>

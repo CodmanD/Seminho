@@ -50,11 +50,11 @@ public class NotificationActivity extends AppCompatActivity {
 
 
 
-        showDialiog();
+        showDialog();
 
     }
 
-    public void showDialiog() {
+    public void showDialog() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         View view = (LinearLayout) getLayoutInflater()
@@ -90,46 +90,32 @@ public class NotificationActivity extends AppCompatActivity {
                    {
                        Toast.makeText(NotificationActivity.this," Not Del notif id="+id,Toast.LENGTH_SHORT).show();
                    }
-                /*
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    nManager.deleteNotificationChannelGroup("SeminhoNotification");
-                }
-                else
-                    {
-                        nManager.cancelAll();
-                    }
-                    */
-                // dialog.cancel();
+
             }
-        }).setNeutralButton(R.string.saveAdvance,new  DialogInterface.OnClickListener()
+        }).setPositiveButton(R.string.saveAdvance,new  DialogInterface.OnClickListener()
         {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-           Toast.makeText(NotificationActivity.this,"Save advance",Toast.LENGTH_SHORT).show();
 
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                advance = (seekBar.getProgress() * 60000);
+
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(NotificationActivity.this);
                 SharedPreferences.Editor editor = preferences.edit();
+
+                Log.d(TAG,"Notif = "+advance);
                 editor.putLong(TAG + "advance", advance);
                 editor.commit();
+
+                Intent intent= new Intent(NotificationActivity.this,MainActivity.class);
+                startActivity(intent);
+                Toast.makeText(NotificationActivity.this,"Wait",Toast.LENGTH_SHORT).show();
                // dialog.cancel();
         }
         })
-                .setPositiveButton(R.string.lookEvent, new DialogInterface.OnClickListener() {
+                .setNeutralButton(R.string.showEvent, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
-                        Toast.makeText(NotificationActivity.this,"Look event",Toast.LENGTH_SHORT).show();
-//                        NotificationActivity.this.advance = (seekBar.getProgress() * 60000);
-//
-//                        Toast.makeText(NotificationActivity.this, getResources().getString(R.string.advanceResult)
-//                                + " " + advance, Toast.LENGTH_SHORT).show();
-//                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-//                        SharedPreferences.Editor editor = preferences.edit();
-//                        editor.putLong(TAG + "advance", NotificationActivity.this.advance);
-//                        editor.commit();
-
-                        //Set value in menuItem
 
 
                         Intent intent= getIntent();
@@ -151,6 +137,7 @@ public class NotificationActivity extends AppCompatActivity {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
 
                 tvAdvance.setText(String.valueOf(progress) + " min");
             }

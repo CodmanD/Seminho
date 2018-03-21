@@ -331,13 +331,13 @@ public class PagesActivity extends AppCompatActivity {
 
                         if (DatabaseHelper.getInstance(this).addEventToDB(currentAE) >= 0) {
                             // Log.d(TAG, "ADD to Base----------ADD Event");
-                            addToFirestore();
+                           // addToFirestore();
                             Toast.makeText(this, getResources().getString(R.string.add) + " " + currentAE.getTitle(), Toast.LENGTH_SHORT).show();
                         }
                     } else {
 
                         if (DatabaseHelper.getInstance(this).updateEventToDB(currentAE)) {
-                            updateFirestore();
+                          //  updateFirestore();
                             Toast.makeText(this, getResources().getString(R.string.update) + " " + currentAE.getTitle(), Toast.LENGTH_SHORT).show();
                             // Log.d(TAG, "UPADTE to Base-----------" + currentAE);
                         }
@@ -404,7 +404,7 @@ public class PagesActivity extends AppCompatActivity {
                 DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
                 if (currentAE != null && dbHelper.removeEventFromDB(currentAE.getId())) {
 
-                    deleteFromFirestore();
+                   // deleteFromFirestore();
                     int pos = pager.getCurrentItem();
 
                     calendar.setTimeInMillis(currentAE.getStartTime());
