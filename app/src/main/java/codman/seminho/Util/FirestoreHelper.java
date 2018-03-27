@@ -9,9 +9,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import codman.seminho.Model.AlarmEvent;
@@ -70,12 +75,7 @@ public class FirestoreHelper {
     public void updateFirestore(AlarmEvent ae)
     {
 
-// Remove the 'capital' field from the document
-
-
-
-
-       // Log.d(TAG,"Update Firestore");
+        // Log.d(TAG,"Update Firestore");
         Map<String,Object> event = new HashMap<>();
         event.put("owner", user);
         event.put("title",ae.getTitle());
@@ -101,6 +101,77 @@ public class FirestoreHelper {
                 });
     }
 
+
+    public ArrayList<AlarmEvent> readFromFirestore()
+    {
+
+// Remove the 'capital' field from the document
+
+ArrayList<AlarmEvent> list= new ArrayList<>();
+        Log.d(TAG,"read from server= ");
+       // List listE=mFirestore.document("events");
+
+        mFirestore.collection("events").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    QuerySnapshot document = task.getResult();
+
+
+                    if (document != null ) {
+
+                    for(int i=0;i<document.getDocuments().size();i++)
+                    {
+                        Log.d(TAG, "Document data: " + document.getDocuments().get(i).getData().get("title"));
+                    }
+
+                        //Log.d(TAG, "DocumentSnapshot data: " + document.toString());
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+
+
+
+
+        /*
+        for(int i=0;i<listE.size();i++)
+        {
+            Log.d(TAG,"AE from server= "+listE.get(i).toString());
+        }
+**/
+        // Log.d(TAG,"Update Firestore");
+       /*
+        Map<String,Object> event = new HashMap<>();
+        event.put("owner", user);
+        event.put("title",ae.getTitle());
+        event.put("category",ae.getCategory());
+        event.put("description",ae.getContent());
+        //event.put("uid",currentAE.getUID());
+        event.put("lastModified",ae.getLastModified());
+        event.put("startTime", ae.getStartTime());
+        event.put("finishTime", ae.getFinishTime());
+
+        mFirestore.collection("events").document(ae.getUID()).update(event)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        // Log.d(TAG, "DocumentSnapshot successfully update!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Log.w(TAG, "Error updating document", e);
+                    }
+                });
+                */
+       return list;
+    }
 
     public void deleteFromFirestore(AlarmEvent ae)
     {

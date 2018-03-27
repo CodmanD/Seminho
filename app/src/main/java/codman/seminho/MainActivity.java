@@ -212,6 +212,38 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
     }
 
 
+
+    private void readFromFireStore(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Holo_Light_Dialog_MinWidth);
+        builder.setTitle(R.string.actionImportServerData)
+                .setCancelable(true)
+                .setPositiveButton(R.string.buttonDownload, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(MainActivity.this,"Fly to server " , Toast.LENGTH_SHORT).show();
+                        // getFileFromUrl(et.getText().toString());
+                        FirestoreHelper mFirestoreHelper= new FirestoreHelper(MainActivity.this,"user");
+
+                        mFirestoreHelper.readFromFirestore();
+                        // ArrayList<AlarmEvent> list=dbHelper.getEvents();
+                        //for(AlarmEvent ae:list)
+                        {
+                          // mFirestoreHelper.addToFirestore(ae);
+                        }
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton(R.string.buttonCancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }
+                );
+        builder.create().show();
+
+    }
+
     private void addToServer(){
 
 
@@ -762,7 +794,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                 if (hasPermissions()) {
                     //getFileFromUrl();
 
-
+                    readFromFireStore();
                     Toast.makeText(this, "GetData Server :", Toast.LENGTH_SHORT).show();
                 } else {
 
