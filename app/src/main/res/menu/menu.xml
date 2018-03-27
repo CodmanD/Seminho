@@ -30,6 +30,12 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/actionImportServerData"
+        android:orderInCategory="100"
+        android:title="@string/actionImportServerData"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/actionExport"
         android:orderInCategory="100"
         android:title="@string/actionExport"

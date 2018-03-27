@@ -26,6 +26,7 @@ public class DotSpan implements LineBackgroundSpan {
     private final int colorForBack;
     private String str = "";
     int count = 0;
+    boolean today = false;
 
     private HashSet<CalendarDay> dates;
 
@@ -97,6 +98,14 @@ public class DotSpan implements LineBackgroundSpan {
         this.colorForBack = colorForBack;
     }
 
+    public DotSpan(int color, String str,int colorForBack,boolean today) {
+        this.radius = DEFAULT_RADIUS;
+        this.color = color;
+        this.str = str;
+        this.colorForBack = colorForBack;
+        this.today=today;
+    }
+
     @Override
     public void drawBackground(
             Canvas canvas, Paint paint,
@@ -118,6 +127,11 @@ public class DotSpan implements LineBackgroundSpan {
             paint.setColor(Color.BLUE);
             canvas.drawText(str, right / 2 + right / 8, bottom + baseline, paint);
 
+        }
+        if(today)
+        {
+            paint.setColor(Color.RED);
+            canvas.drawCircle((left + right) / 2, bottom + 10, 10, paint);
         }
         paint.setColor(oldColor);
 

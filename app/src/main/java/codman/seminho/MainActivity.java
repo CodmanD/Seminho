@@ -215,14 +215,35 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
     private void addToServer(){
 
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Holo_Light_Dialog_MinWidth);
+        builder.setTitle(R.string.actionExportToServer)
+                .setCancelable(true)
+                .setPositiveButton(R.string.buttonUpload, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(MainActivity.this,"Fly to server " , Toast.LENGTH_SHORT).show();
+                        // getFileFromUrl(et.getText().toString());
+                        FirestoreHelper mFirestoreHelper= new FirestoreHelper(MainActivity.this,"user");
+                        ArrayList<AlarmEvent> list=dbHelper.getEvents();
+                        for(AlarmEvent ae:list)
+                        {
+                            mFirestoreHelper.addToFirestore(ae);
+                        }
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton(R.string.buttonCancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }
+                );
+        builder.create().show();
+
 
         //FirestoreHelper mFirestoreHelper= new FirestoreHelper(this,mAuth.getCurrentUser().getUid());
-        FirestoreHelper mFirestoreHelper= new FirestoreHelper(this,"user");
-        ArrayList<AlarmEvent> list=dbHelper.getEvents();
-        for(AlarmEvent ae:list)
-        {
-            mFirestoreHelper.addToFirestore(ae);
-        }
+
 
 
 
@@ -241,10 +262,10 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
+                            //Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
 
-                            Log.d(TAG, "signInWithCredential:success"+user.getEmail());
+                           // Log.d(TAG, "signInWithCredential:success"+user.getEmail());
                             Snackbar.make(findViewById(R.id.root), "Authentication success.", Snackbar.LENGTH_SHORT).show();
                             //Toast.makeText(MainActivity.this,"Login succes",Toast.LENGTH_SHORT).show();
                             //Intent intent= new Intent(MainActivity.this,MainActivity.class);
@@ -253,7 +274,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                             // updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
+                           // Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Snackbar.make(findViewById(R.id.root), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
                             // updateUI(null);
                         }
@@ -273,6 +294,8 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
 
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -650,7 +673,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
-        MenuItem item = menu.getItem(5).getSubMenu().getItem(0);
+        MenuItem item = menu.getItem(6).getSubMenu().getItem(0);
         item.setTitle(getResources().getString(R.string.actionAdvance) + " : " + (advance / 60000) + " min");
         return true;
     }
@@ -735,6 +758,19 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                 }
 
                 return true;
+            case R.id.actionImportServerData:
+                if (hasPermissions()) {
+                    //getFileFromUrl();
+
+
+                    Toast.makeText(this, "GetData Server :", Toast.LENGTH_SHORT).show();
+                } else {
+
+                    requestPermissionWithRationale();
+                }
+
+                return true;
+
             case R.id.actionExport:
                 if (hasPermissions()) {
 
@@ -870,8 +906,10 @@ private boolean  sIn=false;
         final View viewDialog = getLayoutInflater().inflate(R.layout.dialog_download, null);
         final EditText et = viewDialog.findViewById(R.id.etPathURL);
         et.setHint("INPUT URL");
-        et.setText(pathURL);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Holo_Light_Dialog);
+        et.setText("");
+        //et.setText(pathURL);
+       // AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Holo_Light_Dialog);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Holo_Light_Dialog_MinWidth);
         builder.setTitle(R.string.actionImportFromUrl)
                 .setCancelable(true)
                 .setView(viewDialog)
@@ -961,36 +999,7 @@ private boolean  sIn=false;
 //            }
         final AlertDialog popDialog = builder.create();
 
-        /*
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                popDialog.dismiss();
-            }
-        });
-        btnOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(MainActivity.this, getResources().getString(R.string.advanceResult)
-                        + " " + tvAdvance.getText(), Toast.LENGTH_SHORT).show();
-                MainActivity.this.advance = Long.parseLong(tvAdvance.getText().toString().substring(0, 1)) * 60000;
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putLong(TAG + "advance", MainActivity.this.advance);
-                editor.commit();
 
-                //Set value in menuItem
-                toolbar.getMenu().
-                        getItem(5).
-                        getSubMenu().
-                        getItem(0).
-                        setTitle(getResources().getString(R.string.actionAdvance) + " : " + (MainActivity.this.advance / 60000) + " min");
-
-                popDialog.dismiss();
-                restartNotify();
-            }
-        });
-        */
         popDialog.show();
     }
 

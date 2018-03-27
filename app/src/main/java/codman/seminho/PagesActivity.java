@@ -293,29 +293,31 @@ public class PagesActivity extends AppCompatActivity {
                                 Integer.parseInt(etStartHours.getText().toString()),
                                 Integer.parseInt(etStartMin.getText().toString()));
                         currentAE.setStartTime(calendar.getTimeInMillis());
-
-                        calendar.set(Integer.parseInt(etYear.getText().toString()),
-                                Integer.parseInt(etMonth.getText().toString()) - 1
-                                , Integer.parseInt(etDay.getText().toString()),
-                                Integer.parseInt(etFinishHours.getText().toString()),
-                                Integer.parseInt(etFinishMin.getText().toString()));
-
-                        if(currentAE.getStartTime()>calendar.getTimeInMillis())
-                        {
-                            Log.d(TAG,"default endTime");
-                            currentAE.setFinishTime(currentAE.getStartTime()+3600000);
-                        }
-                        else
-                        {
-                            Log.d(TAG,"normal endTime");
-                            currentAE.setFinishTime(calendar.getTimeInMillis());
-                        }
-
                     } catch (Exception ex) {
                         //Log.d(TAG, "ADD Exception curTime-----------Update Event");
                         Toast.makeText(this, R.string.ErrorAdding, Toast.LENGTH_SHORT).show();
                         break;
                     }
+                    try {
+                        calendar.set(Integer.parseInt(etYear.getText().toString()),
+                                Integer.parseInt(etMonth.getText().toString()) - 1
+                                , Integer.parseInt(etDay.getText().toString()),
+                                Integer.parseInt(etFinishHours.getText().toString()),
+                                Integer.parseInt(etFinishMin.getText().toString()));
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                        //Toast.makeText(this, R.string.ErrorAdding, Toast.LENGTH_SHORT).show();
+                        currentAE.setFinishTime(currentAE.getStartTime()+900000);
+                    }
+
+                    if(currentAE.getStartTime()>currentAE.getFinishTime())
+                        {
+                            Log.d(TAG,"default endTime");
+                            currentAE.setFinishTime(currentAE.getStartTime()+900000);
+                        }
+
+
+
 
                     currentAE.setTitle(etTitle.getText().toString());
                     currentAE.setContent(etContent.getText().toString());

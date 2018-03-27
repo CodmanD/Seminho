@@ -37,7 +37,7 @@ public class FirestoreHelper {
 
     public void addToFirestore(AlarmEvent ae)
     {
-        Log.d(TAG,"TO Firestore event ="+ae.getTitle());
+        //Log.d(TAG,"TO Firestore event ="+ae.getTitle());
         Map<String,Object> event = new HashMap<>();
         event.put("owner", user);
         event.put("title", ae.getTitle());
@@ -75,7 +75,7 @@ public class FirestoreHelper {
 
 
 
-        Log.d(TAG,"Update Firestore");
+       // Log.d(TAG,"Update Firestore");
         Map<String,Object> event = new HashMap<>();
         event.put("owner", user);
         event.put("title",ae.getTitle());
@@ -90,13 +90,13 @@ public class FirestoreHelper {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot successfully update!");
+                       // Log.d(TAG, "DocumentSnapshot successfully update!");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error updating document", e);
+                       // Log.w(TAG, "Error updating document", e);
                     }
                 });
     }
@@ -104,7 +104,7 @@ public class FirestoreHelper {
 
     public void deleteFromFirestore(AlarmEvent ae)
     {
-        Log.d(TAG,"Delete event from Firestore");
+       // Log.d(TAG,"Delete event from Firestore");
 
         mFirestore.collection("events").document(ae.getUID()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

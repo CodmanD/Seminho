@@ -3,6 +3,8 @@ package codman.seminho.Calendar;
 
 import android.graphics.Typeface;
 
+import android.provider.CalendarContract;
+import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 
 
@@ -40,8 +42,25 @@ public class OneDayDecorator implements DayViewDecorator {
     @Override
     public void decorate(DayViewFacade view) {
         view.addSpan(new StyleSpan(Typeface.BOLD));
-        codman.seminho.Calendar.DotSpan ds = new codman.seminho.Calendar.DotSpan(1, String.valueOf(count), color);
-        view.addSpan(ds);
+        //if(this.date== CalendarDay.today())
+        if(this.date.getDay()== CalendarDay.today().getDay()
+                &&this.date.getMonth()== CalendarDay.today().getMonth()
+                &&this.date.getYear()== CalendarDay.today().getYear())
+        {
+            codman.seminho.Calendar.DotSpan ds = new codman.seminho.Calendar.DotSpan(1, String.valueOf(count), color,true);
+            view.addSpan(ds);
+          //  view.addSpan(new RelativeSizeSpan(1.4f));
+        }
+        else{
+            codman.seminho.Calendar.DotSpan ds = new codman.seminho.Calendar.DotSpan(1, String.valueOf(count), color);
+            view.addSpan(ds);
+
+             // DotSpan ds =new RelativeSizeSpan(1.4f);
+                    //new codman.seminho.Calendar.DotSpan(1, String.valueOf(count), color);
+        }
+
+
+
     }
 
     /**
