@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import codman.seminho.DataBase.DatabaseHelper;
 import codman.seminho.Model.AlarmEvent;
 import codman.seminho.PagesActivity;
 
@@ -128,6 +129,7 @@ public class FirestoreHelper {
                         long startTime;
                         long  finishTime;
                         long  lastModified;
+                        DatabaseHelper dbHelper=DatabaseHelper.getInstance(context);
                     for(int i=0;i<document.getDocuments().size();i++)
                     {
 
@@ -141,9 +143,14 @@ public class FirestoreHelper {
                         lastModified=Long.parseLong(String.valueOf(document.getDocuments().get(i).getData().get("lastModified")));
 
                         AlarmEvent ae= new AlarmEvent(uid,title,description,category,startTime,finishTime,lastModified);
+
+
                         list.add(ae);
+                        dbHelper.replaceAlarmEvent(ae);
+
                         Log.d(TAG, "Document data: " + document.getDocuments().get(i).getId());
                     }
+
 
                         //Log.d(TAG, "DocumentSnapshot data: " + document.toString());
                     } else {

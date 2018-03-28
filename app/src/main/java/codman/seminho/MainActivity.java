@@ -798,6 +798,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                     //getFileFromUrl();
 
                     readFromFireStore();
+                    decorateCalendar();
                     Toast.makeText(this, "GetData Server :", Toast.LENGTH_SHORT).show();
                 } else {
 

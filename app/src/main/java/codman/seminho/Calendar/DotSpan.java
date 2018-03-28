@@ -132,9 +132,9 @@ public class DotSpan implements LineBackgroundSpan {
             if(today)
             {
                 paint.setColor(colorToday);
-                canvas.drawCircle((left + right) / 2, bottom -10, right/3, paint);
+                canvas.drawCircle((left + right) / 2, bottom/3 , right/3, paint);
                 paint.setColor(Color.WHITE);
-                canvas.drawCircle((left + right) / 2, bottom-10 , right/4, paint);
+                canvas.drawCircle((left + right) / 2, bottom/3 , right/4, paint);
             }
 
             paint.setColor(Color.BLUE);
@@ -146,9 +146,9 @@ public class DotSpan implements LineBackgroundSpan {
         if(today)
         {
             paint.setColor(colorToday);
-            canvas.drawCircle((left + right) / 2, bottom -10, right/3, paint);
+            canvas.drawCircle((left + right) / 2, bottom /3, right/3, paint);
             paint.setColor(Color.WHITE);
-            canvas.drawCircle((left + right) / 2, bottom-10 , right/4, paint);
+            canvas.drawCircle((left + right) / 2, bottom/3, right/4, paint);
         }
 
         paint.setColor(oldColor);
