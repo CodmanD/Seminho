@@ -397,7 +397,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
         restartNotify();
 
-
+        FirebaseFirestore.setLoggingEnabled(true);
         //Google Sign_iN
         mAuth = FirebaseAuth.getInstance();
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -663,7 +663,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         for (int i = 0, count = 0; i < 31; i++) {
             //CalendarDay day = new CalendarDay(2018, date.getMonth(), i + 1);
             CalendarDay day = new CalendarDay(2018, calendarView.getCurrentDate().getMonth(), i + 1);
-            decors.add(new OneDayDecorator(day, 0, 0));
+             decors.add(new OneDayDecorator(day, 0, 0,0));
         }
         calendarView.addDecorators(decors);
         Calendar curDay = Calendar.getInstance();
@@ -684,7 +684,10 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                 color = getResources().getColor(R.color.colorLastDate);
             else
                 color = getResources().getColor(R.color.colorNextDate);
-            decors.add(new OneDayDecorator(day, count, color));
+            if(themeNumber==1)
+                 decors.add(new OneDayDecorator(day, count, color,getResources().getColor(R.color.colorPrimary_blue)));
+            else
+                decors.add(new OneDayDecorator(day, count, color,getResources().getColor(R.color.colorPrimary)));
         }
         calendarView.addDecorators(decors);
 

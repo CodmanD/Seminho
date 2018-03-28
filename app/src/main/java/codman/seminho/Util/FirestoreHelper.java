@@ -38,6 +38,7 @@ public class FirestoreHelper {
     {
         this.context=context;
         this.user=user;
+
     }
 
     public void addToFirestore(AlarmEvent ae)
@@ -107,7 +108,7 @@ public class FirestoreHelper {
 
 // Remove the 'capital' field from the document
 
-ArrayList<AlarmEvent> list= new ArrayList<>();
+    final ArrayList<AlarmEvent> list= new ArrayList<>();
         Log.d(TAG,"read from server= ");
        // List listE=mFirestore.document("events");
 
@@ -120,9 +121,28 @@ ArrayList<AlarmEvent> list= new ArrayList<>();
 
                     if (document != null ) {
 
+                        String title;
+                        String uid;
+                        String category;
+                        String description;
+                        long startTime;
+                        long  finishTime;
+                        long  lastModified;
                     for(int i=0;i<document.getDocuments().size();i++)
                     {
-                        Log.d(TAG, "Document data: " + document.getDocuments().get(i).getData().get("title"));
+
+                        title=String.valueOf(document.getDocuments().get(i).getData().get("title"));
+                        description=String.valueOf(document.getDocuments().get(i).getData().get("description"));
+                        category=String.valueOf(document.getDocuments().get(i).getData().get("category"));
+                        //title=String.valueOf(document.getDocuments().get(i).getData().get("title"));
+                        uid=document.getDocuments().get(i).getId();
+                        startTime=Long.parseLong(String.valueOf(document.getDocuments().get(i).getData().get("startTime")));
+                        finishTime=Long.parseLong(String.valueOf(document.getDocuments().get(i).getData().get("finishTime")));
+                        lastModified=Long.parseLong(String.valueOf(document.getDocuments().get(i).getData().get("lastModified")));
+
+                        AlarmEvent ae= new AlarmEvent(uid,title,description,category,startTime,finishTime,lastModified);
+                        list.add(ae);
+                        Log.d(TAG, "Document data: " + document.getDocuments().get(i).getId());
                     }
 
                         //Log.d(TAG, "DocumentSnapshot data: " + document.toString());

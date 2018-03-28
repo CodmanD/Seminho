@@ -24,6 +24,7 @@ public class DotSpan implements LineBackgroundSpan {
     private final float radius;
     private final int color;
     private final int colorForBack;
+    private static int colorToday;
     private String str = "";
     int count = 0;
     boolean today = false;
@@ -98,12 +99,13 @@ public class DotSpan implements LineBackgroundSpan {
         this.colorForBack = colorForBack;
     }
 
-    public DotSpan(int color, String str,int colorForBack,boolean today) {
+    public DotSpan(int color, String str,int colorForBack,boolean today,int colorToday) {
         this.radius = DEFAULT_RADIUS;
         this.color = color;
         this.str = str;
         this.colorForBack = colorForBack;
         this.today=today;
+        DotSpan.colorToday=colorToday;
     }
 
     @Override
@@ -117,6 +119,9 @@ public class DotSpan implements LineBackgroundSpan {
         if (color != 0) {
             paint.setColor(color);
         }
+
+
+
         canvas.drawCircle((left + right) / 2, bottom + radius, radius, paint);
         paint.setColor(Color.RED);
 
@@ -124,15 +129,28 @@ public class DotSpan implements LineBackgroundSpan {
             paint.setColor(colorForBack);
             //paint.setColor(Color.YELLOW);
             canvas.drawRect(0, 0, right, right, paint);
+            if(today)
+            {
+                paint.setColor(colorToday);
+                canvas.drawCircle((left + right) / 2, bottom -10, right/3, paint);
+                paint.setColor(Color.WHITE);
+                canvas.drawCircle((left + right) / 2, bottom-10 , right/4, paint);
+            }
+
             paint.setColor(Color.BLUE);
-            canvas.drawText(str, right / 2 + right / 8, bottom + baseline, paint);
+          //  canvas.drawText(str, right / 2 + right / 6, bottom + baseline, paint);
+            canvas.drawText(str, right  - right / 6, bottom + baseline, paint);
 
         }
+        else
         if(today)
         {
-            paint.setColor(Color.RED);
-            canvas.drawCircle((left + right) / 2, bottom + 10, 10, paint);
+            paint.setColor(colorToday);
+            canvas.drawCircle((left + right) / 2, bottom -10, right/3, paint);
+            paint.setColor(Color.WHITE);
+            canvas.drawCircle((left + right) / 2, bottom-10 , right/4, paint);
         }
+
         paint.setColor(oldColor);
 
     }

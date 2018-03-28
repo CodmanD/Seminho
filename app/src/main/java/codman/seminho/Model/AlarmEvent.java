@@ -51,6 +51,18 @@ public class AlarmEvent {
     }
 
 
+    public AlarmEvent(String uID,String title, String content, String category, long startTime,long finishTime,long lastModified ) {
+        this.title = title;
+        this.content = content;
+        this.startTime = startTime;
+        this.finishTime=finishTime;
+        this.lastModified=lastModified;
+        this.category = category;
+        //this.alarmName = alarmName;
+
+        this.uID = uID;
+    }
+
 
     public long getFinishTime() {
         return finishTime;
