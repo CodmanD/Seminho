@@ -463,7 +463,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                     tvTitle.setText(events.get(position).getTitle());
                 } else {
                     tvTitle.setTextSize(20);
-                    tvTitle.setText("The " + dbHelper.getCountFutureEvents() + " next events");
+                    tvTitle.setText( dbHelper.getCountFutureEvents() +" "+ getResources().getString(R.string.nextEvents));
                 }
                 //  textView.setTextColor(Color.WHITE);
 

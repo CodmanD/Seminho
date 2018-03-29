@@ -1,61 +1,72 @@
 <resources>
     <string name="app_name">Seminho</string>
-    <string name="actionNewEvent">New Event</string>
-    <string name="actionAuth">LoginESPANIA</string>
-    <string name="actionChangeTheme">Change theme</string>
-    <string name="actionEditCategory">Edit categories</string>
-    <string name="actionImport">Import file</string>
-    <string name="actionImportFromUrl">Import file from URL</string>
-    <string name="actionImportServerData">Import server data</string>
-    <string name="actionExport">Export file</string>
-    <string name="actionExportToServer">Store all event to server</string>
-    <string name="actionSettings">Settings</string>
-    <string name="actionSelectSound">Select sound</string>
-    <string name="actionAdvance">Time advance</string>
-    <string name="actionAbout">About</string>
+    <string name="actionNewEvent">Nuevo evento</string>
+    <string name="actionAuth">Login</string>
+    <string name="actionChangeTheme">Cambiar de tema</string>
+    <string name="actionEditCategory">Editar categorías</string>
+    <string name="actionImport">Importar archivo</string>
+    <string name="actionImportFromUrl">Importar archivo desde URL</string>
+    <string name="actionImportServerData">Importar datos del servidor</string>
+    <string name="actionExport">Exportar archivo</string>
+    <string name="actionExportToServer">Almacenar todo el evento en el servidor</string>
+    <string name="actionSettings">Configuraciones</string>
+    <string name="actionSelectSound">Seleccionar sonido</string>
+    <string name="actionAdvance">Tiempo de avance</string>
+    <string name="actionAbout">Acerca de</string>
     <string name="aboutCompany">International Network Support &#38; Service - Glas</string>
     <string name="aboutVersion">1.0</string>
-    <string name="event_properties">Event Properties</string>
-    <string name="category">Category</string>
-    <string name="dateTime">Date</string>
-    <string name="alarmName">Alarm Name</string>
-    <string name="startTime">Start Time</string>
-    <string name="finishTime">Finish Time</string>
-    <string name="titleMain">Date</string>
-    <string name="title">Title</string>
-    <string name="description">Description</string>
-    <string name="Time">Time</string>
-    <string name="ErrorAdding">ERROR ADDING</string>
-    <string name="add">Added event</string>
-    <string name="update">Updated event</string>
-    <string name="notEvents">No events</string>
-    <string name="day"> day </string>
-    <string name="days"> days </string>
-    <string name="hour"> hour </string>
-    <string name="hours"> hours </string>
-    <string name="minute"> minute </string>
-    <string name="minutes"> minutes </string>
-    <string name="advanceResult">Advance is set</string>
-    <string name="exportCompleted">Calendar saved</string>
-    <string name="importCompleted">Calendar imported</string>
-    <string name="zeroMinutes">0 minutes</string>
-    <string name="buttonOk">Ok</string>
-    <string name="buttonAdd">New Category</string>
-    <string name="buttonDeleteCategory">Delete Category</string>
-    <string name="changeCategory">Change</string>
-    <string name="newCategory">New Category</string>
-    <string name="addNewCategory">Add</string>
-    <string name="deleteNotification">Delete notfication</string>
-    <string name="saveAdvance">Save advance </string>
-    <string name="showEvent">Show event</string>
-    <string name="buttonCancel">Cancel</string>
-    <string name="buttonDownload">Download</string>
-    <string name="buttonUpload">Upload</string>
+    <string name="event_properties">Propiedades del evento</string>
+    <string name="categories">Categorías</string>
+    <string name="category">Categoría</string>
+    <string name="dateTime">Fecha</string>
+    <string name="alarmName">Nombre de alarma</string>
+    <string name="startTime">Hora de inicio</string>
+    <string name="finishTime">Tiempo de finalizacióne</string>
+    <string name="titleMain">Fecha</string>
+    <string name="title">Título</string>
+    <string name="description">Descripción</string>
+    <string name="Time">Hora</string>
+    <string name="ErrorAdding">ERROR AGREGANDO</string>
+    <string name="add">Evento agregado</string>
+    <string name="update">Evento actualizado</string>
+    <string name="notEvents">No hay eventos</string>
+    <string name="day">día</string>
+    <string name="days">dias</string>
+    <string name="hour">hora</string>
+    <string name="hours">horas</string>
+    <string name="minute">minuto</string>
+    <string name="minutes">minutos</string>
+    <string name="advanceResult">El avance está establecido</string>
+    <string name="exportCompleted">Calendario guardado</string>
+    <string name="importCompleted">Calendario importado</string>
+    <string name="zeroMinutes">0 minutos</string>
+    <string name="buttonOk">De acuerdo</string>
+    <string name="buttonAdd">Nueva categoría</string>
+    <string name="buttonDeleteCategory">Eliminar categoría</string>
+    <string name="changeCategory">Cambio</string>
+    <string name="newCategory">Nueva categoría</string>
+    <string name="addNewCategory">Añadir</string>
+    <string name="deleteNotification">Eliminar notificación</string>
+    <string name="saveAdvance">Ahorre avance</string>
+    <string name="showEvent">Mostrar evento</string>
+    <string name="buttonCancel">Cancelar</string>
+    <string name="buttonDownload">Descargar</string>
+    <string name="buttonUpload">Subir</string>
+    <string name="noNextEvent">No hay próximo evento</string>
+    <string name="noEvents">No hay eventos</string>
+    <string name="the">los</string>
+    <string name="nextEvents">próximos eventos</string>
+    <string name="now">Ahora</string>
+    <string name="till">hasta</string>
+    <string name="removeEvent">Eliminar evento</string>
+    <string name="removeEventError">Eliminar error</string>
+    <string name="deleteFromFirestore">Eliminar de Firestore</string>
+    <string name="pleaseSelectAdvance">Por favor seleccione avance</string>
     <string name="pathURL">https://inss.ch/downloads/Test.ics</string>
     <string-array name="categories">
-        <item>Event</item>
-        <item>Date</item>
-        <item>Business</item>
-        <item>Private</item>
+        <item>Evento</item>
+        <item>Fecha</item>
+        <item>Negocio</item>
+        <item>Privado</item>
     </string-array>
 </resources>
