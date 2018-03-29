@@ -25,12 +25,14 @@ public class OneDayDecorator implements DayViewDecorator {
     final String TAG = "Seminho";
     int color;
     int colorToday;
+    int colorTodayBack;
 
-    public OneDayDecorator(CalendarDay date, int count, int color,int colorToday) {
+    public OneDayDecorator(CalendarDay date, int count, int color,int colorToday,int colorTodayBack) {
         this.date = date;
         this.count = count;
         this.color = color;
         this.colorToday = colorToday;
+        this.colorTodayBack = colorTodayBack;
     }
 
     @Override
@@ -49,7 +51,7 @@ public class OneDayDecorator implements DayViewDecorator {
                 &&this.date.getMonth()== CalendarDay.today().getMonth()
                 &&this.date.getYear()== CalendarDay.today().getYear())
         {
-            codman.seminho.Calendar.DotSpan ds = new codman.seminho.Calendar.DotSpan(1, String.valueOf(count), color,true,colorToday);
+            codman.seminho.Calendar.DotSpan ds = new codman.seminho.Calendar.DotSpan(1, String.valueOf(count), color,true,colorToday,colorTodayBack);
             view.addSpan(ds);
           //  view.addSpan(new RelativeSizeSpan(1.4f));
         }

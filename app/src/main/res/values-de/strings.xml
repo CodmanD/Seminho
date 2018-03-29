@@ -1,0 +1,72 @@
+<resources>
+    <string name="app_name">Seminho</string>
+    <string name="actionNewEvent">Neues Event</string>
+    <string name="actionAuth">Login</string>
+    <string name="actionChangeTheme">Thema ändern</string>
+    <string name="actionEditCategory">Kategorien bearbeiten</string>
+    <string name="actionImport">Datei importieren</string>
+    <string name="actionImportFromUrl">Datei von URL importieren</string>
+    <string name="actionImportServerData">Serverdaten importieren</string>
+    <string name="actionExport">Exportdatei</string>
+    <string name="actionExportToServer">Speichern Sie alle Ereignisse auf dem Server</string>
+    <string name="actionSettings">Einstellungen</string>
+    <string name="actionSelectSound">Wählen Sie Ton</string>
+    <string name="actionAdvance">Zeitvorschub</string>
+    <string name="actionAbout">Über</string>
+    <string name="aboutCompany">International Network Support &#38; Service - Glas</string>
+    <string name="aboutVersion">1.0</string>
+    <string name="event_properties">Ereigniseigenschaften</string>
+    <string name="category">Kategorie</string>
+    <string name="dateTime">Datum</string>
+    <string name="alarmName">Alarmname</string>
+    <string name="startTime">Startzeit</string>
+    <string name="finishTime">Endzeit</string>
+    <string name="titleMain">Datum</string>
+    <string name="title">Titel</string>
+    <string name="description">Beschreibung</string>
+    <string name="Time">Zeit</string>
+    <string name="ErrorAdding">FEHLER HINZUFÜGEN</string>
+    <string name="add">Ereignis hinzugefügt</string>
+    <string name="update">Aktualisiertes Ereignis</string>
+    <string name="notEvents">Keine Ereignisse</string>
+    <string name="day">tag</string>
+    <string name="days">tage</string>
+    <string name="hour">stunde</string>
+    <string name="hours">std.</string>
+    <string name="minute"> minute </string>
+    <string name="minutes"> minuten </string>
+    <string name="advanceResult">Fortschritt ist eingestellt</string>
+    <string name="exportCompleted">Kalender gespeichert</string>
+    <string name="importCompleted">Kalender importiert</string>
+    <string name="zeroMinutes">0 minuten</string>
+    <string name="buttonOk">Ok</string>
+    <string name="buttonAdd">Neue Kategorie</string>
+    <string name="buttonDeleteCategory">Kategorie löschen</string>
+    <string name="changeCategory">Veränderung</string>
+    <string name="newCategory">Neue Kategorie</string>
+    <string name="addNewCategory">addieren</string>
+    <string name="deleteNotification">Benachrichtigung löschen</string>
+    <string name="saveAdvance">Sparen Sie Voraus</string>
+    <string name="showEvent">Veranstaltung anzeigen</string>
+    <string name="buttonCancel">Stornieren</string>
+    <string name="buttonDownload">Herunterladen</string>
+    <string name="buttonUpload">Hochladen</string>
+    <string name="noNextEvent">Keine nächste Veranstaltung</string>
+    <string name="now">Jetzt</string>
+    <string name="till">bis</string>
+    <string name="categories">Kategorien</string>
+    <string name="the">Die</string>
+    <string name="nextEvents">Die nächsten Ereignisse</string>
+    <string name="noEvents">Keine Ereignisse</string>
+    <string name="removeEvent">Ereignis entfernen</string>
+    <string name="removeEventError">Fehler entfernen</string>
+    <string name="deleteFromFirestore">Aus dem Firestore löschen</string>
+    <string name="pleaseSelectAdvance">Bitte wählen Sie Voraus</string>
+    <string name="pathURL">https://inss.ch/downloads/Test.ics</string>
+    <string-array name="categories">
+        <item>Veranstaltung</item>
+        <item>Datum</item>
+        <item>Geschäft</item>
+        <item>Privatgelände</item>
+    </string-array>
+</resources>

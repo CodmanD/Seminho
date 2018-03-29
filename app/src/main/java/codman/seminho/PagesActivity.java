@@ -151,7 +151,7 @@ public class PagesActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful())
                 {
-                    Toast.makeText(PagesActivity.this,"DELETE FROM Firestore",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PagesActivity.this,getResources().getString(R.string.deleteFromFirestore),Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -433,9 +433,9 @@ public class PagesActivity extends AppCompatActivity {
 
                     pager.setCurrentItem(pos);
 
-                    Toast.makeText(this, "Remove Event ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getResources().getString(R.string.removeEvent), Toast.LENGTH_SHORT).show();
                 } else
-                    Toast.makeText(this, "Remove Error", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getResources().getString(R.string.removeEventError), Toast.LENGTH_SHORT).show();
 
                 dbHelper.close();
                 break;

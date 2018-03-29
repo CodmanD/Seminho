@@ -69,7 +69,7 @@ public class NotificationActivity extends AppCompatActivity {
         // final Button btnCancel = view.findViewById(R.id.btnCancel);
 
 
-        builder.setTitle("Please Select Advance ")
+        builder.setTitle(getResources().getString(R.string.pleaseSelectAdvance))
                 .setView(view)
                 .setCancelable(true).setNegativeButton(R.string.deleteNotification, new DialogInterface.OnClickListener() {
             @Override
@@ -83,12 +83,12 @@ public class NotificationActivity extends AppCompatActivity {
 
                long id=intent.getLongExtra("NOTIFICATION_ID",-1);
                 String uid=intent.getStringExtra("EVENT_UID");
-                Toast.makeText(NotificationActivity.this,"Del notif id="+id+" | "+uid,Toast.LENGTH_SHORT).show();
+                //Toast.makeText(NotificationActivity.this,"Del notif id="+id+" | "+uid,Toast.LENGTH_SHORT).show();
                if(id>0)
                 nManager.cancel((int)id);
                else
                    {
-                       Toast.makeText(NotificationActivity.this," Not Del notif id="+id,Toast.LENGTH_SHORT).show();
+                      // Toast.makeText(NotificationActivity.this," Not Del notif id="+id,Toast.LENGTH_SHORT).show();
                    }
 
             }

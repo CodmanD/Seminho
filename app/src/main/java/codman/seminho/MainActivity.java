@@ -623,15 +623,15 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                     (minutes > 0 ? minutes + " " + m + " " : m);
 
             if (days == 0 && hours == 0 && minutes == 0)
-                tv1.setText(" Now " + ae.getTitle());
+                tv1.setText(getResources().getString(R.string.now)+" " + ae.getTitle());
             else
-                tv1.setText(time + " till " + ae.getTitle());
+                tv1.setText(time + "  "+getResources().getString(R.string.till)+" " + ae.getTitle());
         } else {
             ae = dbHelper.getFirstEvent(System.currentTimeMillis() - 900000);
             if (ae != null) {
-                tv1.setText(" Now " + ae.getTitle());
+                tv1.setText(getResources().getString(R.string.now)+" " + ae.getTitle());
             } else
-                tv1.setText("No next event");
+                tv1.setText(getResources().getString(R.string.noNextEvent));
         }
     }
 
@@ -647,7 +647,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
             intent.putExtra("year", date.getYear());
             startActivity(intent);
         } else
-            Toast.makeText(this, "No Events", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.noEvents), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -663,7 +663,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         for (int i = 0, count = 0; i < 31; i++) {
             //CalendarDay day = new CalendarDay(2018, date.getMonth(), i + 1);
             CalendarDay day = new CalendarDay(2018, calendarView.getCurrentDate().getMonth(), i + 1);
-             decors.add(new OneDayDecorator(day, 0, 0,0));
+             decors.add(new OneDayDecorator(day, 0, 0,0,0));
         }
         calendarView.addDecorators(decors);
         Calendar curDay = Calendar.getInstance();
@@ -685,9 +685,9 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
             else
                 color = getResources().getColor(R.color.colorNextDate);
             if(themeNumber==1)
-                 decors.add(new OneDayDecorator(day, count, color,getResources().getColor(R.color.colorPrimary_blue)));
+                 decors.add(new OneDayDecorator(day, count, color,getResources().getColor(R.color.colorPrimary_blue),getResources().getColor(R.color.colorContent_blue)));
             else
-                decors.add(new OneDayDecorator(day, count, color,getResources().getColor(R.color.colorPrimary)));
+                decors.add(new OneDayDecorator(day, count, color,getResources().getColor(R.color.colorPrimary),getResources().getColor(R.color.colorContent)));
         }
         calendarView.addDecorators(decors);
 
@@ -892,7 +892,7 @@ private boolean  sIn=false;
        rv.setAdapter(adapter);
         //AlertDialog.Builder builder= new AlertDialog.Builder(this);
         android.app.AlertDialog.Builder adb = new android.app.AlertDialog.Builder(this)
-        .setTitle("Categories")
+        .setTitle(getResources().getString(R.string.categories))
         .setView(view)
         .setCancelable(true)
         .setNegativeButton(R.string.buttonCancel, new DialogInterface.OnClickListener() {
@@ -904,7 +904,7 @@ private boolean  sIn=false;
         .setPositiveButton(R.string.buttonAdd, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(MainActivity.this,"New Category",Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this,getResources().getString(R.string.newCategory),Toast.LENGTH_SHORT).show();
               final  View view=getLayoutInflater().inflate(R.layout.dialog_category,null);
                 AlertDialog.Builder builder=new AlertDialog.Builder(MainActivity.this);
 
@@ -926,7 +926,7 @@ private boolean  sIn=false;
                 }).setNeutralButton(R.string.buttonCancel,new DialogInterface.OnClickListener()
                 { @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    Toast.makeText(MainActivity.this,"Cancel",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this,getResources().getString(R.string.buttonCancel),Toast.LENGTH_SHORT).show();
                     dialog.cancel();
                 }
                 });
@@ -981,7 +981,7 @@ private boolean  sIn=false;
        // final Button btnOk = view.findViewById(R.id.btnOk);
        // final Button btnCancel = view.findViewById(R.id.btnCancel);
 
-        builder.setTitle("Please Select Advance ");
+        builder.setTitle(getResources().getString(R.string.pleaseSelectAdvance));
         builder.setView(view);
         builder.setCancelable(true).setNegativeButton(R.string.buttonCancel, new DialogInterface.OnClickListener() {
             @Override

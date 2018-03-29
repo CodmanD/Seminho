@@ -25,6 +25,7 @@ public class DotSpan implements LineBackgroundSpan {
     private final int color;
     private final int colorForBack;
     private static int colorToday;
+    private static int colorTodayBack;
     private String str = "";
     int count = 0;
     boolean today = false;
@@ -99,13 +100,14 @@ public class DotSpan implements LineBackgroundSpan {
         this.colorForBack = colorForBack;
     }
 
-    public DotSpan(int color, String str,int colorForBack,boolean today,int colorToday) {
+    public DotSpan(int color, String str,int colorForBack,boolean today,int colorToday,int colorTodayBack) {
         this.radius = DEFAULT_RADIUS;
         this.color = color;
         this.str = str;
         this.colorForBack = colorForBack;
         this.today=today;
         DotSpan.colorToday=colorToday;
+        DotSpan.colorTodayBack=colorTodayBack;
     }
 
     @Override
@@ -132,9 +134,9 @@ public class DotSpan implements LineBackgroundSpan {
             if(today)
             {
                 paint.setColor(colorToday);
-                canvas.drawCircle((left + right) / 2, bottom/3 , right/3, paint);
-                paint.setColor(Color.WHITE);
-                canvas.drawCircle((left + right) / 2, bottom/3 , right/4, paint);
+                canvas.drawCircle((left + right) / 2, bottom/2 , right/3, paint);
+                paint.setColor(colorTodayBack);
+                canvas.drawCircle((left + right) / 2, bottom/2 , right/4, paint);
             }
 
             paint.setColor(Color.BLUE);
@@ -146,9 +148,9 @@ public class DotSpan implements LineBackgroundSpan {
         if(today)
         {
             paint.setColor(colorToday);
-            canvas.drawCircle((left + right) / 2, bottom /3, right/3, paint);
-            paint.setColor(Color.WHITE);
-            canvas.drawCircle((left + right) / 2, bottom/3, right/4, paint);
+            canvas.drawCircle((left + right) / 2, bottom /2, right/3, paint);
+            paint.setColor(colorTodayBack);
+            canvas.drawCircle((left + right) / 2, bottom/2, right/4, paint);
         }
 
         paint.setColor(oldColor);
