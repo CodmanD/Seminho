@@ -1,2 +1,72 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="app_name">Seminho</string>
+    <string name="actionNewEvent">Nuovo evento</string>
+    <string name="actionAuth">Login</string>
+    <string name="actionChangeTheme">Cambia tema</string>
+    <string name="actionEditCategory">Modifica categorie</string>
+    <string name="actionImport">Importa file</string>
+    <string name="actionImportFromUrl">Importa file dall&apos;URL</string>
+    <string name="actionImportServerData">Importa i dati del server</string>
+    <string name="actionExport">Esporta file</string>
+    <string name="actionExportToServer">Archivia tutti gli eventi sul server</string>
+    <string name="actionSettings">Impostazioni</string>
+    <string name="actionSelectSound">Seleziona il suono</string>
+    <string name="actionAdvance">Anticipo di tempo</string>
+    <string name="actionAbout">su</string>
+    <string name="aboutCompany">International Network Support &#38; Service - Glas</string>
+    <string name="aboutVersion">1.0</string>
+    <string name="event_properties">Proprietà dell&apos;evento</string>
+    <string name="categories">Categorie</string>
+    <string name="category">Categoria</string>
+    <string name="dateTime">Data</string>
+    <string name="alarmName">Nome dell&apos;allarme</string>
+    <string name="startTime">Ora di inizio</string>
+    <string name="finishTime">Termina il tempo</string>
+    <string name="titleMain">Data</string>
+    <string name="title">Titolo</string>
+    <string name="description">Descrizione</string>
+    <string name="Time">Tempo</string>
+    <string name="ErrorAdding">AGGIUNTA DI ERRORE</string>
+    <string name="add">Evento aggiunto</string>
+    <string name="update">Evento aggiornato</string>
+    <string name="notEvents">No events</string>
+    <string name="day"> giorno </string>
+    <string name="days"> giorni </string>
+    <string name="hour"> ora </string>
+    <string name="hours"> orario </string>
+    <string name="minute"> un minuto </string>
+    <string name="minutes"> verbale </string>
+    <string name="advanceResult">L&apos;anticipo è impostato</string>
+    <string name="exportCompleted">Calendario salvato</string>
+    <string name="importCompleted">Calendario importato</string>
+    <string name="zeroMinutes">0 minuti</string>
+    <string name="buttonOk">Ok</string>
+    <string name="buttonAdd">Nuova categoria</string>
+    <string name="buttonDeleteCategory">Elimina categoria</string>
+    <string name="changeCategory">Cambiamento</string>
+    <string name="newCategory">Nuova categoria</string>
+    <string name="addNewCategory">Aggiungere</string>
+    <string name="deleteNotification">Elimina la notifica</string>
+    <string name="saveAdvance">Risparmia anticipo </string>
+    <string name="showEvent">Mostra evento</string>
+    <string name="buttonCancel">Annullare</string>
+    <string name="buttonDownload">Scarica</string>
+    <string name="buttonUpload">Carica</string>
+    <string name="noNextEvent">Nessun prossimo evento</string>
+    <string name="noEvents">Nessun evento</string>
+    <string name="the">il</string>
+    <string name="nextEvents">prossimi eventi</string>
+    <string name="now">Ora</string>
+    <string name="till">fino a</string>
+    <string name="removeEvent">Rimuovi evento</string>
+    <string name="removeEventError">Rimuovi errore</string>
+    <string name="deleteFromFirestore">Elimina da Firestore</string>
+    <string name="pleaseSelectAdvance">Si prega di selezionare anticipo</string>
+    <string name="pathURL">https://inss.ch/downloads/Test.ics</string>
+    <string-array name="categories">
+        <item>Evento</item>
+        <item>Data</item>
+        <item>Affari</item>
+        <item>Privato</item>
+    </string-array>
+</resources>

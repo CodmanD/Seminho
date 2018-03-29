@@ -29,10 +29,10 @@
     <string name="add">Ereignis hinzugefügt</string>
     <string name="update">Aktualisiertes Ereignis</string>
     <string name="notEvents">Keine Ereignisse</string>
-    <string name="day">tag</string>
-    <string name="days">tage</string>
-    <string name="hour">stunde</string>
-    <string name="hours">std.</string>
+    <string name="day"> tag </string>
+    <string name="days"> tage </string>
+    <string name="hour"> stunde </string>
+    <string name="hours"> std. </string>
     <string name="minute"> minute </string>
     <string name="minutes"> minuten </string>
     <string name="advanceResult">Fortschritt ist eingestellt</string>

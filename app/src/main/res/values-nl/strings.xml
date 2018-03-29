@@ -1,2 +1,72 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="app_name">Seminho</string>
+    <string name="actionNewEvent">Nieuw evenement</string>
+    <string name="actionAuth">Login</string>
+    <string name="actionChangeTheme">Verander het thema</string>
+    <string name="actionEditCategory">Bewerk categorieën</string>
+    <string name="actionImport">Bestand importeren</string>
+    <string name="actionImportFromUrl">Importeer het bestand van de URL</string>
+    <string name="actionImportServerData">Servergegevens importeren</string>
+    <string name="actionExport">Bestand exporteren</string>
+    <string name="actionExportToServer">Bewaar alle gebeurtenissen op server</string>
+    <string name="actionSettings">Instellingen</string>
+    <string name="actionSelectSound">Selecteer geluid</string>
+    <string name="actionAdvance">Tijd voorschot</string>
+    <string name="actionAbout">Over</string>
+    <string name="aboutCompany">International Network Support &#38; Service - Glas</string>
+    <string name="aboutVersion">1.0</string>
+    <string name="event_properties">Event Eigenschappen</string>
+    <string name="categories">Categorieën</string>
+    <string name="category">Categorie</string>
+    <string name="dateTime">Datum</string>
+    <string name="alarmName">Alarmnaam</string>
+    <string name="startTime">Starttijd</string>
+    <string name="finishTime">Eindtijd</string>
+    <string name="titleMain">Datum</string>
+    <string name="title">Titel</string>
+    <string name="description">Beschrijving</string>
+    <string name="Time">Tijd</string>
+    <string name="ErrorAdding">ERROR ADDING</string>
+    <string name="add">Evenement toegevoegd</string>
+    <string name="update">Bijgewerkte evenement</string>
+    <string name="notEvents">Geen evenementen</string>
+    <string name="day"> dag </string>
+    <string name="days"> dagen </string>
+    <string name="hour"> uur </string>
+    <string name="hours"> uur </string>
+    <string name="minute"> een minuutje </string>
+    <string name="minutes"> notulen </string>
+    <string name="advanceResult">Vooruitgang is ingesteld</string>
+    <string name="exportCompleted">Kalender opgeslagen</string>
+    <string name="importCompleted">Kalender geïmporteerd</string>
+    <string name="zeroMinutes">0 minuten</string>
+    <string name="buttonOk">Ok</string>
+    <string name="buttonAdd">Nieuwe categorie</string>
+    <string name="buttonDeleteCategory">Categorie verwijderen</string>
+    <string name="changeCategory">Verandering</string>
+    <string name="newCategory">Nieuwe categorie</string>
+    <string name="addNewCategory">Toevoegen</string>
+    <string name="deleteNotification">Bericht verwijderen</string>
+    <string name="saveAdvance">Vooraf opslaan</string>
+    <string name="showEvent">Show evenement</string>
+    <string name="buttonCancel">Annuleren</string>
+    <string name="buttonDownload">Download</string>
+    <string name="buttonUpload">Upload</string>
+    <string name="noNextEvent">Geen volgend evenement</string>
+    <string name="noEvents">Geen evenementen</string>
+    <string name="the">de</string>
+    <string name="nextEvents">volgende evenementen</string>
+    <string name="now">Nu</string>
+    <string name="till">tot</string>
+    <string name="removeEvent">Evenement verwijderen</string>
+    <string name="removeEventError">Fout verwijderen</string>
+    <string name="deleteFromFirestore">Verwijderen uit Firestore</string>
+    <string name="pleaseSelectAdvance">Selecteer alstublieft vooraf</string>
+    <string name="pathURL">https://inss.ch/downloads/Test.ics</string>
+    <string-array name="categories">
+        <item>Gebeurtenis</item>
+        <item>Datum</item>
+        <item>Bedrijf</item>
+        <item>Privaat</item>
+    </string-array>
+</resources>

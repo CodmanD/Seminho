@@ -1,2 +1,72 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="app_name">Seminho</string>
+    <string name="actionNewEvent">Nouvel évènement</string>
+    <string name="actionAuth">Login</string>
+    <string name="actionChangeTheme">Change le thème</string>
+    <string name="actionEditCategory">Modifier les catégories</string>
+    <string name="actionImport">Importer le fichier</string>
+    <string name="actionImportFromUrl">Importer un fichier depuis une URL</string>
+    <string name="actionImportServerData">Importer des données de serveur</string>
+    <string name="actionExport">Fichier d&apos;exportation</string>
+    <string name="actionExportToServer">Stocker tous les événements sur le serveur</string>
+    <string name="actionSettings">Paramètres</string>
+    <string name="actionSelectSound">Sélectionnez le son</string>
+    <string name="actionAdvance">Avance dans le temps</string>
+    <string name="actionAbout">Sur</string>
+    <string name="aboutCompany">International Network Support &#38; Service - Glas</string>
+    <string name="aboutVersion">1.0</string>
+    <string name="event_properties">Propriétés de l&apos;événement</string>
+    <string name="categories">Catégories</string>
+    <string name="category">Catégorie</string>
+    <string name="dateTime">Date</string>
+    <string name="alarmName">Nom de l&apos;alarme</string>
+    <string name="startTime">Heure de début</string>
+    <string name="finishTime">Heure de fin</string>
+    <string name="titleMain">Date</string>
+    <string name="title">Titre</string>
+    <string name="description">La description</string>
+    <string name="Time">Temps</string>
+    <string name="ErrorAdding">ERREUR AJOUT</string>
+    <string name="add">Événement ajouté</string>
+    <string name="update">Événement mis à jour</string>
+    <string name="notEvents">No events</string>
+    <string name="day"> journée </string>
+    <string name="days"> journées </string>
+    <string name="hour"> heure </string>
+    <string name="hours"> heures </string>
+    <string name="minute"> minute </string>
+    <string name="minutes"> minutes </string>
+    <string name="advanceResult">L&apos;avance est définie</string>
+    <string name="exportCompleted">Calendrier enregistré</string>
+    <string name="importCompleted">Calendrier importé</string>
+    <string name="zeroMinutes">0 minutes</string>
+    <string name="buttonOk">D&apos;accord</string>
+    <string name="buttonAdd">Nouvelle catégorie</string>
+    <string name="buttonDeleteCategory">Supprimer la catégorie</string>
+    <string name="changeCategory">Changement</string>
+    <string name="newCategory">Nouvelle catégorie</string>
+    <string name="addNewCategory">Ajouter</string>
+    <string name="deleteNotification">Supprimer la notification</string>
+    <string name="saveAdvance">Enregistrer l&apos;avance</string>
+    <string name="showEvent">Afficher l&apos;événement</string>
+    <string name="buttonCancel">Annuler</string>
+    <string name="buttonDownload">Télécharger</string>
+    <string name="buttonUpload">Télécharger</string>
+    <string name="noNextEvent">Aucun prochain événement</string>
+    <string name="noEvents">Pas d&apos;événements</string>
+    <string name="the">le</string>
+    <string name="nextEvents">prochains événements</string>
+    <string name="now">À présent</string>
+    <string name="till">jusqu&apos;à</string>
+    <string name="removeEvent">Supprimer l&apos;événement</string>
+    <string name="removeEventError">Supprimer l&apos;erreur</string>
+    <string name="deleteFromFirestore">Supprimer de Firestore</string>
+    <string name="pleaseSelectAdvance">Veuillez sélectionner avance</string>
+    <string name="pathURL">https://inss.ch/downloads/Test.ics</string>
+    <string-array name="categories">
+        <item>Événement</item>
+        <item>Date</item>
+        <item>Affaires</item>
+        <item>Privé</item>
+    </string-array>
+</resources>

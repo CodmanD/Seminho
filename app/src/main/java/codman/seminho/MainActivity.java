@@ -220,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                 .setPositiveButton(R.string.buttonDownload, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(MainActivity.this,"Fly to server " , Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(MainActivity.this,"Fly to server " , Toast.LENGTH_SHORT).show();
                         // getFileFromUrl(et.getText().toString());
                         FirestoreHelper mFirestoreHelper= new FirestoreHelper(MainActivity.this,"user");
 
@@ -786,7 +786,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                     //getFileFromUrl();
 
                     actionImportURL();
-                    Toast.makeText(this, "Input URL :" + this.getApplicationInfo().dataDir, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(this, "Input URL :" + this.getApplicationInfo().dataDir, Toast.LENGTH_SHORT).show();
                 } else {
 
                     requestPermissionWithRationale();
@@ -799,7 +799,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
                     readFromFireStore();
                     decorateCalendar();
-                    Toast.makeText(this, "GetData Server :", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(this, "GetData Server :", Toast.LENGTH_SHORT).show();
                 } else {
 
                     requestPermissionWithRationale();
@@ -828,12 +828,12 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                 return true;
             case R.id.actionAdvance:
                 setAdvance();
-                Toast.makeText(this, "Advanced", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(this, "Advanced", Toast.LENGTH_SHORT).show();
                 return true;
 
             case R.id.actionEditCategories:
                 editCategories();
-                Toast.makeText(this, "EditCategories", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(this, "EditCategories", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.actionAbout:
 /*
@@ -920,7 +920,7 @@ private boolean  sIn=false;
                         cats.add(0,et.getText().toString());
                         //cats.remove(position+1);
                         adapter.notifyDataSetChanged();
-                        Toast.makeText(MainActivity.this,"Save res="+res,Toast.LENGTH_SHORT).show();
+                      //  Toast.makeText(MainActivity.this,"Save res="+res,Toast.LENGTH_SHORT).show();
                         dialog.cancel();
                     }
                 }).setNeutralButton(R.string.buttonCancel,new DialogInterface.OnClickListener()
