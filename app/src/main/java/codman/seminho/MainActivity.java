@@ -138,14 +138,14 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
     private static final int RINGTONES_REQUEST_CODE = 124;
     private static final int RC_SIGN_IN = 9001;
     private GoogleSignInClient mGoogleSignInClient;
-    private  GoogleSignInOptions gso;
+    private GoogleSignInOptions gso;
     private FirebaseAuth mAuth;
 
     // variables Firebase
     private FirebaseFirestore mFirestore;
     private Query mQuery;
 
-
+    private boolean sIn = false;
     private FilePickerDialog dialog;
 
     @BindView(R.id.toolbar)
@@ -169,30 +169,31 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
     DatabaseHelper dbHelper;
 
 
-
     /*
     google SignIn
      */
     private void signIn() {
-        Log.d(TAG,"Sign In");
-        Toast.makeText(this,"Wait",Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "Sign In");
+        Toast.makeText(this, "Wait", Toast.LENGTH_SHORT).show();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
+
     // [START auth_with_google]
     private void signOut() {
         // Firebase sign out
         mAuth.signOut();
 
-        Log.d(TAG,"Sign Out complete");
+        Log.d(TAG, "Sign Out complete");
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         // Google sign out
         mGoogleSignInClient.signOut().addOnCompleteListener(this,
                 new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         //updateUI(null);
-                        Log.d(TAG,"Sign OUT complete");
+                        Log.d(TAG, "Sign OUT complete");
                     }
                 });
     }
@@ -212,8 +213,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
     }
 
 
-
-    private void readFromFireStore(){
+    private void readFromFireStore() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Holo_Light_Dialog_MinWidth);
         builder.setTitle(R.string.actionImportServerData)
                 .setCancelable(true)
@@ -222,13 +222,13 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                     public void onClick(DialogInterface dialog, int which) {
                         //Toast.makeText(MainActivity.this,"Fly to server " , Toast.LENGTH_SHORT).show();
                         // getFileFromUrl(et.getText().toString());
-                        FirestoreHelper mFirestoreHelper= new FirestoreHelper(MainActivity.this,"user");
+                        FirestoreHelper mFirestoreHelper = new FirestoreHelper(MainActivity.this, mAuth.getCurrentUser().getEmail());
 
                         mFirestoreHelper.readFromFirestore();
                         // ArrayList<AlarmEvent> list=dbHelper.getEvents();
                         //for(AlarmEvent ae:list)
                         {
-                          // mFirestoreHelper.addToFirestore(ae);
+                            // mFirestoreHelper.addToFirestore(ae);
                         }
                         dialog.dismiss();
                     }
@@ -244,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
     }
 
-    private void addToServer(){
+    private void addToServer() {
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Holo_Light_Dialog_MinWidth);
@@ -253,12 +253,11 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                 .setPositiveButton(R.string.buttonUpload, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(MainActivity.this,"Fly to server " , Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "Fly to server ", Toast.LENGTH_SHORT).show();
                         // getFileFromUrl(et.getText().toString());
-                        FirestoreHelper mFirestoreHelper= new FirestoreHelper(MainActivity.this,"user");
-                        ArrayList<AlarmEvent> list=dbHelper.getEvents();
-                        for(AlarmEvent ae:list)
-                        {
+                        FirestoreHelper mFirestoreHelper = new FirestoreHelper(MainActivity.this, mAuth.getCurrentUser().getEmail());
+                        ArrayList<AlarmEvent> list = dbHelper.getEvents();
+                        for (AlarmEvent ae : list) {
                             mFirestoreHelper.addToFirestore(ae);
                         }
                         dialog.dismiss();
@@ -275,8 +274,6 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
 
         //FirestoreHelper mFirestoreHelper= new FirestoreHelper(this,mAuth.getCurrentUser().getUid());
-
-
 
 
     }
@@ -297,7 +294,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                             //Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
 
-                           // Log.d(TAG, "signInWithCredential:success"+user.getEmail());
+                            // Log.d(TAG, "signInWithCredential:success"+user.getEmail());
                             Snackbar.make(findViewById(R.id.root), "Authentication success.", Snackbar.LENGTH_SHORT).show();
                             //Toast.makeText(MainActivity.this,"Login succes",Toast.LENGTH_SHORT).show();
                             //Intent intent= new Intent(MainActivity.this,MainActivity.class);
@@ -306,7 +303,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                             // updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
-                           // Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            // Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Snackbar.make(findViewById(R.id.root), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
                             // updateUI(null);
                         }
@@ -321,23 +318,18 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
     ///
 
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
 
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         themeNumber = preferences.getInt(TAG + "theme", 0);
         ringtone = Uri.parse(preferences.getString(TAG + "ringtone", "content://settings/system/notification_sound"));
         advance = preferences.getLong(TAG + "advance", 0);
-        Log.d(TAG,"Main onCreate advance="+advance);
+        Log.d(TAG, "Main onCreate advance=" + advance);
         pathURL = preferences.getString(TAG + "pathURL", getResources().getString(R.string.pathURL));
 
-       // Boolean notif = preferences.getBoolean("notification", false);
+        // Boolean notif = preferences.getBoolean("notification", false);
         // Log.d(TAG,"Theme = "+themeNumber+" ringtone"+ringtone+" Advance = "+advance);
         if (themeNumber == 1) {
             setTheme(R.style.AppThemeBlue);
@@ -408,11 +400,6 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
     }
 
 
-
-
-
-
-
     private void restartNotify() {
 
         AlarmEvent ae = dbHelper.getNextEvent(advance);
@@ -427,8 +414,8 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
     protected void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-      //  FirebaseUser currentUser = mAuth.getCurrentUser();
-       // Log.d(TAG,"onStart getCurrentUser : "+currentUser);
+        //  FirebaseUser currentUser = mAuth.getCurrentUser();
+        // Log.d(TAG,"onStart getCurrentUser : "+currentUser);
         //updateUI(currentUser);
     }
 
@@ -463,7 +450,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                     tvTitle.setText(events.get(position).getTitle());
                 } else {
                     tvTitle.setTextSize(20);
-                    tvTitle.setText( dbHelper.getCountFutureEvents() +" "+ getResources().getString(R.string.nextEvents));
+                    tvTitle.setText(dbHelper.getCountFutureEvents() + " " + getResources().getString(R.string.nextEvents));
                 }
                 //  textView.setTextColor(Color.WHITE);
 
@@ -623,13 +610,13 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                     (minutes > 0 ? minutes + " " + m + " " : m);
 
             if (days == 0 && hours == 0 && minutes == 0)
-                tv1.setText(getResources().getString(R.string.now)+" " + ae.getTitle());
+                tv1.setText(getResources().getString(R.string.now) + " " + ae.getTitle());
             else
-                tv1.setText(time + "  "+getResources().getString(R.string.till)+" " + ae.getTitle());
+                tv1.setText(time + "  " + getResources().getString(R.string.till) + " " + ae.getTitle());
         } else {
             ae = dbHelper.getFirstEvent(System.currentTimeMillis() - 900000);
             if (ae != null) {
-                tv1.setText(getResources().getString(R.string.now)+" " + ae.getTitle());
+                tv1.setText(getResources().getString(R.string.now) + " " + ae.getTitle());
             } else
                 tv1.setText(getResources().getString(R.string.noNextEvent));
         }
@@ -656,14 +643,14 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
     }
 
 
-    private void decorateCalendar() {
+    public void decorateCalendar() {
 
         calendarView.removeDecorators();
         ArrayList<OneDayDecorator> decors = new ArrayList<>();
         for (int i = 0, count = 0; i < 31; i++) {
             //CalendarDay day = new CalendarDay(2018, date.getMonth(), i + 1);
             CalendarDay day = new CalendarDay(2018, calendarView.getCurrentDate().getMonth(), i + 1);
-             decors.add(new OneDayDecorator(day, 0, 0,0,0));
+            decors.add(new OneDayDecorator(day, 0, 0, 0, 0));
         }
         calendarView.addDecorators(decors);
         Calendar curDay = Calendar.getInstance();
@@ -684,10 +671,10 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                 color = getResources().getColor(R.color.colorLastDate);
             else
                 color = getResources().getColor(R.color.colorNextDate);
-            if(themeNumber==1)
-                 decors.add(new OneDayDecorator(day, count, color,getResources().getColor(R.color.colorPrimary_blue),getResources().getColor(R.color.colorContent_blue)));
+            if (themeNumber == 1)
+                decors.add(new OneDayDecorator(day, count, color, getResources().getColor(R.color.colorPrimary_blue), getResources().getColor(R.color.colorContent_blue)));
             else
-                decors.add(new OneDayDecorator(day, count, color,getResources().getColor(R.color.colorPrimary),getResources().getColor(R.color.colorContent)));
+                decors.add(new OneDayDecorator(day, count, color, getResources().getColor(R.color.colorPrimary), getResources().getColor(R.color.colorContent)));
         }
         calendarView.addDecorators(decors);
 
@@ -708,7 +695,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
-        MenuItem item = menu.getItem(6).getSubMenu().getItem(0);
+        MenuItem item = menu.getItem(7).getSubMenu().getItem(0);
         item.setTitle(getResources().getString(R.string.actionAdvance) + " : " + (advance / 60000) + " min");
         return true;
     }
@@ -755,8 +742,37 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                 return true;
             }
 
+            case R.id.actionLogOut: {
+
+                signOut();
+                //Toast.makeText(this, "NEW EVENT", Toast.LENGTH_SHORT).show();
+             /*
+                Intent intent = new Intent(MainActivity.this, PagesActivity.class);
+                if (calendarView.getSelectedDate() != null) {
+                    Log.d(TAG, "SEND SelectDate" + calendarView.getSelectedDate());
+                    intent.putExtra("selectedDate", calendarView.getSelectedDate());
+                }
+
+                startActivity(intent);
+                */
+                return true;
+            }
+
             case R.id.actionExportToServer: {
-                addToServer();
+
+
+//                try {
+//                    Log.d(TAG,"cur user"+mAuth.getCurrentUser().getEmail()+"/"
+//                            +mAuth.getCurrentUser().getDisplayName());
+//                } catch (Exception e) {
+//                    Log.d(TAG,"Exception cur user mAuth"+mAuth.getCurrentUser());
+//                }
+                if (mAuth.getCurrentUser() != null)
+                    addToServer();
+                else
+                    Toast.makeText(this, getResources().getString(R.string.pleaseLogin), Toast.LENGTH_SHORT).show();
+
+
                 //signIn();
                 //Toast.makeText(this, "NEW EVENT", Toast.LENGTH_SHORT).show();
              /*
@@ -797,8 +813,14 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                 if (hasPermissions()) {
                     //getFileFromUrl();
 
-                    readFromFireStore();
-                    decorateCalendar();
+
+                    if (mAuth.getCurrentUser() != null) {
+                        readFromFireStore();
+
+                        decorateCalendar();
+                    } else
+                        Toast.makeText(this, getResources().getString(R.string.pleaseLogin), Toast.LENGTH_SHORT).show();
+
                     //Toast.makeText(this, "GetData Server :", Toast.LENGTH_SHORT).show();
                 } else {
 
@@ -828,12 +850,12 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                 return true;
             case R.id.actionAdvance:
                 setAdvance();
-               // Toast.makeText(this, "Advanced", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(this, "Advanced", Toast.LENGTH_SHORT).show();
                 return true;
 
             case R.id.actionEditCategories:
                 editCategories();
-               // Toast.makeText(this, "EditCategories", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(this, "EditCategories", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.actionAbout:
 /*
@@ -862,78 +884,73 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         return super.onOptionsItemSelected(item);
     }
 
-private boolean  sIn=false;
 
-
-    private void editCategories(){
+    private void editCategories() {
 
         View view = getLayoutInflater().inflate(R.layout.edit_categories, null);
-       RecyclerView rv = view.findViewById(R.id.rvCategories);
+        RecyclerView rv = view.findViewById(R.id.rvCategories);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
         rv.setLayoutManager(mLayoutManager);
 
 
-      // String[] categories= getResources().getStringArray(R.array.categories);
-       final ArrayList<String>cats= dbHelper.getCategories();
-       if(cats.size()==0)
-       {
-           String[] categories= getResources().getStringArray(R.array.categories);
-           for(String c:categories)
-           {
-               dbHelper.putCategory(c);
-               cats.add(c);
-           }
+        // String[] categories= getResources().getStringArray(R.array.categories);
+        final ArrayList<String> cats = dbHelper.getCategories();
+        if (cats.size() == 0) {
+            String[] categories = getResources().getStringArray(R.array.categories);
+            for (String c : categories) {
+                dbHelper.putCategory(c);
+                cats.add(c);
+            }
 
-       }
+        }
 
-        Log.d(TAG,"Count ="+cats.size());
+        Log.d(TAG, "Count =" + cats.size());
 
-       final AdapterCategories adapter=new AdapterCategories(this,getLayoutInflater(), cats);
-       rv.setAdapter(adapter);
+        final AdapterCategories adapter = new AdapterCategories(this, getLayoutInflater(), cats);
+        rv.setAdapter(adapter);
         //AlertDialog.Builder builder= new AlertDialog.Builder(this);
         android.app.AlertDialog.Builder adb = new android.app.AlertDialog.Builder(this)
-        .setTitle(getResources().getString(R.string.categories))
-        .setView(view)
-        .setCancelable(true)
-        .setNegativeButton(R.string.buttonCancel, new DialogInterface.OnClickListener() {
+                .setTitle(getResources().getString(R.string.categories))
+                .setView(view)
+                .setCancelable(true)
+                .setNegativeButton(R.string.buttonCancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
                     }
                 })
-        .setPositiveButton(R.string.buttonAdd, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(MainActivity.this,getResources().getString(R.string.newCategory),Toast.LENGTH_SHORT).show();
-              final  View view=getLayoutInflater().inflate(R.layout.dialog_category,null);
-                AlertDialog.Builder builder=new AlertDialog.Builder(MainActivity.this);
-
-                builder.setCancelable(true).setView(view).setTitle(R.string.newCategory);
-                builder.setPositiveButton(R.string.addNewCategory, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.buttonAdd, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(MainActivity.this, getResources().getString(R.string.newCategory), Toast.LENGTH_SHORT).show();
+                        final View view = getLayoutInflater().inflate(R.layout.dialog_category, null);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+                        builder.setCancelable(true).setView(view).setTitle(R.string.newCategory);
+                        builder.setPositiveButton(R.string.addNewCategory, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
 
 
-
-                        EditText et= view.findViewById(R.id.etCategory);
-                       long res= dbHelper.putCategory(et.getText().toString());
-                        cats.add(0,et.getText().toString());
-                        //cats.remove(position+1);
-                        adapter.notifyDataSetChanged();
-                      //  Toast.makeText(MainActivity.this,"Save res="+res,Toast.LENGTH_SHORT).show();
+                                EditText et = view.findViewById(R.id.etCategory);
+                                long res = dbHelper.putCategory(et.getText().toString());
+                                cats.add(0, et.getText().toString());
+                                //cats.remove(position+1);
+                                adapter.notifyDataSetChanged();
+                                //  Toast.makeText(MainActivity.this,"Save res="+res,Toast.LENGTH_SHORT).show();
+                                dialog.cancel();
+                            }
+                        }).setNeutralButton(R.string.buttonCancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Toast.makeText(MainActivity.this, getResources().getString(R.string.buttonCancel), Toast.LENGTH_SHORT).show();
+                                dialog.cancel();
+                            }
+                        });
                         dialog.cancel();
+                        builder.create().show();
                     }
-                }).setNeutralButton(R.string.buttonCancel,new DialogInterface.OnClickListener()
-                { @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Toast.makeText(MainActivity.this,getResources().getString(R.string.buttonCancel),Toast.LENGTH_SHORT).show();
-                    dialog.cancel();
-                }
                 });
-                dialog.cancel();
-                builder.create().show();
-            }
-        });
         adb.create().show();
 
     }
@@ -944,7 +961,7 @@ private boolean  sIn=false;
         et.setHint("INPUT URL");
         et.setText("");
         //et.setText(pathURL);
-       // AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Holo_Light_Dialog);
+        // AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Holo_Light_Dialog);
         AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Holo_Light_Dialog_MinWidth);
         builder.setTitle(R.string.actionImportFromUrl)
                 .setCancelable(true)
@@ -976,10 +993,10 @@ private boolean  sIn=false;
         View view = (LinearLayout) getLayoutInflater()
                 .inflate(R.layout.dialog_advance, null);
         final SeekBar seekBar = view.findViewById(R.id.seekBar);
-        seekBar.setProgress((int)MainActivity.this.advance/60000);
+        seekBar.setProgress((int) MainActivity.this.advance / 60000);
         final TextView tvAdvance = view.findViewById(R.id.tvAdvance);
-       // final Button btnOk = view.findViewById(R.id.btnOk);
-       // final Button btnCancel = view.findViewById(R.id.btnCancel);
+        // final Button btnOk = view.findViewById(R.id.btnOk);
+        // final Button btnCancel = view.findViewById(R.id.btnCancel);
 
         builder.setTitle(getResources().getString(R.string.pleaseSelectAdvance));
         builder.setView(view);
@@ -1003,7 +1020,7 @@ private boolean  sIn=false;
 
                 //Set value in menuItem
                 toolbar.getMenu().
-                        getItem(5).
+                        getItem(7).
                         getSubMenu().
                         getItem(0).
                         setTitle(getResources().getString(R.string.actionAdvance) + " : " + (MainActivity.this.advance / 60000) + " min");
@@ -1235,10 +1252,6 @@ private boolean  sIn=false;
     }
 
 
-
-
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == RC_SIGN_IN) {
@@ -1283,7 +1296,6 @@ private boolean  sIn=false;
             }
             return;
         }
-
 
 
         super.onActivityResult(requestCode, resultCode, data);
@@ -1557,12 +1569,12 @@ private boolean  sIn=false;
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                     m_error = e;
-                    Log.d(TAG,"Not URL");
+                    Log.d(TAG, "Not URL");
                     progressDialog.dismiss();
                 } catch (IOException e) {
                     e.printStackTrace();
                     m_error = e;
-                    Log.d(TAG,"Not URL Ioexception");
+                    Log.d(TAG, "Not URL Ioexception");
                     progressDialog.dismiss();
                 }
 

@@ -18,6 +18,12 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/actionLogOut"
+        android:orderInCategory="100"
+        android:title="@string/actionLogOut"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/actionImport"
         android:orderInCategory="100"
         android:title="@string/actionImport"

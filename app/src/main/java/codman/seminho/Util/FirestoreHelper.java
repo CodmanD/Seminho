@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import codman.seminho.DataBase.DatabaseHelper;
+import codman.seminho.MainActivity;
 import codman.seminho.Model.AlarmEvent;
 import codman.seminho.PagesActivity;
 
@@ -32,6 +33,7 @@ public class FirestoreHelper {
     private final String TAG="Seminho";
     private String user="";
     private Context context;
+    private MainActivity activity;
     FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
 
 
@@ -39,14 +41,14 @@ public class FirestoreHelper {
     {
         this.context=context;
         this.user=user;
-
+    this.activity=activity;
     }
 
     public void addToFirestore(AlarmEvent ae)
     {
         //Log.d(TAG,"TO Firestore event ="+ae.getTitle());
         Map<String,Object> event = new HashMap<>();
-        event.put("owner", user);
+        //event.put("owner", user);
         event.put("title", ae.getTitle());
         event.put("category",ae.getCategory());
         event.put("description",ae.getContent());
@@ -55,7 +57,7 @@ public class FirestoreHelper {
         event.put("startTime", ae.getStartTime());
         event.put("finishTime", ae.getFinishTime());
 
-        mFirestore.collection("events").document(ae.getUID())
+        mFirestore.collection(user).document(ae.getUID())
 
                 .set(event)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -79,7 +81,7 @@ public class FirestoreHelper {
 
         // Log.d(TAG,"Update Firestore");
         Map<String,Object> event = new HashMap<>();
-        event.put("owner", user);
+      //  event.put("owner", user);
         event.put("title",ae.getTitle());
         event.put("category",ae.getCategory());
         event.put("description",ae.getContent());
@@ -88,7 +90,7 @@ public class FirestoreHelper {
         event.put("startTime", ae.getStartTime());
         event.put("finishTime", ae.getFinishTime());
 
-        mFirestore.collection("events").document(ae.getUID()).update(event)
+        mFirestore.collection(user).document(ae.getUID()).update(event)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -113,7 +115,7 @@ public class FirestoreHelper {
         Log.d(TAG,"read from server= ");
        // List listE=mFirestore.document("events");
 
-        mFirestore.collection("events").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        mFirestore.collection(user).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -151,7 +153,7 @@ public class FirestoreHelper {
                         Log.d(TAG, "Document data: " + document.getDocuments().get(i).getId());
                     }
 
-
+                        ((MainActivity)context).decorateCalendar();
                         //Log.d(TAG, "DocumentSnapshot data: " + document.toString());
                     } else {
                         Log.d(TAG, "No such document");

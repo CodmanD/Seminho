@@ -2,6 +2,7 @@
     <string name="app_name">Seminho</string>
     <string name="actionNewEvent">New Event</string>
     <string name="actionAuth">Login</string>
+    <string name="actionLogOut">Log out</string>
     <string name="actionChangeTheme">Change theme</string>
     <string name="actionEditCategory">Edit categories</string>
     <string name="actionImport">Import file</string>
@@ -62,6 +63,7 @@
     <string name="removeEventError">Remove error</string>
     <string name="deleteFromFirestore">Delete from Firestore</string>
     <string name="pleaseSelectAdvance">Please select advance</string>
+    <string name="pleaseLogin">Please log in</string>
     <string name="pathURL">https://inss.ch/downloads/Test.ics</string>
     <string-array name="categories">
         <item>Event</item>
