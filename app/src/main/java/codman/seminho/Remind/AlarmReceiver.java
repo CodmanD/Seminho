@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
 import java.net.URISyntaxException;
 
@@ -19,12 +20,28 @@ public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        DatabaseHelper database = DatabaseHelper.getInstance(context);
-        int id = intent.getIntExtra("NOTIFICATION_ID", 0);
+
+
+        int id = intent.getIntExtra("NOTIFICATION_ID", -1);
+
+
         long advance=intent.getLongExtra("advance",0);
+        long delay=intent.getLongExtra("delay",0);
+        boolean isDelay=intent.getBooleanExtra("isDelay",false);
         Uri ringtone= intent.getParcelableExtra("ringtone");
-       // Log.d(TAG, "OnReceive BroadCast ID=" + id+" Ringtone "+ringtone);
+        DatabaseHelper database = DatabaseHelper.getInstance(context);
         AlarmEvent ae = database.select(id);
+
+        Log.d(TAG,"onReceive"+"  "+ae.getTitle()+" |ref Id= "+id);
+        if(isDelay)
+        {
+           // NotificationUtil.createNotification(context, ae,ringtone);
+        }
+
+
+
+       // Log.d(TAG, "OnReceive BroadCast ID=" + id+" Ringtone "+ringtone);
+
         try
         {
             NotificationUtil.createNotification(context, ae,ringtone);

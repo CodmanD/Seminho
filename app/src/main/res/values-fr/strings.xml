@@ -63,6 +63,7 @@
     <string name="deleteFromFirestore">Supprimer de Firestore</string>
     <string name="pleaseSelectAdvance">Veuillez sélectionner avance</string>
     <string name="pathURL">https://inss.ch/downloads/Test.ics</string>
+    <string name="saveDelay">Enregistrer le délai</string>
     <string-array name="categories">
         <item>Événement</item>
         <item>Date</item>

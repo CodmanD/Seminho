@@ -1,6 +1,8 @@
 package codman.seminho;
 
+import android.app.AlarmManager;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -19,6 +21,11 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import codman.seminho.DataBase.DatabaseHelper;
+import codman.seminho.Model.AlarmEvent;
+import codman.seminho.Remind.AlarmReceiver;
+import codman.seminho.Remind.AlarmUtil;
+
 import static codman.seminho.Remind.NotificationUtil.ANDROID_CHANNEL_ID;
 
 /**
@@ -29,6 +36,9 @@ public class NotificationActivity extends AppCompatActivity {
     private final String TAG = "Seminho";
     long advance=0;
 
+    Uri ringtone;
+    long delay;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
@@ -36,7 +46,7 @@ public class NotificationActivity extends AppCompatActivity {
         int themeNumber = preferences.getInt(TAG + "theme", 0);
         // ringtone = Uri.parse(preferences.getString(TAG + "ringtone", "content://settings/system/notification_sound"));
         advance = preferences.getLong(TAG + "advance", 0);
-
+        ringtone = Uri.parse(preferences.getString(TAG + "ringtone", "content://settings/system/notification_sound"));
         // pathURL = preferences.getString(TAG + "pathURL", getResources().getString(R.string.pathURL));
 
         // Boolean notif = preferences.getBoolean("notification", false);
@@ -61,8 +71,9 @@ public class NotificationActivity extends AppCompatActivity {
                 .inflate(R.layout.dialog_advance, null);
 
         final SeekBar seekBar = view.findViewById(R.id.seekBar);
+        seekBar.setMax(20);
        // Log.d(TAG,"View = "+view+"  |||  sekbar = "+seekBar);
-        seekBar.setProgress((int) this.advance / 60000);
+       // seekBar.setProgress((int) this.advance / 60000);
         final TextView tvAdvance = view.findViewById(R.id.tvAdvance);
         tvAdvance.setText(String.valueOf(seekBar.getProgress()) + " min");
         // final Button btnOk = view.findViewById(R.id.btnOk);
@@ -90,26 +101,32 @@ public class NotificationActivity extends AppCompatActivity {
                    {
                       // Toast.makeText(NotificationActivity.this," Not Del notif id="+id,Toast.LENGTH_SHORT).show();
                    }
+                Toast.makeText(NotificationActivity.this,getResources().getString(R.string.alarmDeleted),Toast.LENGTH_SHORT).show();
+                NotificationActivity.this.finish();
 
             }
-        }).setPositiveButton(R.string.saveAdvance,new  DialogInterface.OnClickListener()
+        }).setPositiveButton(R.string.saveDelay,new  DialogInterface.OnClickListener()
         {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
 
-                advance = (seekBar.getProgress() * 60000);
+                delay = (seekBar.getProgress() * 60000);
 
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(NotificationActivity.this);
                 SharedPreferences.Editor editor = preferences.edit();
 
                 Log.d(TAG,"Notif = "+advance);
-                editor.putLong(TAG + "advance", advance);
-                editor.commit();
+               // editor.putLong(TAG + "advance", advance);
+               // editor.commit();
 
-                Intent intent= new Intent(NotificationActivity.this,MainActivity.class);
-                startActivity(intent);
-                Toast.makeText(NotificationActivity.this,"Wait",Toast.LENGTH_SHORT).show();
+               // Intent intent= new Intent(NotificationActivity.this,MainActivity.class);
+               // startActivity(intent);
+                //Toast.makeText(NotificationActivity.this,"Wait",Toast.LENGTH_SHORT).show();
+
+                setDelayNotify();
+
+                NotificationActivity.this.finish();
                // dialog.cancel();
         }
         })
@@ -158,5 +175,50 @@ public class NotificationActivity extends AppCompatActivity {
 
 
         popDialog.show();
+    }
+
+
+    private void setDelayNotify() {
+
+        Intent intent= getIntent();
+
+        long id=intent.getLongExtra("NOTIFICATION_ID",-1);
+        long ms=intent.getLongExtra("EVENT_MS",-1);
+        String uid=intent.getStringExtra("EVENT_UID");
+
+        AlarmEvent ae=DatabaseHelper.getInstance(this).select(id);
+
+
+        Log.d(TAG,"setDeleay AE ="+ae.getTitle()+" | "+id+"|"+ae.getId());
+
+        Intent alarmIntent = new Intent(this, AlarmReceiver.class);
+
+        alarmIntent.putExtra("advance",advance-delay);
+        alarmIntent.putExtra("NOTIFICATION_ID",(int)id);
+        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this,(int) ae.getId(), alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        //alarmManager.cancel(pendingIntent);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            // alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, ms-advance-delay, pendingIntent);
+            // Log.d(TAG,"setALARM  -seExactAndAllowWhileIdle");
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            //    alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, ms-advance-delay, pendingIntent);
+            //Log.d(TAG,"setALARM  -seExact");
+        } else {
+            // alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            alarmManager.set(AlarmManager.RTC_WAKEUP, ms-advance-delay, pendingIntent);
+            // Log.d(TAG,"setALARM  -set");
+        }
+
+        /*
+        AlarmEvent ae = DatabaseHelper.getInstance(this).getNextEvent(advance);
+        if (ae != null) {
+            Intent alarmIntent = new Intent(this, AlarmReceiver.class);
+            AlarmUtil.setAlarm(this, alarmIntent, (int) ae.getId(), ringtone, ae.getStartTime(), advance);
+        }
+*/
     }
 }

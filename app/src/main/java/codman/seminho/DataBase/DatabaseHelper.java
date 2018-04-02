@@ -670,10 +670,12 @@ public long putCategory(String category){
         SQLiteDatabase database = this.getReadableDatabase();
         Cursor cursor = database.query(ALARMEVENT_TABLE, null, COL_ID + " = ?", new String[]{String.valueOf(id)}, null, null, null);
         // Log.d(TAG,"Count"+cursor.getCount());
-        cursor.moveToFirst();
-
-
         AlarmEvent ae = new AlarmEvent();
+        if(cursor.moveToFirst())
+        {
+
+
+
         ae.setId(cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID)));
         ae.setUID(cursor.getString(cursor.getColumnIndexOrThrow(COL_UID)));
         ae.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(COL_TITLE)));
@@ -682,6 +684,7 @@ public long putCategory(String category){
         ae.setLastModified(cursor.getLong(cursor.getColumnIndexOrThrow(COL_LAST_MODIFIED)));
         ae.setStartTime(cursor.getLong(cursor.getColumnIndexOrThrow(COL_START_TIME)));
         ae.setFinishTime(cursor.getLong(cursor.getColumnIndexOrThrow(COL_FINISH_TIME)));
+        }
         // Log.d(TAG,"getAlarmEvent = "+ae);
         cursor.close();
         database.close();

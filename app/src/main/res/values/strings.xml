@@ -65,6 +65,8 @@
     <string name="pleaseSelectAdvance">Please select advance</string>
     <string name="pleaseLogin">Please log in</string>
     <string name="pathURL">https://inss.ch/downloads/Test.ics</string>
+    <string name="saveDelay">Save delay</string>
+    <string name="alarmDeleted">Alarm deleted</string>
     <string-array name="categories">
         <item>Event</item>
         <item>Date</item>

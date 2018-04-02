@@ -89,12 +89,12 @@ public class NotificationUtil extends ContextWrapper {
         PendingIntent pending = PendingIntent.getActivity(context, 0, viewIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         // Create intent for notification snooze click behaviour
         //Intent intent = new Intent(context, MainActivity.class);
-        Intent intent = new Intent(context, NotificationActivity.class);
+       // Intent intent = new Intent(context, NotificationActivity.class);
         //SharedPreferences sPref= PreferenceManager.getDefaultSharedPreferences(context);
         //sPref.edit().putBoolean("notification",true);
         //sPref.edit().commit();
         //  snoozeIntent.putExtra("NOTIFICATION_ID", reminder.getId());
-        PendingIntent pendingSnooze = PendingIntent.getBroadcast(context, (int) ae.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        //PendingIntent pendingSnooze = PendingIntent.getBroadcast(context, (int) ae.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // int imageResId = context.getResources().getIdentifier(reminder.getIcon(), "drawable", context.getPackageName());
 
