@@ -64,6 +64,10 @@
     <string name="pleaseSelectAdvance">Veuillez sélectionner avance</string>
     <string name="pathURL">https://inss.ch/downloads/Test.ics</string>
     <string name="saveDelay">Enregistrer le délai</string>
+    <string name="alarmDeleted">Alarme supprimé</string>
+    <string name="installed">Installée</string>
+    <string name="deleted">Supprimé</string>
+    <string name="saved">Enregistré</string>
     <string-array name="categories">
         <item>Événement</item>
         <item>Date</item>

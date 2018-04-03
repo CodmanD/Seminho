@@ -64,6 +64,10 @@
     <string name="pleaseSelectAdvance">Selecteer alstublieft vooraf</string>
     <string name="pathURL">https://inss.ch/downloads/Test.ics</string>
     <string name="saveDelay">Spaar vertraging</string>
+    <string name="alarmDeleted">Alarm verwijderd</string>
+    <string name="installed">Geïnstalleerd</string>
+    <string name="deleted">Verwijderde</string>
+    <string name="saved">Opgeslagen</string>
     <string-array name="categories">
         <item>Gebeurtenis</item>
         <item>Datum</item>

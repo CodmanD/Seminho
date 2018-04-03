@@ -33,10 +33,12 @@ public class OneDayDecorator implements DayViewDecorator {
         this.color = color;
         this.colorToday = colorToday;
         this.colorTodayBack = colorTodayBack;
+
     }
 
     @Override
     public boolean shouldDecorate(CalendarDay day) {
+
 
         boolean res = (date != null && day.equals(date));
 
@@ -45,6 +47,7 @@ public class OneDayDecorator implements DayViewDecorator {
 
     @Override
     public void decorate(DayViewFacade view) {
+
         view.addSpan(new StyleSpan(Typeface.BOLD));
         //if(this.date== CalendarDay.today())
         if(this.date.getDay()== CalendarDay.today().getDay()

@@ -153,7 +153,7 @@ public class FirestoreHelper {
                         Log.d(TAG, "Document data: " + document.getDocuments().get(i).getId());
                     }
 
-                        ((MainActivity)context).decorateCalendar();
+                        ((MainActivity)context).decorateCalendar(null);
                         //Log.d(TAG, "DocumentSnapshot data: " + document.toString());
                     } else {
                         Log.d(TAG, "No such document");

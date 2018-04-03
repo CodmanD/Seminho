@@ -16,6 +16,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 
+import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -70,6 +71,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.Query;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
@@ -173,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
     google SignIn
      */
     private void signIn() {
-        Log.d(TAG, "Sign In");
+        //  Log.d(TAG, "Sign In");
         Toast.makeText(this, "Wait", Toast.LENGTH_SHORT).show();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
@@ -185,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         // Firebase sign out
         mAuth.signOut();
 
-        Log.d(TAG, "Sign Out complete");
+        // Log.d(TAG, "Sign Out complete");
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         // Google sign out
         mGoogleSignInClient.signOut().addOnCompleteListener(this,
@@ -253,7 +255,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                 .setPositiveButton(R.string.buttonUpload, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(MainActivity.this, "Fly to server ", Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(MainActivity.this, "Fly to server ", Toast.LENGTH_SHORT).show();
                         // getFileFromUrl(et.getText().toString());
                         FirestoreHelper mFirestoreHelper = new FirestoreHelper(MainActivity.this, mAuth.getCurrentUser().getEmail());
                         ArrayList<AlarmEvent> list = dbHelper.getEvents();
@@ -278,8 +280,9 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
     }
 
+
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
+        //Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
         // [START_EXCLUDE silent]
         // showProgressDialog();
         // [END_EXCLUDE]
@@ -326,7 +329,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         themeNumber = preferences.getInt(TAG + "theme", 0);
         ringtone = Uri.parse(preferences.getString(TAG + "ringtone", "content://settings/system/notification_sound"));
         advance = preferences.getLong(TAG + "advance", 0);
-        Log.d(TAG, "Main onCreate advance=" + advance);
+        // Log.d(TAG, "Main onCreate advance=" + advance);
         pathURL = preferences.getString(TAG + "pathURL", getResources().getString(R.string.pathURL));
 
         // Boolean notif = preferences.getBoolean("notification", false);
@@ -350,20 +353,10 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         String title = FORMATTER.format(new Date(System.currentTimeMillis()));
         getSupportActionBar().setTitle(title);
 
-
-        //if(notif)
-
         lv.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(View view, int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
-                // Log.d(TAG, "LayoutChangeLisyener");
-
-                // if(start)
-                {
-                    // Log.d(TAG, "ScrollTo");
-                    sv.scrollTo(0, 0);
-                    // start = false;
-                }
+                sv.scrollTo(0, 0);
             }
         });
 
@@ -387,7 +380,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                         0, 60000);
 
 
-        restartNotify();
+        //  restartNotify();
 
         FirebaseFirestore.setLoggingEnabled(true);
         //Google Sign_iN
@@ -401,6 +394,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
 
     private void restartNotify() {
+
 
         AlarmEvent ae = dbHelper.getNextEvent(advance);
         if (ae != null) {
@@ -443,17 +437,11 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                     String time = timeFormat.format(new Date(cal.getTimeInMillis()));
                     tvData.setText(date);
                     tvTime.setText(time);
-                    // tvData.setText( cal.get(Calendar.DAY_OF_MONTH) + "/" + (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.YEAR));
-
-                    // tvTime.setText( cal.get(Calendar.HOUR) + " : " + cal.get(Calendar.MINUTE) +
-                    //       " " + (cal.get(Calendar.AM_PM) == 0 ? "AM" : "PM"));
                     tvTitle.setText(events.get(position).getTitle());
                 } else {
                     tvTitle.setTextSize(20);
                     tvTitle.setText(dbHelper.getCountFutureEvents() + " " + getResources().getString(R.string.nextEvents));
                 }
-                //  textView.setTextColor(Color.WHITE);
-
                 return view;
             }
         };
@@ -463,20 +451,12 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position == events.size() - 1) {
                     Intent intent = new Intent(MainActivity.this, EventsActivity.class);
-                    //intent.putExtra("ID", Integer.parseInt(id.getText().toString()));
-                    //Log.d(TAG, "===============AE = " + events.get(position).getId() + " | " + events.get(position).getTitle());
                     intent.putExtra("ID", (int) events.get(position).getId());
-
-                    // Log.d(TAG, "GET ID=" + intent.getIntExtra("ID", -1));
-                    //ntent.putExtra("MS", events.get(position).getTimeAlarm());
                     startActivity(intent);
 
                 } else {
                     Intent intent = new Intent(MainActivity.this, PagesActivity.class);
-                    //intent.putExtra("ID", Integer.parseInt(id.getText().toString()));
-                    // Log.d(TAG, "===============AE = " + events.get(position).getId() + " | " + events.get(position).getTitle());
                     intent.putExtra("ID", (int) events.get(position).getId());
-                    // Log.d(TAG, "GET ID=" + intent.getIntExtra("ID", -1));
                     intent.putExtra("MS", events.get(position).getStartTime());
                     startActivity(intent);
                 }
@@ -485,7 +465,6 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         lv.setAdapter(adapter);
         getListViewSize(lv, adapter);
         if (start) {
-            //Log.d(TAG, "ScrollTo");
             sv.scrollTo(0, 0);
             start = false;
         }
@@ -510,63 +489,9 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         params.height = totalHeight + (myListView.getDividerHeight() * (adapter.getCount() - 1));
         myListView.setLayoutParams(params);
         // print height of adapter on log
-        Log.d("height of listItem:", String.valueOf(totalHeight));
 
     }
 
-
-
-/*
-    private void showCurrentEvent() {
-
-        Calendar cal = Calendar.getInstance();
-
-        AlarmEvent[] aes = dbHelper.getCurrentEvents();
-
-        if (aes != null) {
-
-            if(aes[0].getTimeAlarm()<cal.getTimeInMillis())
-            {
-                tv1.setText("  now " + aes[0].getTitle());
-            }
-            else
-            {
-                long t = aes[0].getTimeAlarm();
-                long res = t - System.currentTimeMillis();
-
-                int days = (int) res / 86400000;
-                int hours = (int) ((res % 86400000) / 3600000);
-                int minutes = (int) ((res % 3600000) / 60000);
-
-            // Log.d(TAG, "TTIME :" + days + "/" + hours + "/" + minutes);
-
-            Resources r = getResources();
-            String d = "";
-            if (days == 1)
-                d = r.getString(R.string.day);
-            if (days > 1)
-                d = r.getString(R.string.days);
-            String h = "";
-            if (hours == 1)
-                h = r.getString(R.string.hour);
-            if (hours > 1)
-                h = r.getString(R.string.hours);
-            String m = getString(R.string.zeroMinutes);
-            if (minutes == 1)
-                m = r.getString(R.string.minute);
-            if (minutes > 1)
-                m = r.getString(R.string.minutes);
-
-            String time = (days > 0 ? days + " " + d + " " : d) +
-                    (hours > 0 ? hours + " " + h + " " : h) +
-                    (minutes > 0 ? minutes + " " + m + " " : m);
-
-            tv1.setText(time + "  till " + aes[0].getTitle());
-            }
-        }else
-            tv1.setText("no next event");
-    }
-    */
 
     private void showCurrentEvent() {
 
@@ -624,7 +549,8 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
     @Override
     public void onDateSelected(@NonNull MaterialCalendarView widget, @Nullable CalendarDay date, boolean selected) {
-        //tvDate.setText(getSelectedDatesString());
+        widget.removeDecorators();
+        decorateCalendar(date);
         Calendar cal = Calendar.getInstance();
         cal.set(date.getYear(), date.getMonth(), date.getDay(), 0, 0, 0);
         if (dbHelper.getCountEvents(cal) > 0) {
@@ -639,17 +565,19 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
     @Override
     public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
-        decorateCalendar();
+        decorateCalendar(null);
     }
 
 
-    public void decorateCalendar() {
+    public void decorateCalendar(CalendarDay date) {
+
 
         calendarView.removeDecorators();
         ArrayList<OneDayDecorator> decors = new ArrayList<>();
         for (int i = 0, count = 0; i < 31; i++) {
             //CalendarDay day = new CalendarDay(2018, date.getMonth(), i + 1);
             CalendarDay day = new CalendarDay(2018, calendarView.getCurrentDate().getMonth(), i + 1);
+            // if(date!=null&&date.getDay()!=(i+1))
             decors.add(new OneDayDecorator(day, 0, 0, 0, 0));
         }
         calendarView.addDecorators(decors);
@@ -671,9 +599,9 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                 color = getResources().getColor(R.color.colorLastDate);
             else
                 color = getResources().getColor(R.color.colorNextDate);
-            if (themeNumber == 1)
+            if (themeNumber == 1 && ((date != null && date.getDay() != (i + 1)) || date == null))
                 decors.add(new OneDayDecorator(day, count, color, getResources().getColor(R.color.colorPrimary_blue), getResources().getColor(R.color.colorContent_blue)));
-            else
+            else if (date == null || (date != null && (date.getDay() != (i + 1))))
                 decors.add(new OneDayDecorator(day, count, color, getResources().getColor(R.color.colorPrimary), getResources().getColor(R.color.colorContent)));
         }
         calendarView.addDecorators(decors);
@@ -685,7 +613,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
     public void onResume() {
 
         super.onResume();
-        decorateCalendar();
+        decorateCalendar(null);
         createList();
         showCurrentEvent();
         calendarView.clearSelection();
@@ -708,7 +636,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                 //Toast.makeText(this, "NEW EVENT", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MainActivity.this, PagesActivity.class);
                 if (calendarView.getSelectedDate() != null) {
-                    Log.d(TAG, "SEND SelectDate" + calendarView.getSelectedDate());
+                    //Log.d(TAG, "SEND SelectDate" + calendarView.getSelectedDate());
                     intent.putExtra("selectedDate", calendarView.getSelectedDate());
                 }
 
@@ -727,63 +655,22 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                 return true;
             }
             case R.id.actionAuth: {
-
                 signIn();
-                //Toast.makeText(this, "NEW EVENT", Toast.LENGTH_SHORT).show();
-             /*
-                Intent intent = new Intent(MainActivity.this, PagesActivity.class);
-                if (calendarView.getSelectedDate() != null) {
-                    Log.d(TAG, "SEND SelectDate" + calendarView.getSelectedDate());
-                    intent.putExtra("selectedDate", calendarView.getSelectedDate());
-                }
-
-                startActivity(intent);
-                */
                 return true;
             }
 
             case R.id.actionLogOut: {
-
                 signOut();
-                //Toast.makeText(this, "NEW EVENT", Toast.LENGTH_SHORT).show();
-             /*
-                Intent intent = new Intent(MainActivity.this, PagesActivity.class);
-                if (calendarView.getSelectedDate() != null) {
-                    Log.d(TAG, "SEND SelectDate" + calendarView.getSelectedDate());
-                    intent.putExtra("selectedDate", calendarView.getSelectedDate());
-                }
-
-                startActivity(intent);
-                */
                 return true;
             }
 
             case R.id.actionExportToServer: {
 
-
-//                try {
-//                    Log.d(TAG,"cur user"+mAuth.getCurrentUser().getEmail()+"/"
-//                            +mAuth.getCurrentUser().getDisplayName());
-//                } catch (Exception e) {
-//                    Log.d(TAG,"Exception cur user mAuth"+mAuth.getCurrentUser());
-//                }
                 if (mAuth.getCurrentUser() != null)
                     addToServer();
                 else
                     Toast.makeText(this, getResources().getString(R.string.pleaseLogin), Toast.LENGTH_SHORT).show();
 
-
-                //signIn();
-                //Toast.makeText(this, "NEW EVENT", Toast.LENGTH_SHORT).show();
-             /*
-                Intent intent = new Intent(MainActivity.this, PagesActivity.class);
-                if (calendarView.getSelectedDate() != null) {
-                    Log.d(TAG, "SEND SelectDate" + calendarView.getSelectedDate());
-                    intent.putExtra("selectedDate", calendarView.getSelectedDate());
-                }
-
-                startActivity(intent);
-                */
                 return true;
             }
 
@@ -817,7 +704,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                     if (mAuth.getCurrentUser() != null) {
                         readFromFireStore();
 
-                        decorateCalendar();
+                        decorateCalendar(null);
                     } else
                         Toast.makeText(this, getResources().getString(R.string.pleaseLogin), Toast.LENGTH_SHORT).show();
 
@@ -858,17 +745,6 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                 // Toast.makeText(this, "EditCategories", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.actionAbout:
-/*
-                if(!sIn){
-                signIn();
-                sIn=true;
-                }
-                else
-                    {
-                        signOut();
-                        sIn=false;
-                    }
-                    */
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setTitle("Seminho " + getResources().getString(R.string.aboutVersion))
@@ -904,7 +780,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
         }
 
-        Log.d(TAG, "Count =" + cats.size());
+        // Log.d(TAG, "Count =" + cats.size());
 
         final AdapterCategories adapter = new AdapterCategories(this, getLayoutInflater(), cats);
         rv.setAdapter(adapter);
@@ -1090,7 +966,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             progressDialog.dismiss();
-            decorateCalendar();
+            decorateCalendar(null);
             createList();
         }
     }
@@ -1286,7 +1162,11 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                 if (ringtone != null) {
                     editor.putString(TAG + "ringtone", ringtone.toString());
                     editor.commit();
-                    Toast.makeText(this, ringtone.toString(), Toast.LENGTH_SHORT).show();
+
+                    Ringtone r = RingtoneManager.getRingtone(this, ringtone);
+
+
+                    Toast.makeText(this, getResources().getString(R.string.installed) + " : " + r.getTitle(this), Toast.LENGTH_SHORT).show();
                 } else {
                     // Log.d(TAG,"NONE");
                     editor.putString(TAG + "ringtone", "none");
@@ -1599,7 +1479,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
                 progressDialog.hide();
                 file.delete();
-                decorateCalendar();
+                decorateCalendar(null);
                 createList();
             }
         }.execute(url);

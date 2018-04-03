@@ -76,8 +76,6 @@ public class NotificationActivity extends AppCompatActivity {
        // seekBar.setProgress((int) this.advance / 60000);
         final TextView tvAdvance = view.findViewById(R.id.tvAdvance);
         tvAdvance.setText(String.valueOf(seekBar.getProgress()) + " min");
-        // final Button btnOk = view.findViewById(R.id.btnOk);
-        // final Button btnCancel = view.findViewById(R.id.btnCancel);
 
 
         builder.setTitle(getResources().getString(R.string.pleaseSelectAdvance))
@@ -112,17 +110,6 @@ public class NotificationActivity extends AppCompatActivity {
 
 
                 delay = (seekBar.getProgress() * 60000);
-
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(NotificationActivity.this);
-                SharedPreferences.Editor editor = preferences.edit();
-
-                Log.d(TAG,"Notif = "+advance);
-               // editor.putLong(TAG + "advance", advance);
-               // editor.commit();
-
-               // Intent intent= new Intent(NotificationActivity.this,MainActivity.class);
-               // startActivity(intent);
-                //Toast.makeText(NotificationActivity.this,"Wait",Toast.LENGTH_SHORT).show();
 
                 setDelayNotify();
 
@@ -189,7 +176,7 @@ public class NotificationActivity extends AppCompatActivity {
         AlarmEvent ae=DatabaseHelper.getInstance(this).select(id);
 
 
-        Log.d(TAG,"setDeleay AE ="+ae.getTitle()+" | "+id+"|"+ae.getId());
+      //  Log.d(TAG,"setDeleay AE ="+ae.getTitle()+" | "+id+"|"+ae.getId());
 
         Intent alarmIntent = new Intent(this, AlarmReceiver.class);
 

@@ -212,7 +212,7 @@ public long putCategory(String category){
                 //ae.setTimeAlarm(Long.parseLong(cursor.getString(cursor.getColumnIndexOrThrow(COL_DATE_AND_TIME))));
                 ae.setStartTime(cursor.getLong(cursor.getColumnIndexOrThrow(COL_START_TIME)));
                 ae.setFinishTime(cursor.getLong(cursor.getColumnIndexOrThrow(COL_FINISH_TIME)));
-                Log.d(TAG, "AE:" + ae);
+             //   Log.d(TAG, "AE:" + ae);
 
             } while (cursor.moveToNext());
         cursor.close();
@@ -314,7 +314,7 @@ public long putCategory(String category){
         ContentValues values = new ContentValues();
         String query = "SELECT * FROM " + ALARMEVENT_TABLE + " WHERE " + COL_UID + " = '" + ae.getUID() + "'";
         Cursor cursor = database.rawQuery(query, null);
-        Log.d(TAG, "CURSOR = " + cursor);
+       // Log.d(TAG, "CURSOR = " + cursor);
         if (cursor.moveToFirst()) {
             values.put(COL_TITLE, ae.getTitle());
             values.put(COL_CONTENT, ae.getContent());
@@ -325,7 +325,7 @@ public long putCategory(String category){
             values.put(COL_LAST_MODIFIED, ae.getLastModified());
 
 
-            Log.d(TAG, "InDB LastModified=" + cursor.getLong(cursor.getColumnIndexOrThrow(COL_LAST_MODIFIED)) + " : " + ae.getLastModified());
+           // Log.d(TAG, "InDB LastModified=" + cursor.getLong(cursor.getColumnIndexOrThrow(COL_LAST_MODIFIED)) + " : " + ae.getLastModified());
             int updCount = database.update(ALARMEVENT_TABLE, values,
                     COL_UID + " = '" + ae.getUID() + "' AND " + COL_LAST_MODIFIED + " < " + ae.getLastModified(),
                     null);
@@ -524,7 +524,7 @@ public long putCategory(String category){
             ae.setFinishTime(cursor.getLong(cursor.getColumnIndexOrThrow(COL_FINISH_TIME)));
             cursor.close();
             database.close();
-            Log.d(TAG, "GET EVENTS AE: " + ae.toString());
+           // Log.d(TAG, "GET EVENTS AE: " + ae.toString());
             return ae;
 
         }

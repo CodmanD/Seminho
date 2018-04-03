@@ -82,7 +82,7 @@ public class NotificationUtil extends ContextWrapper {
         viewIntent.putExtra("EVENT_UID", ae.getUID());
         viewIntent.putExtra("NOTIFICATION_ID", ae.getId());
        // viewIntent.putExtra("EVENT_MS", ae.getStartTime());
-        Log.d(TAG,"put Extra id="+ae.getId());
+       // Log.d(TAG,"put Extra id="+ae.getId());
         viewIntent.putExtra("NOTIFICATION_DISMISS", true);
         // PendingIntent pending = PendingIntent.getActivity(context, (int)ae.getId(), viewIntent, PendingIntent.FLAG_UPDATE_CURRENT);
        // PendingIntent pending = PendingIntent.getActivity(context, 0, viewIntent, PendingIntent.FLAG_UPDATE_CURRENT);

@@ -33,13 +33,12 @@ import static android.content.ContentValues.TAG;
 public class AdapterCategories  extends RecyclerView.Adapter<AdapterCategories.ViewHolder> {
 
     private List<String> categories;
-private Context context;
+    private Context context;
     LayoutInflater inflater;
 
     public AdapterCategories(Context context,LayoutInflater inflater,final List<String> categories) {
         this.context=context;
         this.categories = categories;
-        //this.inflater=inflater;
     }
 
 
@@ -57,7 +56,6 @@ private Context context;
     public void onBindViewHolder(AdapterCategories.ViewHolder viewHolder, int i) {
 
         String category = categories.get(i);
-          Log.d(TAG,"onBindViewHolder event = "+category);
         viewHolder.tv.setText(category);
         viewHolder.position=i;
 
@@ -99,7 +97,7 @@ private Context context;
 
                             long res= DatabaseHelper.getInstance(context).updateCategory(et.getText().toString(),tv.getText().toString());
                             tv.setText(et.getText());
-                            Toast.makeText(context,"Save res="+res,Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context,context.getResources().getString(R.string.deleted),Toast.LENGTH_SHORT).show();
 
                             dialog.cancel();
                             categories.add(position,tv.getText().toString());
@@ -110,7 +108,7 @@ private Context context;
                             .setNeutralButton(R.string.buttonCancel,new DialogInterface.OnClickListener()
                     { @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(context,"Cancel",Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(context,"Cancel",Toast.LENGTH_SHORT).show();
                         dialog.cancel();
                     }
                     })
@@ -118,18 +116,15 @@ private Context context;
                             { @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 long res= DatabaseHelper.getInstance(context).removeCategory(et.getText().toString());
-                                Toast.makeText(context,"DELETE="+res,Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context,context.getResources().getString(R.string.deleted),Toast.LENGTH_SHORT).show();
                                 dialog.cancel();
                                 categories.remove(position);
                                 AdapterCategories.this.notifyDataSetChanged();
                             }
                             })
 
-                    //dialog.cancel();
+
                     .create().show();
-
-                       //Toast.makeText(context, "CLICK Category = " +((TextView)v).getText(), Toast.LENGTH_SHORT).show();
-
                 }
             });
         }

@@ -32,7 +32,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         DatabaseHelper database = DatabaseHelper.getInstance(context);
         AlarmEvent ae = database.select(id);
 
-        Log.d(TAG,"onReceive"+"  "+ae.getTitle()+" |ref Id= "+id);
+       // Log.d(TAG,"onReceive"+"  "+ae.getTitle()+" |ref Id= "+id);
         if(isDelay)
         {
            // NotificationUtil.createNotification(context, ae,ringtone);
