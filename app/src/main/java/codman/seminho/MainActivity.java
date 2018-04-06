@@ -16,6 +16,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 
+import android.graphics.Color;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -36,6 +37,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Layout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -427,10 +429,11 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
                 TextView tvTitle = (TextView) view.findViewById(R.id.tvTitleLV);
-                if ((events.size() - 1) > position) {
-                    TextView tvData = (TextView) view.findViewById(R.id.tvDataLV);
+                TextView tvData = (TextView) view.findViewById(R.id.tvDataLV);
 
-                    TextView tvTime = (TextView) view.findViewById(R.id.tvTimeLV);
+                TextView tvTime = (TextView) view.findViewById(R.id.tvTimeLV);
+                if ((events.size() - 1) > position) {
+
                     cal.setTimeInMillis(events.get(position).getStartTime());
 
                     String date = dateFormat.format(new Date(cal.getTimeInMillis()));
@@ -439,8 +442,16 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                     tvTime.setText(time);
                     tvTitle.setText(events.get(position).getTitle());
                 } else {
+
+                    LinearLayout.LayoutParams lp= new LinearLayout.LayoutParams(  LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT);
+                    tvTitle.setLayoutParams(lp);
+
+                    tvTitle.setWidth(getWindowManager().getDefaultDisplay().getWidth());
+
                     tvTitle.setTextSize(20);
                     tvTitle.setText(dbHelper.getCountFutureEvents() + " " + getResources().getString(R.string.nextEvents));
+
                 }
                 return view;
             }
@@ -934,9 +945,10 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
     private void selectSound() {
         Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
-        Uri rington = RingtoneManager.getActualDefaultRingtoneUri(
+      if(ringtone==null)
+       ringtone = RingtoneManager.getActualDefaultRingtoneUri(
                 getApplicationContext(), RingtoneManager.TYPE_RINGTONE);
-        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, rington);
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, ringtone);
         startActivityForResult(intent, RINGTONES_REQUEST_CODE);
     }
 
@@ -1173,6 +1185,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                     editor.commit();
 
                 }
+                restartNotify();
             }
             return;
         }

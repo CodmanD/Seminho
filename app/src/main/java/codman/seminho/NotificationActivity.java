@@ -182,21 +182,25 @@ public class NotificationActivity extends AppCompatActivity {
 
         alarmIntent.putExtra("advance",advance-delay);
         alarmIntent.putExtra("NOTIFICATION_ID",(int)id);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        ringtone = Uri.parse(preferences.getString(TAG + "ringtone", "content://settings/system/notification_sound"));
+        alarmIntent.putExtra("ringtone",ringtone);
         AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this,(int) ae.getId(), alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         //alarmManager.cancel(pendingIntent);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            // alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, ms-advance-delay, pendingIntent);
+
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+delay, pendingIntent);
             // Log.d(TAG,"setALARM  -seExactAndAllowWhileIdle");
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            //    alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, ms-advance-delay, pendingIntent);
+
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+delay, pendingIntent);
             //Log.d(TAG,"setALARM  -seExact");
         } else {
-            // alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-            alarmManager.set(AlarmManager.RTC_WAKEUP, ms-advance-delay, pendingIntent);
+
+            alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+delay, pendingIntent);
             // Log.d(TAG,"setALARM  -set");
         }
 

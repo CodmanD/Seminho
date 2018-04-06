@@ -9,7 +9,7 @@
     <string name="actionImportFromUrl">Import file from URL</string>
     <string name="actionImportServerData">Import server data</string>
     <string name="actionExport">Export file</string>
-    <string name="actionExportToServer">Store all event to server</string>
+    <string name="actionExportToServer">Upload all events to server</string>
     <string name="actionSettings">Settings</string>
     <string name="actionSelectSound">Select sound</string>
     <string name="actionAdvance">Time advance</string>
@@ -22,12 +22,12 @@
     <string name="dateTime">Date</string>
     <string name="alarmName">Alarm Name</string>
     <string name="startTime">Start Time</string>
-    <string name="finishTime">Finish Time</string>
+    <string name="finishTime">End Time</string>
     <string name="titleMain">Date</string>
     <string name="title">Title</string>
     <string name="description">Description</string>
     <string name="Time">Time</string>
-    <string name="ErrorAdding">ERROR ADDING</string>
+    <string name="ErrorAdding">ERROR with adding event</string>
     <string name="add">Added event</string>
     <string name="update">Updated event</string>
     <string name="notEvents">No events</string>
@@ -48,7 +48,7 @@
     <string name="newCategory">New Category</string>
     <string name="addNewCategory">Add</string>
     <string name="deleteNotification">Delete notification</string>
-    <string name="saveAdvance">Save advance </string>
+    <string name="saveAdvance">Save delay </string>
     <string name="showEvent">Show event</string>
     <string name="buttonCancel">Cancel</string>
     <string name="buttonDownload">Download</string>
