@@ -9,43 +9,6 @@
         android:orderInCategory="100"
         android:title="@string/actionNewEvent"
         app:showAsAction="ifRoom" />
-
-
-    <item
-        android:id="@+id/actionAuth"
-        android:orderInCategory="100"
-        android:title="@string/actionAuth"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/actionLogOut"
-        android:orderInCategory="100"
-        android:title="@string/actionLogOut"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/actionImport"
-        android:orderInCategory="100"
-        android:title="@string/actionImport"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/actionImportURL"
-        android:orderInCategory="100"
-        android:title="@string/actionImportFromUrl"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/actionImportServerData"
-        android:orderInCategory="100"
-        android:title="@string/actionImportServerData"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/actionExport"
-        android:orderInCategory="100"
-        android:title="@string/actionExport"
-        app:showAsAction="never" />
     <item
         android:id="@+id/actionSettings"
         android:icon="@drawable/ic_build_white_24dp"
@@ -82,10 +45,52 @@
     </item>
 
     <item
-        android:id="@+id/actionExportToServer"
+        android:id="@+id/actionAuth"
         android:orderInCategory="100"
-        android:title="@string/actionExportToServer"
-        app:showAsAction="ifRoom" />
+        android:title="@string/actionAuth"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/actionLogOut"
+        android:orderInCategory="100"
+        android:title="@string/actionLogOut"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/actionImportExport"
+        android:orderInCategory="100"
+        android:title="@string/actionImportExport"
+        app:showAsAction="never" />
+
+    <!--<item-->
+        <!--android:id="@+id/actionImport"-->
+        <!--android:orderInCategory="100"-->
+        <!--android:title="@string/actionImport"-->
+        <!--app:showAsAction="never" />-->
+
+    <!--<item-->
+        <!--android:id="@+id/actionImportURL"-->
+        <!--android:orderInCategory="100"-->
+        <!--android:title="@string/actionImportFromUrl"-->
+        <!--app:showAsAction="never" />-->
+
+    <!--<item-->
+        <!--android:id="@+id/actionImportServerData"-->
+        <!--android:orderInCategory="100"-->
+        <!--android:title="@string/actionImportServerData"-->
+        <!--app:showAsAction="never" />-->
+
+    <!--<item-->
+        <!--android:id="@+id/actionExport"-->
+        <!--android:orderInCategory="100"-->
+        <!--android:title="@string/actionExport"-->
+        <!--app:showAsAction="never" />-->
+
+
+    <!--<item-->
+        <!--android:id="@+id/actionExportToServer"-->
+        <!--android:orderInCategory="100"-->
+        <!--android:title="@string/actionExportToServer"-->
+        <!--app:showAsAction="ifRoom" />-->
     <item
         android:id="@+id/actionAbout"
         android:orderInCategory="100"

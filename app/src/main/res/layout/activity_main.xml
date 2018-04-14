@@ -20,6 +20,11 @@
         app:subtitleTextColor="?attr/colorButtonNormal"
         app:titleTextColor="?attr/colorButtonNormal" />
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/fl"
+        >
     <ScrollView
 
         android:id="@+id/sV"
@@ -132,4 +137,5 @@
 
 </android.support.constraint.ConstraintLayout>
     </ScrollView>
+    </FrameLayout>
 </LinearLayout>

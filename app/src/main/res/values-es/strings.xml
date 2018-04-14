@@ -5,10 +5,11 @@
     <string name="actionChangeTheme">Cambiar de tema</string>
     <string name="actionEditCategory">Editar categorías</string>
     <string name="actionImport">Importar archivo</string>
+    <string name="actionImportExport">Import/Export</string>
     <string name="actionImportFromUrl">Importar archivo desde URL</string>
     <string name="actionImportServerData">Importar datos del servidor</string>
     <string name="actionExport">Exportar archivo</string>
-    <string name="actionExportToServer">Almacenar todo el evento en el servidor</string>
+    <string name="actionExportToServer">Exportación del servidor</string>
     <string name="actionSettings">Configuraciones</string>
     <string name="actionSelectSound">Seleccionar sonido</string>
     <string name="actionAdvance">Tiempo de avance</string>

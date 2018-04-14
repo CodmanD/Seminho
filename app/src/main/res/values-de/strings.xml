@@ -5,6 +5,7 @@
     <string name="actionChangeTheme">Thema ändern</string>
     <string name="actionEditCategory">Kategorien bearbeiten</string>
     <string name="actionImport">Datei importieren</string>
+    <string name="actionImportExport">Import/Export</string>
     <string name="actionImportFromUrl">Datei von URL importieren</string>
     <string name="actionImportServerData">Serverdaten importieren</string>
     <string name="actionExport">Datei exportieren</string>

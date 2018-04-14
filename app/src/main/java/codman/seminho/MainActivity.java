@@ -28,6 +28,7 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 
@@ -48,6 +49,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -163,6 +165,11 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
     ListView lv;
     @BindView(R.id.sV)
     ScrollView sv;
+    @BindView(R.id.root)
+    ConstraintLayout root;
+
+    @BindView(R.id.fl)
+    FrameLayout fl;
 
     Uri ringtone;
     long advance;
@@ -300,7 +307,11 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                             FirebaseUser user = mAuth.getCurrentUser();
 
                             // Log.d(TAG, "signInWithCredential:success"+user.getEmail());
+                       if(status==0)
                             Snackbar.make(findViewById(R.id.root), "Authentication success.", Snackbar.LENGTH_SHORT).show();
+                       else{
+                           Snackbar.make(findViewById(R.id.llImEx), "Authentication success.", Snackbar.LENGTH_SHORT).show();
+                       }
                             //Toast.makeText(MainActivity.this,"Login succes",Toast.LENGTH_SHORT).show();
                             //Intent intent= new Intent(MainActivity.this,MainActivity.class);
                             //intent.putExtra("user",user.getDisplayName());
@@ -309,7 +320,11 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                         } else {
                             // If sign in fails, display a message to the user.
                             // Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Snackbar.make(findViewById(R.id.root), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
+                            if(status==0)
+                                Snackbar.make(findViewById(R.id.root), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
+                            else{
+                                Snackbar.make(findViewById(R.id.llImEx), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
+                            }
                             // updateUI(null);
                         }
 
@@ -443,7 +458,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                     tvTitle.setText(events.get(position).getTitle());
                 } else {
 
-                    LinearLayout.LayoutParams lp= new LinearLayout.LayoutParams(  LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                             LinearLayout.LayoutParams.WRAP_CONTENT);
                     tvTitle.setLayoutParams(lp);
 
@@ -634,7 +649,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
-        MenuItem item = menu.getItem(7).getSubMenu().getItem(0);
+        MenuItem item = menu.getItem(1).getSubMenu().getItem(0);
         item.setTitle(getResources().getString(R.string.actionAdvance) + " : " + (advance / 60000) + " min");
         return true;
     }
@@ -675,69 +690,79 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                 return true;
             }
 
-            case R.id.actionExportToServer: {
 
-                if (mAuth.getCurrentUser() != null)
-                    addToServer();
-                else
-                    Toast.makeText(this, getResources().getString(R.string.pleaseLogin), Toast.LENGTH_SHORT).show();
+            //Start old Menu
 
-                return true;
-            }
+            //            case R.id.actionExportToServer: {
+//
+//                if (mAuth.getCurrentUser() != null)
+//                    addToServer();
+//                else
+//                    Toast.makeText(this, getResources().getString(R.string.pleaseLogin), Toast.LENGTH_SHORT).show();
+//
+//                return true;
+//            }
 
-            case R.id.actionImport:
-                if (hasPermissions()) {
-                    pickFile();
-                    //Toast.makeText(this,"Input URL",Toast.LENGTH_SHORT).show();
-                } else {
+//            case R.id.actionImport:
+//                if (hasPermissions()) {
+//                    pickFile();
+//                    //Toast.makeText(this,"Input URL",Toast.LENGTH_SHORT).show();
+//                } else {
+//
+//                    requestPermissionWithRationale();
+//                }
+//
+//                return true;
+//            case R.id.actionImportURL:
+//                if (hasPermissions()) {
+//                    //getFileFromUrl();
+//
+//                    actionImportURL();
+//                    //Toast.makeText(this, "Input URL :" + this.getApplicationInfo().dataDir, Toast.LENGTH_SHORT).show();
+//                } else {
+//
+//                    requestPermissionWithRationale();
+//                }
+//
+//                return true;
+//            case R.id.actionImportServerData:
+//                if (hasPermissions()) {
+//                    //getFileFromUrl();
+//
+//
+//                    if (mAuth.getCurrentUser() != null) {
+//                        readFromFireStore();
+//
+//                        decorateCalendar(null);
+//                    } else
+//                        Toast.makeText(this, getResources().getString(R.string.pleaseLogin), Toast.LENGTH_SHORT).show();
+//
+//                    //Toast.makeText(this, "GetData Server :", Toast.LENGTH_SHORT).show();
+//                } else {
+//
+//                    requestPermissionWithRationale();
+//                }
+//
+//                return true;
+//
+//            case R.id.actionExport:
+//                if (hasPermissions()) {
+//
+//                    pickFolder();
+//
+//                } else {
+//
+//                    requestPermissionWithRationale();
+//                }
+//
+//
+//                return true;
 
-                    requestPermissionWithRationale();
-                }
+            //End old menu
 
-                return true;
-            case R.id.actionImportURL:
-                if (hasPermissions()) {
-                    //getFileFromUrl();
-
-                    actionImportURL();
-                    //Toast.makeText(this, "Input URL :" + this.getApplicationInfo().dataDir, Toast.LENGTH_SHORT).show();
-                } else {
-
-                    requestPermissionWithRationale();
-                }
-
-                return true;
-            case R.id.actionImportServerData:
-                if (hasPermissions()) {
-                    //getFileFromUrl();
-
-
-                    if (mAuth.getCurrentUser() != null) {
-                        readFromFireStore();
-
-                        decorateCalendar(null);
-                    } else
-                        Toast.makeText(this, getResources().getString(R.string.pleaseLogin), Toast.LENGTH_SHORT).show();
-
-                    //Toast.makeText(this, "GetData Server :", Toast.LENGTH_SHORT).show();
-                } else {
-
-                    requestPermissionWithRationale();
-                }
-
-                return true;
-
-            case R.id.actionExport:
-                if (hasPermissions()) {
-
-                    pickFolder();
-
-                } else {
-
-                    requestPermissionWithRationale();
-                }
-
-
+            case R.id.actionImportExport:
+                status = 1;
+                importExportScreen();
                 return true;
             case R.id.actionSettings:
                 // Toast.makeText(this,"Settings",Toast.LENGTH_SHORT).show();
@@ -907,7 +932,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
                 //Set value in menuItem
                 toolbar.getMenu().
-                        getItem(7).
+                        getItem(1).
                         getSubMenu().
                         getItem(0).
                         setTitle(getResources().getString(R.string.actionAdvance) + " : " + (MainActivity.this.advance / 60000) + " min");
@@ -945,9 +970,9 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
     private void selectSound() {
         Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
-      if(ringtone==null)
-       ringtone = RingtoneManager.getActualDefaultRingtoneUri(
-                getApplicationContext(), RingtoneManager.TYPE_RINGTONE);
+        if (ringtone == null)
+            ringtone = RingtoneManager.getActualDefaultRingtoneUri(
+                    getApplicationContext(), RingtoneManager.TYPE_RINGTONE);
         intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, ringtone);
         startActivityForResult(intent, RINGTONES_REQUEST_CODE);
     }
@@ -1054,6 +1079,18 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
     }
 
+    int status = 0;
+
+    @Override
+    public void onBackPressed() {
+        if (status != 1)
+            super.onBackPressed();
+        else {
+            status = 0;
+            fl.removeAllViews();
+            fl.addView(sv);
+        }
+    }
 
     ////////////////Permissions
     @SuppressLint("WrongConstant")
@@ -1384,6 +1421,119 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         }
 
     }
+
+    private void importExportScreen() {
+        View view = View.inflate(this, R.layout.import_export, null);
+        LinearLayout llImEx = view.findViewById(R.id.llImEx);
+
+
+        fl.removeAllViews();
+        fl.addView(llImEx);
+
+        Button btnExportFile = view.findViewById(R.id.btnExportFile);
+        Button btnExportServer = view.findViewById(R.id.btnExportServer);
+        Button btnImportFile = view.findViewById(R.id.btnImportFile);
+        Button btnImportServer = view.findViewById(R.id.btnImportServer);
+        Button btnImportUrl = view.findViewById(R.id.btnImportUrl);
+
+        btnExportServer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                status = 0;
+                fl.removeAllViews();
+                fl.addView(sv);
+                if (mAuth.getCurrentUser() != null) {
+                    addToServer();
+
+                } else
+                    Toast.makeText(MainActivity.this, getResources().getString(R.string.pleaseLogin), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        btnExportFile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                status = 0;
+                fl.removeAllViews();
+                fl.addView(sv);
+                if (hasPermissions()) {
+
+                    pickFolder();
+
+
+                } else {
+
+                    requestPermissionWithRationale();
+                }
+            }
+        });
+
+        btnImportFile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                status = 0;
+                fl.removeAllViews();
+                fl.addView(sv);
+
+                if (hasPermissions()) {
+                    pickFile();
+
+                    //Toast.makeText(this,"Input URL",Toast.LENGTH_SHORT).show();
+                } else {
+
+                    requestPermissionWithRationale();
+                }
+
+            }
+        });
+
+        btnImportUrl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                status = 0;
+                fl.removeAllViews();
+                fl.addView(sv);
+                if (hasPermissions()) {
+                    actionImportURL();
+
+                    //Toast.makeText(this, "Input URL :" + this.getApplicationInfo().dataDir, Toast.LENGTH_SHORT).show();
+                } else {
+
+                    requestPermissionWithRationale();
+                }
+            }
+        });
+
+        btnImportServer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                status = 0;
+                fl.removeAllViews();
+                fl.addView(sv);
+
+
+                if (hasPermissions()) {
+                    //getFileFromUrl();
+
+
+                    if (mAuth.getCurrentUser() != null) {
+                        readFromFireStore();
+
+                        decorateCalendar(null);
+                    } else
+                        Toast.makeText(MainActivity.this, getResources().getString(R.string.pleaseLogin), Toast.LENGTH_SHORT).show();
+
+                    //Toast.makeText(this, "GetData Server :", Toast.LENGTH_SHORT).show();
+                } else {
+
+                    requestPermissionWithRationale();
+                }
+
+
+            }
+        });
+    }
+
 
     private void downloadFile(String url) {
         final ProgressDialog progressDialog = new ProgressDialog(this);

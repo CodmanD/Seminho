@@ -5,10 +5,11 @@
     <string name="actionChangeTheme">Verander het thema</string>
     <string name="actionEditCategory">Bewerk categorieën</string>
     <string name="actionImport">Bestand importeren</string>
-    <string name="actionImportFromUrl">Importeer het bestand van de URL</string>
-    <string name="actionImportServerData">Servergegevens importeren</string>
+    <string name="actionImportExport">Import/Export</string>
+    <string name="actionImportFromUrl">Importeer van URL</string>
+    <string name="actionImportServerData">Importeren van server</string>
     <string name="actionExport">Bestand exporteren</string>
-    <string name="actionExportToServer">Bewaar alle gebeurtenissen op server</string>
+    <string name="actionExportToServer">Server export</string>
     <string name="actionSettings">Instellingen</string>
     <string name="actionSelectSound">Selecteer geluid</string>
     <string name="actionAdvance">Tijd voorschot</string>
