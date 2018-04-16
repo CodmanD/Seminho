@@ -69,6 +69,16 @@
     <string name="installed">Installée</string>
     <string name="deleted">Supprimé</string>
     <string name="saved">Enregistré</string>
+
+    <string name="exportText">Exportation</string>
+    <string name="importText">Importer</string>
+    <string name="exportFileDescription">Exporte tous les événements dans le fichier Seminho.ics</string>
+    <string name="exportServerDescription">Télécharge toutes les données sur le serveur (sauvegarde)</string>
+
+    <string name="importFileDescription">Importer un fichier ics à partir du système de fichiers local</string>
+    <string name="importUrlDescription">Définir une URL avec un fichier ics pour importer des événements</string>
+    <string name="importServerDescription">Importe toutes les données du serveur (Restaurer)</string>
+
     <string-array name="categories">
         <item>Événement</item>
         <item>Date</item>

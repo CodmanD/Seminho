@@ -69,6 +69,15 @@
     <string name="installed">Zainstalowany</string>
     <string name="deleted">Usunięto</string>
     <string name="saved">Uratowany</string>
+
+    <string name="exportText">Eksport</string>
+    <string name="importText">Import</string>
+    <string name="exportFileDescription">Eksportuje wszystkie zdarzenia do pliku Seminho.ics</string>
+    <string name="exportServerDescription">Przesyła wszystkie dane na serwer (Kopia zapasowa)</string>
+
+    <string name="importFileDescription">Zaimportuj plik ics z lokalnego systemu plików</string>
+    <string name="importUrlDescription">Zdefiniuj adres URL za pomocą pliku ics, aby zaimportować zdarzenia</string>
+    <string name="importServerDescription">Importuje wszystkie dane z serwera (Przywróć)</string>
     <string-array name="categories">
         <item>Zdarzenie</item>
         <item>Data</item>

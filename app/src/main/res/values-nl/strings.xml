@@ -69,6 +69,15 @@
     <string name="installed">Geïnstalleerd</string>
     <string name="deleted">Verwijderde</string>
     <string name="saved">Opgeslagen</string>
+
+    <string name="exportText">Exporteren</string>
+    <string name="importText">Importeren</string>
+    <string name="exportFileDescription">Exporteert alle gebeurtenissen naar het Seminho.ics-bestand</string>
+    <string name="exportServerDescription">Uploadt alle gegevens naar de server (back-up)</string>
+
+    <string name="importFileDescription">Importeer een ics-bestand van het lokale bestandssysteem</string>
+    <string name="importUrlDescription">Definieer een URL met een ics-bestand om gebeurtenissen te importeren</string>
+    <string name="importServerDescription">Importeert alle gegevens van de server (herstellen)</string>
     <string-array name="categories">
         <item>Gebeurtenis</item>
         <item>Datum</item>

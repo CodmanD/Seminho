@@ -8,6 +8,13 @@
     android:id="@+id/llImEx"
     android:background="?attr/colorPrimary"
     >
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:text="@string/exportText"
+    android:textSize="28dp"
+    />
 
     <Button
         android:text="@string/actionExport"
@@ -17,6 +24,14 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/exportFileDescription"
+        android:textSize="14dp"
+        />
     <Button
         android:text="@string/actionExportToServer"
         android:id="@+id/btnExportServer"
@@ -25,9 +40,23 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/exportServerDescription"
+        android:textSize="14dp"
+        />
     <Space
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="30dp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/importText"
+        android:textSize="28dp"
         />
 <Button
     android:id="@+id/btnImportFile"
@@ -37,6 +66,13 @@
     android:layout_marginLeft="20dp"
     android:layout_marginRight="20dp"
     />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/importFileDescription"
+        android:textSize="14dp"
+        />
 
     <Button
         android:text="@string/actionImportFromUrl"
@@ -46,6 +82,13 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/importUrlDescription"
+        android:textSize="14dp"
+        />
     <Button
         android:id="@+id/btnImportServer"
         android:layout_width="match_parent"
@@ -54,6 +97,12 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         />
-
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/importServerDescription"
+        android:textSize="14dp"
+        />
 
 </LinearLayout>
